@@ -28,3 +28,14 @@ class AssetService:
         """
         filtered_data = AssetService.get_queryset().filter(function_id=id)
         return filtered_data
+
+    @staticmethod
+    def update(asset, **kwargs):
+        """
+        Function update an asset from kwargs
+        """
+        for key, value in kwargs.items():
+            setattr(asset, key, value)
+        asset.save()
+
+        return asset

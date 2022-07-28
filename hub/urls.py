@@ -56,9 +56,11 @@ get_ticket_id = ITSMViewSet.as_view({"get": "get_ticket_id"})
 
 add_category = AddCategoryViewSet.as_view({"post": "addcategory"})
 add_process = AddProcessViewSet.as_view({"post": "addprocess"})
+asset_updates = AssetViewSet.as_view({"put": "asset_update"})
 
 
 urlpatterns = [
+    path(r"asset/<int:asset>", asset_updates, name="asset_updates"),
     path(r"ticket_id/", get_ticket_id, name="get_ticket_id"),
     path(r"source/", source, name="Source",),
     path(r"source/data/", source_data, name="Source_data",),

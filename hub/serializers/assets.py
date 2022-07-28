@@ -6,6 +6,7 @@ class AssetSerializer(serializers.ModelSerializer):
     """
     Model serializer for ITSM information
     """
+    AssetName = serializers.CharField(required=False, max_length=256)
 
     class Meta:
         model = Assets

@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -14,6 +15,24 @@ class AssetViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     
     serializer_class = AssetSerializer
+
+    def validated_data(self):
+        """
+        Function which return validated data
+        """
+        request_data = self.request.data
+        serializer_args = list()
+        serializer_kwargs = {"data": request_data}
+
+        if self.action in ["update", "partial_update"]:
+            serializer_args.append(self.get_object())
+
+        if self.action in ["partial_update"]:
+            serializer_kwargs["partial"] = True
+
+        serializer = self.get_serializer(*serializer_args, **serializer_kwargs)
+        serializer.is_valid(raise_exception=True)
+        return serializer.validated_data
 
     def asset_types(self, requset):
         queryset = AssetService.get_queryset()
@@ -77,3 +96,23 @@ class AssetViewSet(viewsets.ModelViewSet):
                 "Data": data,
             }
         )
+
+    def asset_update(self, request, asset):
+        """
+            Function to update asset queryset
+        """
+        serializer = AssetSerializer(data=request.data)
+        print(serializer)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.is_valid(raise_exception=True))
+        validated_data = serializer.validated_data
+        with transaction.atomic():
+            asset = AssetService.get_queryset().filter(id=asset)
+            for asset in asset:
+                assets = AssetService.update(asset, **validated_data)
+                data = {
+                    "id": assets.pk
+                }
+        return Response(data)
+
+
