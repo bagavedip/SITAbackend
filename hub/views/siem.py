@@ -334,7 +334,7 @@ class SIEMViewSet(viewsets.ModelViewSet):
     def seim_all_data(self, request, *args, **kwargs):
         siem_data = SIEMService.get_queryset()
         if siem_data:
-            serializer = SIEMSerializer(siem_data, many = True)
+            serializer = SIEMSerializer(siem_data, many=True)
             return Response(
                 {
                     "Status": status.HTTP_200_OK,

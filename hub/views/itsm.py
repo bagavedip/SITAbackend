@@ -1,6 +1,11 @@
-from rest_framework import viewsets
+import logging
+from rest_framework import viewsets, status
 from rest_framework.response import Response
+
+from hub.serializers.itsm import ITSMSerializer
 from hub.services.itsm import ITSMService
+
+logger = logging.getLogger(__name__)
 
 
 class ITSMViewSet(viewsets.ModelViewSet):
@@ -59,4 +64,11 @@ class ITSMViewSet(viewsets.ModelViewSet):
                 }
             )
 
+    def get_ticket_id(self, request):
+        query_params = request.query_params
+        ticket = query_params.get("ticket_id", None)
+        data = ITSMService.get_queryset().filter(SIEM_id=ticket)
+        serializer = ITSMSerializer(data, many=True)
+        logger.info("Successfully Fetch for ticket id.")
+        return Response(serializer.data, status=status.HTTP_200_OK)
     

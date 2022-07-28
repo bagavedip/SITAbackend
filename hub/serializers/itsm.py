@@ -9,9 +9,4 @@ class ITSMSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ITSM
-        fields = (
-            "RequestID","itsm_id","RequestType","Subject",
-            "RequestStatus","CreatedTime","ServiceCategory",
-            "Account","Priority","Technician",
-            "Resolution",
-        )
+        fields = "__all__"

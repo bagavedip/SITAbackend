@@ -52,12 +52,14 @@ offence_entity_location = EntityViewSet.as_view({"get": "offence_entity_location
 offence_entity_function = EntityViewSet.as_view({"get": "offence_entity_function"})
 offence_entity_geo_assettypes = EntityViewSet.as_view({"get": "offence_entity_geo_asset_types"})
 offence_entity_geo_function = EntityViewSet.as_view({"get": "offence_entity_geo_function"})
+get_ticket_id = ITSMViewSet.as_view({"get": "get_ticket_id"})
 
 add_category = AddCategoryViewSet.as_view({"post": "addcategory"})
 add_process = AddProcessViewSet.as_view({"post": "addprocess"})
 
 
 urlpatterns = [
+    path(r"ticket_id/", get_ticket_id, name="get_ticket_id"),
     path(r"source/", source, name="Source",),
     path(r"source/data/", source_data, name="Source_data",),
     path(r"siem/", SIEM_all_data, name="SIEM_all_data",),
