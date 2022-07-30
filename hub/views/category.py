@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
@@ -34,3 +35,37 @@ class AddCategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                         "Category_Details": data
                     }
                 )
+
+    @action(detail=False, methods=["put"])
+    def update_category(self, request, category_id):
+        """
+            Function to update asset queryset
+        """
+        serializer = CategorySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        with transaction.atomic():
+            categories = CategoryService.get_queryset().filter(id=category_id)
+            for data in categories:
+                category = CategoryService.update(data, **validated_data)
+                data = {
+                    "id": category.pk,
+                    "Category Name": category.category,
+                }
+        return Response(data)
+
+
+    def category_delete(self, request, category_id):
+        queryset = CategoryService.get_queryset().filter(id=category_id)
+        if queryset:
+            queryset.delete()
+            message = f"Record deleted for id {category_id}"
+            Status = status.HTTP_200_OK
+        else:
+            message = f"Record not found for id {category_id}"
+            Status = status.HTTP_404_NOT_FOUND
+        return Response(
+            {
+                "Status": Status,
+                "Message": message
+            })

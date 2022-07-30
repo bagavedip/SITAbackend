@@ -28,7 +28,7 @@ class Assets(models.Model):
     id = models.BigAutoField(_("id"), primary_key=True)
     AssetName = models.CharField(_("AssetName"), max_length=50, null=True, help_text=_("Asset Name"))
     AssetType = models.CharField(_("AssetType"), max_length=50, choices=AssetType.choices, help_text=_("Asset Types"))
-    Category = models.CharField(_("Category"), max_length=50, choices=Category.choices, help_text=_("Asset Category"))
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, help_text="Asset Category")
     criticality = models.CharField(_("criticality"), max_length=100, choices=Criticalities.choices,
                                    help_text=_("Criticality"))
     function_id = models.ForeignKey(Function, verbose_name=_("function_id"), on_delete=models.CASCADE,

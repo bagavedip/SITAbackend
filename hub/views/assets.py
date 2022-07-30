@@ -1,5 +1,6 @@
 from django.db import transaction
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from hub.serializers.assets import AssetSerializer
@@ -97,22 +98,37 @@ class AssetViewSet(viewsets.ModelViewSet):
             }
         )
 
-    def asset_update(self, request, asset):
+    @action(detail=False, methods=["put"])
+    def update_asset(self, request, asset):
         """
             Function to update asset queryset
         """
         serializer = AssetSerializer(data=request.data)
-        print(serializer)
         serializer.is_valid(raise_exception=True)
-        print(serializer.is_valid(raise_exception=True))
         validated_data = serializer.validated_data
         with transaction.atomic():
             asset = AssetService.get_queryset().filter(id=asset)
             for asset in asset:
                 assets = AssetService.update(asset, **validated_data)
                 data = {
-                    "id": assets.pk
+                    "id": assets.pk,
+                    "Asset Name": assets.AssetName,
                 }
         return Response(data)
+
+    def asset_delete(self, request, asset_id):
+        queryset = AssetService.get_queryset().filter(id=asset_id)
+        if queryset:
+            queryset.delete()
+            message = f"Record deleted for id {asset_id}"
+            Status = status.HTTP_200_OK
+        else:
+            message = f"Record not found for id {asset_id}"
+            Status = status.HTTP_404_NOT_FOUND
+        return Response(
+            {
+                "Status": Status,
+                "Message": message
+            })
 
 
