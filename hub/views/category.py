@@ -11,6 +11,7 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
     serializer_class = CategorySerializer
+    queryset = CategoryService.get_queryset()
 
     @action(detail=False, methods=["post"])
     def addcategory(self, request):
@@ -70,3 +71,27 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 "Status": Status,
                 "Message": message
             })
+
+    def category_details(self, request, **kwargs):
+        queryset = self.queryset
+        if queryset:
+            queryset_details = []
+            for data in queryset:
+                query_data = ({
+                    "Id": data.id,
+                    "Category": data.category
+                })
+                queryset_details.append(query_data)
+
+            return Response(
+                {
+                    "Status": status.HTTP_200_OK,
+                    "Data": queryset_details
+                }
+            )
+        else:
+            return Response({
+                "Status": status.HTTP_404_NOT_FOUND,
+                "Message": "Data Not Existing"
+            }
+            )

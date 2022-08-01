@@ -15,6 +15,7 @@ from hub.services.entity import EntityService
 class EntityViewSet(viewsets.ModelViewSet):
 
     serializer_class = EntitySerializer
+    queryset = EntityService.get_queryset()
 
     def entities(self, request):
         data = EntityService.get_queryset()

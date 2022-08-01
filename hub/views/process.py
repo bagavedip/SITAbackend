@@ -12,6 +12,7 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     # permission_classes = [IsAuthenticated]
 
     serializer_class = ProcessSerializer
+    queryset = ProcessService.get_queryset()
 
     @action(detail=False, methods=["post"])
     def addprocess(self, request):
@@ -74,18 +75,18 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     @action(detail=False, methods=["post"])
     def addprocess(self, request,**kwargs):
         if request.method == 'POST':
-            Serializer = ProcessSerializer(data = request.data)
+            Serializer = ProcessSerializer(data=request.data)
             data = {}
             if Serializer.is_valid():
                 if not self.queryset.filter(process=request.data["process"]).exists():
                     process = Serializer.save()
                     data["Id"]= process.id
                     data['Process'] = process.process
-                    return Response (
+                    return Response(
                         {
                             "Status": status.HTTP_200_OK,
                             "Message": "Process Successfully Added",
-                            "Process_details" : data
+                            "Process_details": data
                         }
                     )
                 else:
@@ -104,3 +105,27 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                         "Process_Details" : data
                     }
                 )
+
+    def process_details(self, request, **kwargs):
+        queryset = self.queryset
+        if queryset:
+            queryset_details = []
+            for data in queryset:
+                query_data = ({
+                    "Id": data.id,
+                    "Process": data.process
+                })
+                queryset_details.append(query_data)
+
+            return Response(
+                {
+                    "Status": status.HTTP_200_OK,
+                    "Data": queryset_details
+                }
+            )
+        else:
+            return Response({
+                "Status": status.HTTP_404_NOT_FOUND,
+                "Message": "Data Not Existing"
+            }
+            )

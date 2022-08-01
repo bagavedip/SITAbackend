@@ -60,8 +60,7 @@ class AssetViewSet(viewsets.ModelViewSet):
         for asset in queryset:
             data = ({
                 "Asset_Name": asset.AssetName,
-                "Asset_Type": asset.AssetType,
-                "Category": asset.Category,
+                "Category": asset.category.category,
                 "Criticality": asset.criticality,
                 "Function_Name": asset.function_id.function_name,
                 "Location": asset.function_id.location_id.location,

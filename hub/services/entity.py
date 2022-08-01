@@ -19,3 +19,15 @@ class EntityService:
         """
         logger.info(f"Received Entity start datetime {start_datetime}")
         return get_object_or_404(EntityService.get_queryset(), pk=start_datetime)
+
+    @staticmethod
+    def update(entity, **kwargs):
+        """
+        Function update an asset from kwargs
+        """
+        for key, value in kwargs.items():
+            setattr(entity, key, value)
+        entity.save()
+
+        return entity
+

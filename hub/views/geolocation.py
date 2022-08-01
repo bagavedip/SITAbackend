@@ -17,17 +17,25 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     
     serializer_class = GeoLocationSerializer
+    queryset = GeoLocationService.get_queryset()
 
     def geo_locations(self, request):
-        data = GeoLocationService.get_queryset()
-        if data:
-            serializer = self.serializer_class(data, many = True)
+        queryset = GeoLocationService.get_queryset().select_related('entity_id')
+        if queryset:
+            dataset = []
+            for location in queryset:
+                data = {
+                    "id": location.id,
+                    "location": location.location,
+                    "entity": location.entity_id.entityname,
+                }
+                dataset.append(data)
         return Response(
             {
                 "Status": "Success",
-                "Data": serializer.data,
+                "Data": dataset,
             }
-        )        
+        )
 
     def offence_location(self, request):
         queryset = GeoLocationService.get_queryset()
@@ -63,12 +71,12 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
                     location = Serializer.save()
                     data["Id"] = location.id
                     data['Location'] = location.location
-                    data["Entity"] = location.entity_id
+                    data["Entity"] = location.entity_id.entityname
                     return Response(
                         {
                             "Status": status.HTTP_200_OK,
                             "Message": "Location Successfully Added",
-                            "Process_details" : data
+                            "Process_details": data
                         }
                     )
                 else:
@@ -102,7 +110,7 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
                 location = GeoLocationService.update(data, **validated_data)
                 data = {
                     "id": location.pk,
-                    "Location Name":location.location,
+                    "Location Name": location.location,
                 }
         return Response(data)
 
@@ -117,6 +125,6 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
             Status = status.HTTP_404_NOT_FOUND
         return Response(
             {
-                "Status" : Status,
-                "Message":message
+                "Status": Status,
+                "Message": message
             })

@@ -16,6 +16,7 @@ class FunctionViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     
     serializer_class = FunctionSerializer
+    queryset = FunctionService.get_queryset()
 
     def function(self, request):
         try:
@@ -23,7 +24,7 @@ class FunctionViewSet(viewsets.ModelViewSet):
             if id != None:
                 data = FunctionService.get_queryset().filter(id=id)
                 if data:
-                    serializer = self.serializer_class(data, many = True)
+                    serializer = self.serializer_class(data, many=True)
                     return Response(
                         {
                             "Status": status.HTTP_200_OK,
@@ -50,9 +51,10 @@ class FunctionViewSet(viewsets.ModelViewSet):
                 dataset = []
                 for functions in data:
                     data = ({
-                        "Function_id":functions.id,
-                        "Function_name":functions.function_name,
-                        "Location_id":functions.location_id.id,
+                        "Function_id": functions.id,
+                        "Function_name": functions.function_name,
+                        "Location_id": functions.location_id.id,
+                        "Location": functions.location_id.location
                     })
                     dataset.append(data)
                 return Response(
@@ -190,3 +192,39 @@ class FunctionViewSet(viewsets.ModelViewSet):
                 "Status": Status,
                 "Message": message
             })
+
+    @action(detail=False, methods=["post"])
+    def addfunction(self, request,**kwargs):
+        if request.method == 'POST':
+            Serializer = self.serializer_class(data = request.data)
+            data = {}
+            if Serializer.is_valid():
+                if not self.queryset.filter(function_name=request.data["function_name"]).exists():
+                    function = Serializer.save()
+                    data["Id"]= function.id
+                    data['Function'] = function.function_name
+                    data['Location'] = function.location_id_id
+                    print(data)
+                    return Response (
+                        {
+                            "Status": status.HTTP_200_OK,
+                            "Message": "Function Successfully Added",
+                            "Process_details" : data
+                        }
+                    )
+                else:
+                    return Response (
+                        {
+                            "Status":status.HTTP_400_BAD_REQUEST,
+                            "Message": "Function allready Exist",
+                        }
+                    )
+            else:
+                data = Serializer.errors
+                return Response (
+                    {
+                        "Status":status.HTTP_204_NO_CONTENT,
+                        "Message": "Fill required data",
+                        "Function_Details" : data
+                    }
+                )

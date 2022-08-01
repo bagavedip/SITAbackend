@@ -27,3 +27,14 @@ class GeoLocationService:
         """
         filtered_data = GeoLocationService.get_queryset().filter(entity_id=id)
         return filtered_data
+
+    @staticmethod
+    def update(location_data, **kwargs):
+        """
+        Function update an asset from kwargs
+        """
+        for key, value in kwargs.items():
+            setattr(location_data, key, value)
+        location_data.save()
+
+        return location_data

@@ -24,3 +24,14 @@ class FunctionService:
     def function_filter(id):
         filtered_data = FunctionService.get_queryset().filter(location_id=id)
         return filtered_data
+
+    @staticmethod
+    def update(function_data, **kwargs):
+        """
+        Function update an asset from kwargs
+        """
+        for key, value in kwargs.items():
+            setattr(function_data, key, value)
+        function_data.save()
+
+        return function_data
