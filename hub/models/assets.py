@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from hub.models.category import Category
 from .functions import Function
 
 
@@ -12,12 +14,6 @@ class Assets(models.Model):
         Laptop = "Laptop", _("Laptop")
         Mobile = "Mobile", _("Mobile")
         Desktop = "Desktop", _("Desktop")
-        Others = "Others", _("Others")
-
-    class Category(models.TextChoices):
-        Category1 = "Category1", _("Category1")
-        Category2 = "Category2", _("Category2")
-        Category3 = "Category3", _("Category3")
         Others = "Others", _("Others")
 
     class Criticalities(models.TextChoices):

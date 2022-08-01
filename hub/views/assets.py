@@ -131,4 +131,30 @@ class AssetViewSet(viewsets.ModelViewSet):
                 "Message": message
             })
 
-
+    @action(detail=False, methods=["post"])
+    def addasset(self, request, **kwargs):
+        if request.method == 'POST':
+            Serializer = AssetSerializer(data=request.data)
+            data = {}
+            if Serializer.is_valid():
+                asset = Serializer.save()
+                data['Asset_Name'] = asset.AssetName
+                data['Category'] = asset.category_id
+                data['Criticality'] = asset.criticality
+                data['Function_Id'] = asset.function_id_id
+                return Response(
+                    {
+                        "Status": status.HTTP_200_OK,
+                        "Message": "Asset Successfully Added",
+                        "Asset_Details": data,
+                    }
+                )
+            else:
+                data = Serializer.errors
+                return Response(
+                    {
+                        "Status": status.HTTP_400_BAD_REQUEST,
+                        "Message": "Fill required data",
+                        "Asset_Details": data
+                    }
+                )

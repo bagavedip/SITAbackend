@@ -3,9 +3,10 @@ from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from hub.serializers.category import CategorySerializer
+from hub.services.category import CategoryService
 
 
-class AddCategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]

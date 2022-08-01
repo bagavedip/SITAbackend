@@ -1,6 +1,8 @@
+from django.db import transaction
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from hub.serializers.functions import FuctionSerializer
+from hub.serializers.functions import FunctionSerializer
 from hub.services.functions import FunctionService
 from hub.services.assets import AssetService
 from hub.services.itsm import ITSMService
@@ -13,7 +15,7 @@ class FunctionViewSet(viewsets.ModelViewSet):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
     
-    serializer_class = FuctionSerializer
+    serializer_class = FunctionSerializer
 
     def function(self, request):
         try:
@@ -155,3 +157,36 @@ class FunctionViewSet(viewsets.ModelViewSet):
                 "Data": data,
             }
         )
+
+    @action(detail=False, methods=["put"])
+    def update_function(self, request, function_id):
+        """
+            Function to update asset queryset
+        """
+        serializer = FunctionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        with transaction.atomic():
+            Function_queryset = FunctionService.get_queryset().filter(id=function_id)
+            for data in Function_queryset:
+                function = FunctionService.update(data, **validated_data)
+                data = {
+                    "id": function.pk,
+                    "Function Name":function.function_name,
+                }
+        return Response(data)
+
+    def function_delete(self, request, function_id):
+        queryset = FunctionService.get_queryset().filter(id=function_id)
+        if queryset:
+            queryset.delete()
+            message = f"Record deleted for id {function_id}"
+            Status = status.HTTP_200_OK
+        else:
+            message = f"Record not found for id {function_id}"
+            Status = status.HTTP_404_NOT_FOUND
+        return Response(
+            {
+                "Status": Status,
+                "Message": message
+            })

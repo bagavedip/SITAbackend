@@ -4,7 +4,7 @@ from hub.models.geolocations import GeoLocation
 
 class GeoLocationSerializer(serializers.ModelSerializer):
     """
-    Model serializer for ITSM information
+    Model serializer for Location information
     """
 
     class Meta:

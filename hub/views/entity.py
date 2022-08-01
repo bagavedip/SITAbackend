@@ -1,4 +1,6 @@
+from django.db import transaction
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from hub.services.geolocations import GeoLocationService
 from hub.services.functions import FunctionService
@@ -197,3 +199,72 @@ class EntityViewSet(viewsets.ModelViewSet):
                 "Data": data,
             }
         )
+
+    @action(detail=False, methods=["post"])
+    def addentity(self, request,**kwargs):
+        if request.method == 'POST':
+            Serializer = EntitySerializer(data = request.data)
+            data = {}
+            if Serializer.is_valid():
+                if not self.queryset.filter(entityname=request.data["entityname"]).exists():
+                    entity = Serializer.save()
+                    data["Id"]= entity.id
+                    data['Entity'] = entity.entityname
+                    print(data)
+                    return Response (
+                        {
+                            "Status": status.HTTP_200_OK,
+                            "Message": "Entity Successfully Added",
+                            "Process_details" : data
+                        }
+                    )
+                else:
+                    return Response (
+                        {
+                            "Status":status.HTTP_400_BAD_REQUEST,
+                            "Message": "Entity allready Exist",
+                        }
+                    )
+            else:
+                data = Serializer.errors
+                return Response (
+                    {
+                        "Status":status.HTTP_204_NO_CONTENT,
+                        "Message": "Fill required data",
+                        "Entity_Details" : data
+                    }
+                )
+
+    @action(detail=False, methods=["put"])
+    def update_entity(self, request, entity_id):
+        """
+            Function to update asset queryset
+        """
+        serializer = EntitySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        with transaction.atomic():
+            Entity_queryset = EntityService.get_queryset().filter(id=entity_id)
+            for data in Entity_queryset:
+                entity = EntityService.update(data, **validated_data)
+                data = {
+                    "id": entity.pk,
+                    "Entity Name":entity.entityname,
+                }
+        return Response(data)
+
+    def entity_delete(self, request, entity_id):
+        queryset = EntityService.get_queryset().filter(id=entity_id)
+        if queryset:
+            queryset.delete()
+            message = f"Record deleted for id {entity_id}"
+            Status = status.HTTP_200_OK
+        else:
+            message = f"Record not found for id {entity_id}"
+            Status = status.HTTP_404_NOT_FOUND
+        return Response(
+            {
+                "Status": Status,
+                "Message": message
+            })
+

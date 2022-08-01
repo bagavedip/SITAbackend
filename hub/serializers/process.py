@@ -4,7 +4,7 @@ from hub.models.process import Process
 
 class ProcessSerializer(serializers.ModelSerializer):
     """
-    Model serializer for ITSM information
+    Model serializer for Process information
     """
 
     class Meta:

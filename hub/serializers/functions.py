@@ -2,9 +2,9 @@ from rest_framework import serializers
 from hub.models.functions import Function
 
 
-class FuctionSerializer(serializers.ModelSerializer):
+class FunctionSerializer(serializers.ModelSerializer):
     """
-    Model serializer for ITSM information
+    Model serializer for function information
     """
 
     class Meta:
