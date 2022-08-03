@@ -56,3 +56,4 @@ class Hub(models.Model):
     soar_id = models.CharField(_("soar_id"), max_length=20000, help_text=_("soar id"), null=True)
     ticket_id = models.CharField(_("ticket_id"), max_length=20000, help_text=_("ticket id"), null=True)
     Suspicious = models.CharField(_("Suspicious"), max_length=20000, help_text=_("suspicious"), null=True)
+    subject = models.CharField(_("subject"), max_length=256, help_text=_("subject"), null=True)

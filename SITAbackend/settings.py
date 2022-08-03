@@ -147,7 +147,7 @@ REST_FRAMEWORK = {
     )
 }
 
-ORIGINAL_BACKEND = "django.contrib.gis.db.backends.postgis"
+# ORIGINAL_BACKEND = "django.contrib.gis.db.backends.postgis"
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
