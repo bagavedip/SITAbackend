@@ -1,5 +1,6 @@
 from django.urls import path
 
+from .views.hub import InsightHub
 from .views.process import ProcessViewSet
 from .views.siem import SIEMViewSet
 from .views.source import SourceViewSet
@@ -75,10 +76,14 @@ delete_category = CategoryViewSet.as_view({"delete":"category_delete"})
 update_category = CategoryViewSet.as_view({"put":"update_category"})
 
 # process
-add_process = ProcessViewSet.as_view({"post":"addprocess"})
-process_details = ProcessViewSet.as_view({"get":"process_details"})
-delete_process = ProcessViewSet.as_view({"delete":"process_delete"})
-update_process = ProcessViewSet.as_view({"put":"update_process"})
+add_process = ProcessViewSet.as_view({"post": "addprocess"})
+process_details = ProcessViewSet.as_view({"get": "process_details"})
+delete_process = ProcessViewSet.as_view({"delete": "process_delete"})
+update_process = ProcessViewSet.as_view({"put": "update_process"})
+
+# Hub
+insight_tickets = InsightHub.as_view({"post": "insight_tickets"})
+hub = InsightHub.as_view({"post": "insights_hub"})
 
 
 urlpatterns = [
@@ -146,4 +151,7 @@ urlpatterns = [
          name="Offences for Entity, Geo and Asset types"),
     path(r"usecase/function/geo/entity/offence/", offence_entity_geo_function,
          name="Offences for Entity, Geo and Function"),
+
+    path(r"insight_tickets/", insight_tickets, name="insight_tickets"),
+    path(r"insights/", hub, name="insight_hub"),
 ]
