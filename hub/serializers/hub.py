@@ -4,7 +4,6 @@ from hub.constants.color import ColorMap
 
 
 class InsightsSerializer:
-
     def __init__(self, request) -> None:
         self.request_filters = []
         self.model_group_map = []
@@ -12,12 +11,10 @@ class InsightsSerializer:
         self.datasets = []
         self.hier_data = {}
         self.donut_center = {}
-
+        self.legend_filter = ""
         filter_data = request.data
-
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
-
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
         add_criticality = False
         for filter in filterOptions:
@@ -26,12 +23,15 @@ class InsightsSerializer:
             else:
                 self.request_filters.append(filter)
         self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
-
+        header_option = filter_data.get('filterOptions').get('headerOption')
+        filters = Map.get_filter(header_option).split(",")
+        if len(filters) > 1:
+            self.legend_filter = filters[1]
+        else:
+            self.legend_filter = filters[0] # legent filter kyu define kiya hai
         if add_criticality:
             self.request_filters.append('Criticality')
-
         self.depth = len(self.request_filters)
-
         index = 1
         for filter in self.request_filters:
             self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
@@ -119,18 +119,19 @@ class InsightsSerializer:
         hierarchy = []
         labels = []
         backgroundColor = []
-        for item in self.hier_data.get(self.datasets[0]['label']):
-            data.append(item['events'])
-            originalData.append(item['events'])
-            lable_name = self.datasets[0]['label']
-            columns = Map.get_filter(lable_name)
-            id_col = columns.split(",")[0]
-            hierarchy.append(id_col + "=" + item['name'] + "~" + str(item['events']))
-            labels.append(item['name'])
-            id = item['name']
-            if '-' in item['name']:
-                id = item['name'].split("-")[0]
-            backgroundColor.append(ColorMap.get_color(self.datasets[0]['label'], id))
+        if self.hier_data.get(self.datasets[0]['label']) is not None:
+            for item in self.hier_data.get(self.datasets[0]['label']):
+                data.append(item['events'])
+                originalData.append(item['events'])
+                lable_name = self.datasets[0]['label']
+                columns = Map.get_filter(lable_name)
+                id_col = columns.split(",")[0]
+                hierarchy.append(id_col + "=" + item['name'] + "~" + str(item['events']))
+                labels.append(item['name'])
+                id = item['name']
+                if '-' in item['name']:
+                    id = item['name'].split("-")[0]
+                backgroundColor.append(ColorMap.get_color(self.datasets[0]['label'], id))
         self.datasets[0]['data'] = data
         self.datasets[0]['originalData'] = originalData
         self.datasets[0]['hierarchy'] = hierarchy
@@ -143,24 +144,25 @@ class InsightsSerializer:
         hierarchy = []
         labels = []
         backgroundColor = []
-        for item in self.hier_data.get(self.datasets[0]['label']):
-            lable_name = self.datasets[0]['label']
-            columns = Map.get_filter(lable_name)
-            id_col = columns.split(",")[0]
-            parent_hierarchy = id_col + "=" + item['name'] + "~" + str(item['events'])
-            for child_item in item.get(self.datasets[1]['label']):
-                data.append(child_item['events'])
-                originalData.append(child_item['events'])
-                lable_name = self.datasets[1]['label']
+        if self.hier_data.get(self.datasets[0]['label']) is not None:
+            for item in self.hier_data.get(self.datasets[0]['label']):
+                lable_name = self.datasets[0]['label']
                 columns = Map.get_filter(lable_name)
                 id_col = columns.split(",")[0]
-                hierarchy.append(
-                    parent_hierarchy + "*" + id_col + "=" + child_item['name'] + "~" + str(child_item['events']))
-                labels.append(child_item['name'])
-                id = child_item['name']
-                if '-' in child_item['name']:
-                    id = child_item['name'].split("-")[0]
-                backgroundColor.append(ColorMap.get_color(self.datasets[1]['label'], id))
+                parent_hierarchy = id_col + "=" + item['name'] + "~" + str(item['events'])
+                for child_item in item.get(self.datasets[1]['label']):
+                    data.append(child_item['events'])
+                    originalData.append(child_item['events'])
+                    lable_name = self.datasets[1]['label']
+                    columns = Map.get_filter(lable_name)
+                    id_col = columns.split(",")[0]
+                    hierarchy.append(
+                        parent_hierarchy + "*" + id_col + "=" + child_item['name'] + "~" + str(child_item['events']))
+                    labels.append(child_item['name'])
+                    id = child_item['name']
+                    if '-' in child_item['name']:
+                        id = child_item['name'].split("-")[0]
+                    backgroundColor.append(ColorMap.get_color(self.datasets[1]['label'], id))
         self.datasets[1]['data'] = data
         self.datasets[1]['originalData'] = originalData
         self.datasets[1]['hierarchy'] = hierarchy
@@ -175,31 +177,31 @@ class InsightsSerializer:
         hierarchy = []
         labels = []
         backgroundColor = []
-        for item in self.hier_data.get(self.datasets[0]['label']):
-            lable_name = self.datasets[0]['label']
-            columns = Map.get_filter(lable_name)
-            id_col = columns.split(",")[0]
-            parent_hierarchy = id_col + "=" + item['name'] + "~" + str(item['events'])
-            for child_item in item.get(self.datasets[1]['label']):
-                lable_name = self.datasets[1]['label']
+        if self.hier_data.get(self.datasets[0]['label']) is not None:
+            for item in self.hier_data.get(self.datasets[0]['label']):
+                lable_name = self.datasets[0]['label']
                 columns = Map.get_filter(lable_name)
                 id_col = columns.split(",")[0]
-                parent2_hierarchy = parent_hierarchy + "*" + id_col + "=" + child_item['name'] + "~" + str(
-                    child_item['events'])
-                for child2_item in child_item.get(self.datasets[2]['label']):
-                    data.append(child2_item['events'])
-                    originalData.append(child2_item['events'])
-                    lable_name = self.datasets[2]['label']
+                parent_hierarchy = id_col + "=" + item['name'] + "~" + str(item['events'])
+                for child_item in item.get(self.datasets[1]['label']):
+                    lable_name = self.datasets[1]['label']
                     columns = Map.get_filter(lable_name)
                     id_col = columns.split(",")[0]
-                    hierarchy.append(
-                        parent2_hierarchy + "*" + id_col + "=" + child2_item['name'] + "~" + str(child2_item['events']))
-                    labels.append(child2_item['name'])
-                    id = child2_item['name']
-                    if '-' in child2_item['name']:
-                        id = child2_item['name'].split("-")[0]
-                    backgroundColor.append(ColorMap.get_color(self.datasets[2]['label'], id))
-
+                    parent2_hierarchy = parent_hierarchy + "*" + id_col + "=" + child_item['name'] + "~" + str(
+                        child_item['events'])
+                    for child2_item in child_item.get(self.datasets[2]['label']):
+                        data.append(child2_item['events'])
+                        originalData.append(child2_item['events'])
+                        lable_name = self.datasets[2]['label']
+                        columns = Map.get_filter(lable_name)
+                        id_col = columns.split(",")[0]
+                        hierarchy.append(parent2_hierarchy + "*" + id_col + "=" + child2_item['name'] + "~" + str(
+                            child2_item['events']))
+                        labels.append(child2_item['name'])
+                        id = child2_item['name']
+                        if '-' in child2_item['name']:
+                            id = child2_item['name'].split("-")[0]
+                        backgroundColor.append(ColorMap.get_color(self.datasets[2]['label'], id))
         self.datasets[2]['data'] = data
         self.datasets[2]['originalData'] = originalData
         self.datasets[2]['hierarchy'] = hierarchy
@@ -214,37 +216,37 @@ class InsightsSerializer:
         hierarchy = []
         labels = []
         backgroundColor = []
-        for item in self.hier_data.get(self.datasets[0]['label']):
-            lable_name = self.datasets[0]['label']
-            columns = Map.get_filter(lable_name)
-            id_col = columns.split(",")[0]
-            parent_hierarchy = id_col + "=" + item['name'] + "~" + str(item['events'])
-            for child_item in item.get(self.datasets[1]['label']):
-                lable_name = self.datasets[1]['label']
+        if self.hier_data.get(self.datasets[0]['label']) is not None:
+            for item in self.hier_data.get(self.datasets[0]['label']):
+                lable_name = self.datasets[0]['label']
                 columns = Map.get_filter(lable_name)
                 id_col = columns.split(",")[0]
-                parent2_hierarchy = parent_hierarchy + "*" + id_col + "=" + child_item['name'] + "~" + str(
-                    child_item['events'])
-                for child2_item in child_item.get(self.datasets[2]['label']):
-                    lable_name = self.datasets[2]['label']
+                parent_hierarchy = id_col + "=" + item['name'] + "~" + str(item['events'])
+                for child_item in item.get(self.datasets[1]['label']):
+                    lable_name = self.datasets[1]['label']
                     columns = Map.get_filter(lable_name)
                     id_col = columns.split(",")[0]
-                    parent3_hierarchy = parent2_hierarchy + "*" + id_col + "=" + child2_item['name'] + "~" + str(
-                        child2_item['events'])
-                    for child3_item in child2_item.get(self.datasets[3]['label']):
-                        data.append(child3_item['events'])
-                        originalData.append(child3_item['events'])
-                        lable_name = self.datasets[3]['label']
+                    parent2_hierarchy = parent_hierarchy + "*" + id_col + "=" + child_item['name'] + "~" + str(
+                        child_item['events'])
+                    for child2_item in child_item.get(self.datasets[2]['label']):
+                        lable_name = self.datasets[2]['label']
                         columns = Map.get_filter(lable_name)
                         id_col = columns.split(",")[0]
-                        hierarchy.append(parent3_hierarchy + "*" + id_col + "=" + child3_item['name'] + "~" + str(
-                            child3_item['events']))
-                        labels.append(child3_item['name'])
-                        id = child3_item['name']
-                        if '-' in child3_item['name']:
-                            id = child2_item['name'].split("-")[0]
-                        backgroundColor.append(ColorMap.get_color(self.datasets[3]['label'], id))
-
+                        parent3_hierarchy = parent2_hierarchy + "*" + id_col + "=" + child2_item['name'] + "~" + str(
+                            child2_item['events'])
+                        for child3_item in child2_item.get(self.datasets[3]['label']):
+                            data.append(child3_item['events'])
+                            originalData.append(child3_item['events'])
+                            lable_name = self.datasets[3]['label']
+                            columns = Map.get_filter(lable_name)
+                            id_col = columns.split(",")[0]
+                            hierarchy.append(parent3_hierarchy + "*" + id_col + "=" + child3_item['name'] + "~" + str(
+                                child3_item['events']))
+                            labels.append(child3_item['name'])
+                            id = child3_item['name']
+                            if '-' in child3_item['name']:
+                                id = child2_item['name'].split("-")[0]
+                            backgroundColor.append(ColorMap.get_color(self.datasets[3]['label'], id))
         self.datasets[3]['data'] = data
         self.datasets[3]['originalData'] = originalData
         self.datasets[3]['hierarchy'] = hierarchy
@@ -282,4 +284,3 @@ class InsightsSerializer:
                 filter_vals.append(temp_label)
             self.update_hierarcy_data(filter_vals, row.get('events'))
         self.build_dataset()
-        

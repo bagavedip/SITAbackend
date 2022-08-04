@@ -2,7 +2,6 @@ from hub.models.hub import Hub
 from django.db.models import Q
 from hub.serializers.ticket_details import TicketDetailsSerializer
 
-
 class TicketsService:
 
     @staticmethod

@@ -84,6 +84,9 @@ update_process = ProcessViewSet.as_view({"put": "update_process"})
 # Hub
 insight_tickets = InsightHub.as_view({"post": "insight_tickets"})
 hub = InsightHub.as_view({"post": "insights_hub"})
+grid_master = InsightHub.as_view({"post": "master_data"})
+
+
 
 
 urlpatterns = [
@@ -154,4 +157,7 @@ urlpatterns = [
 
     path(r"insight_tickets/", insight_tickets, name="insight_tickets"),
     path(r"insights/", hub, name="insight_hub"),
+    path(r"chart-data", hub, name="insight_hub"),
+    path(r"insight-grid", insight_tickets, name="insight_tickets"),
+    path(r"insight-grid-master-dropdowns", grid_master, name="grid_master"),
 ]
