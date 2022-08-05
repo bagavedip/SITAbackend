@@ -1,10 +1,10 @@
 import logging
-import re
-from urllib import response
 from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import json
-from collections import defaultdict as dd
+
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from hub.services.insight_hub_service import HubService
 from hub.constants.dataset import Dataset
@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class InsightHub(viewsets.GenericViewSet):
+    permission_classes = [IsAuthenticated]
 
     def convert_data(self, dataset):
         if len(dataset) == 0:
@@ -237,3 +238,13 @@ class InsightHub(viewsets.GenericViewSet):
         ]
 
         return Response(response, status=status.HTTP_201_CREATED)
+
+    def asset_details(self, request):
+        request_param = request.query_params.dict()
+        incident = request_param.get("incident", None)
+        print(incident)
+        queryset = HubService.asset_details(incident)
+        print(f"{queryset}queryset")
+
+        return Response(queryset, status=status.HTTP_201_CREATED)
+

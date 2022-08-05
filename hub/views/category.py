@@ -1,4 +1,5 @@
 from django.db import transaction
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
@@ -8,8 +9,7 @@ from hub.services.category import CategoryService
 
 class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = CategorySerializer
     queryset = CategoryService.get_queryset()
 

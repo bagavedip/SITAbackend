@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from hub.serializers.assets import AssetSerializer
@@ -12,8 +13,7 @@ from hub.services.siem import SIEMService
 
 class AssetViewSet(viewsets.ModelViewSet):
 
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     serializer_class = AssetSerializer
 

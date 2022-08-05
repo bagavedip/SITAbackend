@@ -41,18 +41,18 @@ update_asset = AssetViewSet.as_view({"put": "update_asset"})
 offence_asset_types = AssetViewSet.as_view({"get": "offence_asset_types"})
 
 # Function urls
-add_function = FunctionViewSet.as_view({"post":"addfunction"})
-delete_function = FunctionViewSet.as_view({"delete":"function_delete"})
-update_function = FunctionViewSet.as_view({"put":"update_function"})
+add_function = FunctionViewSet.as_view({"post": "addfunction"})
+delete_function = FunctionViewSet.as_view({"delete": "function_delete"})
+update_function = FunctionViewSet.as_view({"put": "update_function"})
 functions = FunctionViewSet.as_view({"get": "function"})
 functiondetails = FunctionViewSet.as_view({"get": "functionlocationentity"})
 asset_function = FunctionViewSet.as_view({"get": "function_asset"})
 functions_offence = FunctionViewSet.as_view({"get": "offence_function"})
 
 # Geolocation urls
-add_location = GeoLocationViewSet.as_view({"post":"addlocation"})
-delete_location = GeoLocationViewSet.as_view({"delete":"location_delete"})
-update_location = GeoLocationViewSet.as_view({"put":"update_location"})
+add_location = GeoLocationViewSet.as_view({"post": "addlocation"})
+delete_location = GeoLocationViewSet.as_view({"delete": "location_delete"})
+update_location = GeoLocationViewSet.as_view({"put": "update_location"})
 geo_location = GeoLocationViewSet.as_view({"get": "geo_locations"})
 offence_location = GeoLocationViewSet.as_view({"get": "offence_location"})
 
@@ -70,10 +70,10 @@ offence_entity_geo_function = EntityViewSet.as_view({"get": "offence_entity_geo_
 get_ticket_id = ITSMViewSet.as_view({"get": "get_ticket_id"})
 
 # category
-add_category = CategoryViewSet.as_view({"post":"addcategory"})
-category_details = CategoryViewSet.as_view({"get":"category_details"})
-delete_category = CategoryViewSet.as_view({"delete":"category_delete"})
-update_category = CategoryViewSet.as_view({"put":"update_category"})
+add_category = CategoryViewSet.as_view({"post": "addcategory"})
+category_details = CategoryViewSet.as_view({"get": "category_details"})
+delete_category = CategoryViewSet.as_view({"delete": "category_delete"})
+update_category = CategoryViewSet.as_view({"put": "update_category"})
 
 # process
 add_process = ProcessViewSet.as_view({"post": "addprocess"})
@@ -85,6 +85,7 @@ update_process = ProcessViewSet.as_view({"put": "update_process"})
 insight_tickets = InsightHub.as_view({"post": "insight_tickets"})
 hub = InsightHub.as_view({"post": "insights_hub"})
 grid_master = InsightHub.as_view({"post": "master_data"})
+asset_details = InsightHub.as_view({"get": "asset_details"})
 
 
 
@@ -160,4 +161,5 @@ urlpatterns = [
     path(r"chart-data", hub, name="insight_hub"),
     path(r"insight-grid", insight_tickets, name="insight_tickets"),
     path(r"insight-grid-master-dropdowns", grid_master, name="grid_master"),
+    path(r"asset_details/", asset_details, name="asset_details")
 ]

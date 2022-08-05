@@ -1,5 +1,6 @@
 import logging
 from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from hub.serializers.itsm import ITSMSerializer
@@ -9,9 +10,8 @@ logger = logging.getLogger(__name__)
 
 
 class ITSMViewSet(viewsets.ModelViewSet):
-    
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+
+    permission_classes = [IsAuthenticated]
     queryset = ITSMService.get_queryset()
 
     def request_modes(self, request):

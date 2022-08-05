@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from hub.serializers.functions import FunctionSerializer
 from hub.services.functions import FunctionService
@@ -12,8 +13,7 @@ from hub.services.siem import SIEMService
 
 class FunctionViewSet(viewsets.ModelViewSet):
 
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     serializer_class = FunctionSerializer
     queryset = FunctionService.get_queryset()
@@ -194,7 +194,7 @@ class FunctionViewSet(viewsets.ModelViewSet):
             })
 
     @action(detail=False, methods=["post"])
-    def addfunction(self, request,**kwargs):
+    def addfunction(self, request, **kwargs):
         if request.method == 'POST':
             Serializer = self.serializer_class(data = request.data)
             data = {}
@@ -215,16 +215,16 @@ class FunctionViewSet(viewsets.ModelViewSet):
                 else:
                     return Response (
                         {
-                            "Status":status.HTTP_400_BAD_REQUEST,
+                            "Status": status.HTTP_400_BAD_REQUEST,
                             "Message": "Function allready Exist",
                         }
                     )
             else:
                 data = Serializer.errors
-                return Response (
+                return Response(
                     {
-                        "Status":status.HTTP_204_NO_CONTENT,
+                        "Status": status.HTTP_204_NO_CONTENT,
                         "Message": "Fill required data",
-                        "Function_Details" : data
+                        "Function_Details": data
                     }
                 )

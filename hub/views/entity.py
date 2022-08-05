@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from hub.services.geolocations import GeoLocationService
 from hub.services.functions import FunctionService
@@ -14,6 +15,7 @@ from hub.services.entity import EntityService
 
 class EntityViewSet(viewsets.ModelViewSet):
 
+    permission_classes = [IsAuthenticated]
     serializer_class = EntitySerializer
     queryset = EntityService.get_queryset()
 

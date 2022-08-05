@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class SourceViewSet(viewsets.GenericViewSet):
-    
+
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -43,11 +43,11 @@ class SourceViewSet(viewsets.GenericViewSet):
             print(file_path)
             print(source.type)
             if source.type == 'EXCEL':
-               df = pd.read_excel(file_path)
-               if source.name == 'SIEM':
-                   serializer_class = SIEMSerializer(data=df)
-                   serializer_class.is_valid()
-                   serializer_class.save()
+                df = pd.read_excel(file_path)
+                if source.name == 'SIEM':
+                    serializer_class = SIEMSerializer(data=df)
+                    serializer_class.is_valid()
+                    serializer_class.save()
 
             logger.info(f"Source with ID {source.pk} created successfully.")
             return Response({"id": source.pk}, status=status.HTTP_201_CREATED)

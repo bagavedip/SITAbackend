@@ -1,4 +1,5 @@
 from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from hub.serializers.siem import SIEMSerializer
 from shared_stage.services.rules import RulesService
@@ -8,15 +9,13 @@ from hub.services.siem import SIEMService
 
 class SIEMViewSet(viewsets.ModelViewSet):
 
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     serializer_class = SIEMSerializer
 
     def event_count_data(self, request):
         if request.query_params:
             start_date = request.query_params["start_datetime"]
-            print(start_date)
             if start_date: 
                 siem_data = SIEMService.get_queryset().filter(start_datetime=start_date)
                 if siem_data:

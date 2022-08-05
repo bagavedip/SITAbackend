@@ -48,10 +48,8 @@ class UserService:
         Function to fetch active user email in model
         """
         try:
-            print("hello")
             email = email.lower()
             queryset = self.get_user_queryset().get(email=email, is_active=True)
-            print(queryset)
             return queryset
         except User.DoesNotExist:
             return None

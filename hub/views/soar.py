@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from hub.serializers.soar import SOARSerializer
 from hub.services.siem import SIEMService
@@ -9,6 +10,7 @@ from shared_stage.services.usecase import UseCaseService
 
 class SOARViewSet(viewsets.ModelViewSet):
 
+    permission_classes = [IsAuthenticated]
     serializer_class = SOARSerializer
 
     def incident(self, request, *args, **kwargs):
@@ -20,9 +22,9 @@ class SOARViewSet(viewsets.ModelViewSet):
         if soar_data:
             for data in soar_data:
                 count += 1
-                if data.Incident ==True :
+                if data.Incident==True :
                     resolved += 1
-                elif data.Incident == False:
+                elif data.Incident==False:
                     unresolved += 1
                 else:
                     client_to_respond += 1
