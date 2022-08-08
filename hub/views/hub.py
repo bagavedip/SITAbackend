@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import json
 
+from collections import defaultdict as dd
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from hub.services.insight_hub_service import HubService
@@ -30,8 +31,8 @@ class InsightHub(viewsets.GenericViewSet):
 
             key_index = 0
             for key in keys:
-                if key_index < len(keys) - 1:
-                    if key_index < len(keys) - 2:
+                if key_index < len(keys) -1:
+                    if key_index < len(keys) -2:
                         nested_dict_str = "dd(lambda: " + nested_dict_str + ")"
                     key_var = key_var + "[data.get('" + key + "')]"
                     key_index += 1

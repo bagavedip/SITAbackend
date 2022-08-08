@@ -106,13 +106,25 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
         validated_data = serializer.validated_data
         with transaction.atomic():
             location_queryset = GeoLocationService.get_queryset().filter(id=location_id)
-            for data in location_queryset:
-                location = GeoLocationService.update(data, **validated_data)
-                data = {
-                    "id": location.pk,
-                    "Location Name": location.location,
-                }
-        return Response(data)
+            if location_queryset:
+                for data in location_queryset:
+                    location = GeoLocationService.update(data, **validated_data)
+                    data = {
+                        "id": location.pk,
+                        "Location Name": location.location,
+                    }
+                return Response(
+                    {
+                        "Status": status.HTTP_200_OK,
+                        "Message": "",
+                        "Data": data
+                    })
+            else:
+                return Response(
+                    {
+                        "Status": status.HTTP_404_NOT_FOUND,
+                        "Message": "Data not not found"
+                    })
 
     def location_delete(self, request, location_id):
         queryset = GeoLocationService.get_queryset().filter(id=location_id)
