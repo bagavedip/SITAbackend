@@ -39,7 +39,7 @@ class Hub(models.Model):
     priority = models.CharField(_("priority"), max_length=200, help_text=_("priority"), null=True)
     group = models.CharField(_("group"), max_length=200, help_text=_("group"), null=True)
     service_category = models.CharField(_("category"), max_length=200, help_text=_("category"), null=True)
-    assigned_time = models.CharField(_("assigned_time"), max_length=200, null=True, help_text=_("Time send mail"))
+    assigned_time = models.DateTimeField(_("assigned_time"), max_length=200, null=True, help_text=_("Time send mail"))
     resolution = models.CharField(_("resolution"), max_length=200, help_text=_("resolution"), null=True)
     assets = models.CharField(_("assets"), max_length=20000, help_text=_("log source"), null=True)
     site = models.CharField(_("site"), max_length=200, help_text=_("location"), null=True)

@@ -243,9 +243,7 @@ class InsightHub(viewsets.GenericViewSet):
     def asset_details(self, request):
         request_param = request.query_params.dict()
         incident = request_param.get("incident", None)
-        print(incident)
         queryset = HubService.asset_details(incident)
-        print(f"{queryset}queryset")
 
         return Response(queryset, status=status.HTTP_201_CREATED)
 
