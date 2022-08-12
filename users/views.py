@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     service_class = UserService
+    serializer_class = LoginSerializer
 
     def get_service(self):
         # function which return user service
