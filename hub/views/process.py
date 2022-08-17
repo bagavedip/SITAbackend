@@ -1,8 +1,11 @@
+import csv
+import codecs
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
+from hub.models.process import Process
 from hub.serializers.process import ProcessSerializer
 from hub.services.process import ProcessService
 
@@ -10,34 +13,9 @@ from hub.services.process import ProcessService
 class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     permission_classes = [IsAuthenticated]
-
     serializer_class = ProcessSerializer
-    queryset = ProcessService.get_queryset()
 
-    @action(detail=False, methods=["post"])
-    def addprocess(self, request):
-        if request.method == 'POST':
-            Serializer = ProcessSerializer(data=request.data)
-            data = {}
-            if Serializer.is_valid():
-                process = Serializer.save()
-                data['Process'] = process.process
-                return Response(
-                    {
-                        "Status": status.HTTP_200_OK,
-                        "Message": "Process Successfully Added",
-                        "Process_details" : data
-                    }
-                )
-            else:
-                data = Serializer.errors
-                return Response(
-                    {
-                        "Status": status.HTTP_400_BAD_REQUEST,
-                        "Message": "Fill required data",
-                        "Process_Details": data
-                    }
-                )
+    # queryset = ProcessService.get_queryset()
 
     @action(detail=False, methods=["put"])
     def update_process(self, request, process_id):
@@ -73,14 +51,14 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             })
 
     @action(detail=False, methods=["post"])
-    def addprocess(self, request,**kwargs):
+    def addprocess(self, request, **kwargs):
         if request.method == 'POST':
             Serializer = ProcessSerializer(data=request.data)
             data = {}
             if Serializer.is_valid():
-                if not self.queryset.filter(process=request.data["process"]).exists():
+                if not ProcessService.get_queryset().filter(process=request.data["process"]).exists():
                     process = Serializer.save()
-                    data["Id"]= process.id
+                    data["Id"] = process.id
                     data['Process'] = process.process
                     return Response(
                         {
@@ -90,24 +68,107 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                         }
                     )
                 else:
-                    return Response (
+                    return Response(
                         {
-                            "Status":status.HTTP_400_BAD_REQUEST,
+                            "Status": status.HTTP_400_BAD_REQUEST,
                             "Message": "Process allready Exist",
                         }
                     )
             else:
                 data = Serializer.errors
-                return Response (
+                return Response(
                     {
-                        "Status":status.HTTP_204_NO_CONTENT,
+                        "Status": status.HTTP_204_NO_CONTENT,
                         "Message": "Fill required data",
-                        "Process_Details" : data
+                        "Process_Details": data
                     }
                 )
 
+    @action(detail=False, methods=['POST'])
+    def validate_process(self, request):
+        # """Upload data from CSV, with validation."""
+        file = request.FILES.get("File")
+
+        reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
+        data = list(reader)
+        # print(data)
+        cate_data = {}
+        serializer = ProcessSerializer(data=data, many=True)
+        # print(serializer)
+        if serializer.is_valid():
+            # print(data)
+            return Response({
+                "Status": status.HTTP_200_OK,
+                "Message": "Validation Successful",
+                "Data": data
+            }
+            )
+        else:
+            # print("failed")
+            process_err = serializer.errors
+            return Response({
+                "Status": status.HTTP_406_NOT_ACCEPTABLE,
+                "Message": serializer.errors,
+                "Data": process_err
+            }
+            )
+
+    @action(detail=False, methods=['POST'])
+    def upload_process(self, request):
+        """Upload data from CSV, with validation."""
+        file = request.FILES.get("File")
+
+        reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
+        data = list(reader)
+        # print(data)
+        serializer = ProcessSerializer(data=data, many=True)
+        # print(serializer)
+        if serializer.is_valid():
+            process_list = []
+            for row in serializer.data:
+                process_list.append(
+                    Process(
+                        process=row["process"],
+                    )
+                )
+            # print(asset_list)
+            Process.objects.bulk_create(process_list)
+
+            return Response({
+                "Status": status.HTTP_200_OK,
+                "Message": "Successfully upload the data",
+                "Data": data
+            }
+            )
+        else:
+            process_err = serializer.errors
+            # print(asset_err)
+            return Response({
+                "Status": status.HTTP_406_NOT_ACCEPTABLE,
+                "Message": serializer.errors,
+                "Data": process_err
+            }
+            )
+
     def process_details(self, request, **kwargs):
-        queryset = self.queryset
+        queryset = ProcessService.get_queryset()
+        queryset_details = []
+        for data in queryset:
+            query_data = ({
+                "Id": data.id,
+                "Process": data.process
+            })
+            queryset_details.append(query_data)
+
+        return Response(
+            {
+                "Status": status.HTTP_200_OK,
+                "Data": queryset_details
+            }
+        )
+
+    def single_process_details(self, request, process_id):
+        queryset = ProcessService.get_queryset().filter(id=process_id)
         if queryset:
             queryset_details = []
             for data in queryset:

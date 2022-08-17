@@ -36,12 +36,16 @@ false_positives = ITSMViewSet.as_view({"get": "false_positives"})
 asset_types = AssetViewSet.as_view({"get": "asset_types"})
 asset = AssetViewSet.as_view({"get": "asset"})
 add_asset = AssetViewSet.as_view({"post": "addasset"})
+validate_asset = AssetViewSet.as_view({"post": "validate_asset_csv"})
+upload_asset = AssetViewSet.as_view({"post": "upload_asset"})
 delete_asset = AssetViewSet.as_view({"delete": "asset_delete"})
 update_asset = AssetViewSet.as_view({"put": "update_asset"})
 offence_asset_types = AssetViewSet.as_view({"get": "offence_asset_types"})
 
 # Function urls
 add_function = FunctionViewSet.as_view({"post": "addfunction"})
+validate_function = FunctionViewSet.as_view({"post": "validate_function_csv"})
+upload_function = FunctionViewSet.as_view({"post": "upload_function"})
 delete_function = FunctionViewSet.as_view({"delete": "function_delete"})
 update_function = FunctionViewSet.as_view({"put": "update_function"})
 functions = FunctionViewSet.as_view({"get": "function"})
@@ -51,6 +55,8 @@ functions_offence = FunctionViewSet.as_view({"get": "offence_function"})
 
 # Geolocation urls
 add_location = GeoLocationViewSet.as_view({"post": "addlocation"})
+validate_location = GeoLocationViewSet.as_view({"post": "validate_location"})
+upload_location = GeoLocationViewSet.as_view({"post": "upload_location"})
 delete_location = GeoLocationViewSet.as_view({"delete": "location_delete"})
 update_location = GeoLocationViewSet.as_view({"put": "update_location"})
 geo_location = GeoLocationViewSet.as_view({"get": "geo_locations"})
@@ -59,6 +65,8 @@ offence_location = GeoLocationViewSet.as_view({"get": "offence_location"})
 # entity
 entities = EntityViewSet.as_view({"get": "entities"})
 add_entity = EntityViewSet.as_view({"post":"addentity"})
+validate_entity = EntityViewSet.as_view({"post": "validate_entity"})
+upload_entity = EntityViewSet.as_view({"post": "upload_entity"})
 delete_entity = EntityViewSet.as_view({"delete":"entity_delete"})
 update_entity = EntityViewSet.as_view({"put":"update_entity"})
 offence_entity = EntityViewSet.as_view({"get": "offence_entity"})
@@ -71,12 +79,16 @@ get_ticket_id = ITSMViewSet.as_view({"get": "get_ticket_id"})
 
 # category
 add_category = CategoryViewSet.as_view({"post": "addcategory"})
+validate_category = CategoryViewSet.as_view({"post": "validate_category"})
+upload_category = CategoryViewSet.as_view({"post": "upload_category"})
 category_details = CategoryViewSet.as_view({"get": "category_details"})
 delete_category = CategoryViewSet.as_view({"delete": "category_delete"})
 update_category = CategoryViewSet.as_view({"put": "update_category"})
 
 # process
 add_process = ProcessViewSet.as_view({"post": "addprocess"})
+validate_process = ProcessViewSet.as_view({"post": "validate_process"})
+upload_process = ProcessViewSet.as_view({"post": "upload_process"})
 process_details = ProcessViewSet.as_view({"get": "process_details"})
 delete_process = ProcessViewSet.as_view({"delete": "process_delete"})
 update_process = ProcessViewSet.as_view({"put": "update_process"})
@@ -86,8 +98,8 @@ insight_tickets = InsightHub.as_view({"post": "insight_tickets"})
 hub = InsightHub.as_view({"post": "insights_hub"})
 grid_master = InsightHub.as_view({"post": "master_data"})
 asset_details = InsightHub.as_view({"get": "asset_details"})
-
-
+oei_chart_data = InsightHub.as_view({"post": "oei"})
+oei_master_data = ITSMViewSet.as_view({"post": "master_data"})
 
 
 urlpatterns = [
@@ -96,18 +108,26 @@ urlpatterns = [
     path(r"add_asset/", add_asset, name="Add Asset Details"),
     path(r"asset_types/", asset_types, name="Asset_Types"),
     path(r"asset/", asset, name="Asset_Details"),
+    path(r"validate_asset/", validate_asset, name="validate Asset Details"),
+    path(r"upload_asset/", upload_asset, name="Upload Asset File"),
 
     path(r"add_category/", add_category, name="Add Category Details"),
+    path(r"validate_category/", validate_category, name="validate Category Details"),
+    path(r"upload_category/", upload_category, name="Upload Category Details"),
     path(r"delete_category/<int:category_id>", delete_category, name="Delete Category"),
     path(r"update_category/<int:category_id>", update_category, name="Update Category"),
     path(r"categories/", category_details, name="Category Details"),
 
     path(r"add_process/", add_process, name="Add Process Details"),
+    path(r"validate_process/", validate_process, name="validate Process Details"),
+    path(r"upload_process/", upload_process, name="Upload Process Details"),
     path(r"process_details/", process_details, name="Process Details"),
     path(r"delete_process/<int:process_id>", delete_process, name="Delete Process Details"),
     path(r"update_process/<int:process_id>", update_process, name="Update Process"),
 
     path(r"add_function/", add_function, name="Add Function"),
+    path(r"validate_function/", validate_function, name="validate Function Details"),
+    path(r"upload_function/", upload_function, name="Upload Function Details"),
     path(r"function/", functions, name="All Function"),
     path(r"delete_function/<int:function_id>", delete_function, name="Delete Function"),
     path(r"update_function/<int:function_id>", update_function, name="Update Function"),
@@ -117,6 +137,8 @@ urlpatterns = [
     path(r"function/offence/", functions_offence, name="Offence for Functions"),
 
     path(r"add_location/", add_location, name="Add Geo Location"),
+    path(r"validate_location/", validate_location, name="validate location Details"),
+    path(r"upload_location/", upload_location, name="Upload location Details"),
     path(r"geo_locations/", geo_location, name="Geo Location"),
     path(r"delete_location/<int:location_id>", delete_location, name="Delete Geo Location"),
     path(r"update_location/<int:location_id>", update_location, name="Update Location"),
@@ -124,6 +146,8 @@ urlpatterns = [
     path(r"geo_locations/offence/", offence_location, name="Offence for Geo Location"),
 
     path(r"add_entity/", add_entity, name="Add Entity Details"),
+    path(r"validate_entity/", validate_entity, name="validate Entity Details"),
+    path(r"upload_entity/", upload_entity, name="Upload Entity Details"),
     path(r"entities/", entities, name="Entities_Data"),
     path(r"delete_entity/<int:entity_id>", delete_entity, name="Delete Entities Data"),
     path(r"update_entity/<int:entity_id>", update_entity, name="Update Entity"),
@@ -161,5 +185,7 @@ urlpatterns = [
     path(r"chart-data", hub, name="insight_hub"),
     path(r"insight-grid", insight_tickets, name="insight_tickets"),
     path(r"insight-grid-master-dropdowns", grid_master, name="grid_master"),
-    path(r"asset_details/", asset_details, name="asset_details")
+    path(r"asset_details/", asset_details, name="asset_details"),
+    path(r"oei/", oei_chart_data, name="oei"),
+    path(r"oei_master_data", oei_master_data, name="oei_master_data")
 ]

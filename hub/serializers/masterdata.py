@@ -19,3 +19,17 @@ class MasterDataSerialiser:
         #     for dropdown_data in dropdown_item:
         #         dropdown_values = {}
         #         dropdown_values[]
+
+
+class OeiMasterDataSerialiser:
+
+    def __init__(self):
+        self.drop_down_ids = ["Priority", "Category", "Reopened %", "Service", "First response Time", "Status"]
+        self.table_columns = ["ServiceCategory", "Priority", "Reopened"]
+        self.master_data = []
+
+    def get_response(self):
+        if len(self.master_data) == 0:
+            return []
+
+        response = []

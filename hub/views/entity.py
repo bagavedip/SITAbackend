@@ -1,3 +1,5 @@
+import csv
+import codecs
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -10,23 +12,46 @@ from hub.services.itsm import ITSMService
 from hub.services.soar import SOARService
 from hub.services.siem import SIEMService
 from hub.serializers.entity import EntitySerializer
+from hub.models.entity import Entity
 from hub.services.entity import EntityService
 
 
 class EntityViewSet(viewsets.ModelViewSet):
-
     permission_classes = [IsAuthenticated]
     serializer_class = EntitySerializer
-    queryset = EntityService.get_queryset()
+
+    # queryset = EntityService.get_queryset()
 
     def entities(self, request):
-        data = EntityService.get_queryset()
-        if data:
-            serializer = EntitySerializer(data, many=True)
+        queryset = EntityService.get_queryset()
+        dataset = []
+        for entity in queryset:
+            data = ({
+                "id": entity.id,
+                "entityname": entity.entityname
+            })
+            dataset.append(data)
         return Response(
             {
                 "Status": status.HTTP_200_OK,
-                "Data": serializer.data,
+                "Data": dataset,
+            }
+        )
+
+    def single_entities(self, request, entity_id):
+        queryset = EntityService.get_queryset().filter(id=entity_id)
+        if queryset:
+            dataset = []
+            for entity in queryset:
+                data = ({
+                    "id": entity.id,
+                    "entityname": entity.entityname
+                })
+                dataset.append(data)
+        return Response(
+            {
+                "Status": status.HTTP_200_OK,
+                "Data": dataset,
             }
         )
 
@@ -48,7 +73,8 @@ class EntityViewSet(viewsets.ModelViewSet):
                                 for soar in soar_data.values():
                                     siem_data = SIEMService.siem_filter(soar.get('TicketIDs'))
                                     for siem in siem_data.values():
-                                        entity_offences[entity.get('entityname')] = entity_offences.get(entity.get('entityname'), 0) + 1
+                                        entity_offences[entity.get('entityname')] = entity_offences.get(
+                                            entity.get('entityname'), 0) + 1
         entity_offences['Total offence'] = sum(entity_offences.values())
         data = entity_offences
 
@@ -76,7 +102,8 @@ class EntityViewSet(viewsets.ModelViewSet):
                             for soar in soar_data.values():
                                 siem_data = SIEMService.siem_filter(soar.get('TicketIDs'))
                                 for siem in siem_data.values():
-                                    asset_types[asset_name.get('AssetType')] = asset_types.get(asset_name.get('AssetType'), 0) + 1
+                                    asset_types[asset_name.get('AssetType')] = asset_types.get(
+                                        asset_name.get('AssetType'), 0) + 1
                     assetsdata = asset_types
                     entities[entity.get('entityname')] = assetsdata
         data = entities
@@ -114,7 +141,7 @@ class EntityViewSet(viewsets.ModelViewSet):
                 "Data": data,
             }
         )
-    
+
     def offence_entity_function(self, request):
         queryset = EntityService.get_queryset()
         entities = dict()
@@ -132,7 +159,8 @@ class EntityViewSet(viewsets.ModelViewSet):
                             for soar in soar_data.values():
                                 siem_data = SIEMService.siem_filter(soar.get('TicketIDs'))
                                 for siem in siem_data.values():
-                                    functions[function.get('function_name')] = functions.get(function.get('function_name'), 0) + 1
+                                    functions[function.get('function_name')] = functions.get(
+                                        function.get('function_name'), 0) + 1
                 functionsdata = functions
                 entities[entity.get('entityname')] = functionsdata
         data = entities
@@ -161,7 +189,8 @@ class EntityViewSet(viewsets.ModelViewSet):
                             for soar in soar_data.values():
                                 siem_data = SIEMService.siem_filter(soar.get('TicketIDs'))
                                 for siem in siem_data.values():
-                                    asset_types[asset_name.get('AssetType')] = asset_types.get(asset_name.get('AssetType'), 0) + 1
+                                    asset_types[asset_name.get('AssetType')] = asset_types.get(
+                                        asset_name.get('AssetType'), 0) + 1
                     assetsdata = asset_types
                     locations[location.get('location')] = assetsdata
             entities[entity.get('entityname')] = locations
@@ -191,7 +220,8 @@ class EntityViewSet(viewsets.ModelViewSet):
                             for soar in soar_data.values():
                                 siem_data = SIEMService.siem_filter(soar.get('TicketIDs'))
                                 for siem in siem_data.values():
-                                    functions[function.get('function_name')] = functions.get(function.get('function_name'), 0) + 1
+                                    functions[function.get('function_name')] = functions.get(
+                                        function.get('function_name'), 0) + 1
                 functionsdata = functions
                 locations[location.get('location')] = functionsdata
             entities[entity.get('entityname')] = locations
@@ -204,39 +234,103 @@ class EntityViewSet(viewsets.ModelViewSet):
         )
 
     @action(detail=False, methods=["post"])
-    def addentity(self, request,**kwargs):
+    def addentity(self, request, **kwargs):
         if request.method == 'POST':
-            Serializer = EntitySerializer(data = request.data)
+            Serializer = EntitySerializer(data=request.data)
             data = {}
             if Serializer.is_valid():
-                if not self.queryset.filter(entityname=request.data["entityname"]).exists():
+                if not EntityService.get_queryset().filter(entityname=request.data["entityname"]).exists():
                     entity = Serializer.save()
-                    data["Id"]= entity.id
+                    data["Id"] = entity.id
                     data['Entity'] = entity.entityname
-                    print(data)
-                    return Response (
+                    return Response(
                         {
                             "Status": status.HTTP_200_OK,
                             "Message": "Entity Successfully Added",
-                            "Process_details" : data
+                            "Process_details": data
                         }
                     )
                 else:
-                    return Response (
+                    return Response(
                         {
-                            "Status":status.HTTP_400_BAD_REQUEST,
+                            "Status": status.HTTP_400_BAD_REQUEST,
                             "Message": "Entity allready Exist",
                         }
                     )
             else:
                 data = Serializer.errors
-                return Response (
+                return Response(
                     {
-                        "Status":status.HTTP_204_NO_CONTENT,
+                        "Status": status.HTTP_204_NO_CONTENT,
                         "Message": "Fill required data",
-                        "Entity_Details" : data
+                        "Entity_Details": data
                     }
                 )
+
+    @action(detail=False, methods=['POST'])
+    def validate_entity(self, request):
+        file = request.FILES.get("File")
+
+        reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
+        data = list(reader)
+        # print(data)
+        cate_data = {}
+        serializer = EntitySerializer(data=data, many=True)
+        # print(serializer)
+        if serializer.is_valid():
+            # print(data)
+            return Response({
+                "Status": status.HTTP_200_OK,
+                "Message": "Validation Successful",
+                "Data": data
+            }
+            )
+        else:
+            # print("failed")
+            entity_err = serializer.errors
+            return Response({
+                "Status": status.HTTP_406_NOT_ACCEPTABLE,
+                "Message": serializer.errors,
+                "Data": entity_err
+            }
+            )
+
+    @action(detail=False, methods=['POST'])
+    def upload_entity(self, request):
+        """Upload data from CSV, with validation."""
+        file = request.FILES.get("File")
+
+        reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
+        data = list(reader)
+        # print(data)
+        serializer = EntitySerializer(data=data, many=True)
+        # print(serializer)
+        if serializer.is_valid():
+            entity_list = []
+            for row in serializer.data:
+                entity_list.append(
+                    Entity(
+                        entityname=row["entityname"],
+                    )
+                )
+            # print(asset_list)
+            Entity.objects.bulk_create(entity_list)
+
+            return Response({
+                "Status": status.HTTP_200_OK,
+                "Message": "Successfully upload the data",
+                "Data": data
+            }
+            )
+        else:
+            entity_err = serializer.errors
+            # print(asset_err)
+            return Response({
+                "Status": status.HTTP_406_NOT_ACCEPTABLE,
+                "Message": serializer.errors,
+                "Data": entity_err
+            }
+            )
 
     @action(detail=False, methods=["put"])
     def update_entity(self, request, entity_id):
@@ -252,7 +346,7 @@ class EntityViewSet(viewsets.ModelViewSet):
                 entity = EntityService.update(data, **validated_data)
                 data = {
                     "id": entity.pk,
-                    "Entity Name":entity.entityname,
+                    "Entity Name": entity.entityname,
                 }
         return Response(data)
 
@@ -270,4 +364,3 @@ class EntityViewSet(viewsets.ModelViewSet):
                 "Status": Status,
                 "Message": message
             })
-

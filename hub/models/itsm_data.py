@@ -17,94 +17,133 @@ class ITSM(models.Model):
         Message = "Message", _("Message")
         Whatsapp = "Whatsapp", _("Whatsapp")
 
-    RequestID = models.CharField(max_length=200, null=True, help_text="Request Id")
-    Request_mode = models.CharField(max_length=200, choices=ModeOfRequest.choices, null=True, help_text="Request Mode")
-    Cluster = models.CharField(max_length=200, null=True, help_text="Cluster")
-    Applicant = models.CharField(max_length=200, null=True, help_text="Applicant")
-    Department = models.CharField(max_length=200, null=True, help_text="Department")
-    Category = models.CharField(max_length=200, null=True, help_text="Category")
-    Subcategory = models.CharField(max_length=200, null=True, help_text="Sub Category")
-    Article = models.CharField(max_length=200, null=True, help_text="Article")
-    Affair = models.CharField(max_length=200, help_text="Affair")
-    Created_by = models.CharField(max_length=200, null=True, help_text="Created By")
-    Urgency = models.CharField(max_length=200, choices=PriorityValue.choices, null=True, help_text="Urgency")
-    Impact = models.CharField(max_length=200, choices=PriorityValue.choices, null=True, help_text="Impact")
-    RequestType = models.CharField(max_length=200, null=True, help_text="Request Type")
-    Technician = models.CharField(max_length=200, null=True, help_text="Technician")
-    Description = models.CharField(max_length=200, null=True, help_text="Description")
-    Site = models.CharField(max_length=200, null=True, help_text="Site")
-    Region = models.CharField(max_length=200, null=True, help_text="Region")
-    Approval_Status = models.CharField(max_length=200, null=True, help_text="Approval Status")
-    Request_closing_code = models.CharField(max_length=200, null=True, help_text="Request Closing Code")
-    Request_Closure_Comments = models.CharField(max_length=200, null=True, help_text="Request_Closure_Comments")
-    ServiceCategory = models.CharField(max_length=200, null=True, help_text="Service Category")
-    Priority = models.CharField(max_length=200, choices=PriorityValue.choices, null=True, help_text="Priority")
-    Level = models.CharField(max_length=200, null=True, help_text="Level")
-    Asset_Name = models.CharField(max_length=200, null=True, help_text="Asset Name")
-    Application_Status = models.CharField(max_length=200, null=True, help_text="Application status")
-    Pending_status = models.BooleanField(null=True, help_text="Pending Status")
-    CreatedTime = models.DateTimeField(max_length=200, null=True, help_text="Created Time")
-    Answer_date = models.DateTimeField(max_length=200, null=True, help_text="Answer Date")
-    Expiration_time = models.DateTimeField(max_length=200, null=True, help_text="Expiration Time")
-    Ending_time = models.DateTimeField(max_length=200, null=True, help_text="Ending Time")
-    Time_elapsed = models.DateTimeField(max_length=200, null=True, help_text="Time Elapsed")
-    Expired_status = models.BooleanField(null=True, help_text="Expire Status")
-    Itsm_id = models.CharField(max_length=200, null=True, help_text="ITSM Id")
-    Subject = models.CharField(max_length=200, null=True, help_text="Subject")
-    RequestStatus = models.CharField(max_length=200, null=True, help_text="Request Status")
-    Account = models.CharField(max_length=200, null=True, help_text="Account")
-    Resolution = models.CharField(max_length=200, null=True, help_text="Resolution")
-    Reopened = models.BooleanField(null=True, help_text="Reopened")
-    RCF = models.BooleanField(null=True, help_text="RCF")
-    User_On_Behalf_Of_OBO = models.CharField(max_length=200, null=True, help_text="Subject")
-    Total_cost = models.CharField(max_length=200, null=True, help_text="Subject")
-    Exchanged_Service = models.CharField(max_length=200, null=True, help_text="Subject")
-    Sale_order = models.CharField(max_length=200, null=True, help_text="Subject")
-    Number_of_Services = models.IntegerField(null=True, help_text="Subject")
-    Solicitant_area = models.CharField(max_length=200, null=True, help_text="Solicitant_area")
-    Complexity = models.CharField(max_length=200, null=True, help_text="Complexity")
-    Type = models.CharField(max_length=200, null=True, help_text="Type")
-    Opportunity_Status = models.CharField(max_length=200, null=True, help_text="Opportunity_Status")
-    Qualys_first_time_detected = models.CharField(max_length=200, null=True, help_text="qualys_first_time_detected")
-    Qualys_url = models.CharField(max_length=200, null=True, help_text="qualys_url")
-    Qualys_last_time_detected = models.CharField(max_length=200, null=True, help_text="Iqualys_last_time_detected")
-    Qualys_last_time_tested = models.CharField(max_length=200, null=True, help_text="qualys_last_time_tested")
-    Qualys_category = models.CharField(max_length=200, null=True, help_text="Iqualys_category")
-    Qualys_severity = models.CharField(max_length=200, null=True, help_text="qualys_severity")
-    Qualys_group = models.CharField(max_length=200, null=True, help_text="qualys_group")
-    Qualys_payload_method = models.CharField(max_length=200, null=True, help_text="qualys_payload_method")
-    Qualys_payload_response = models.CharField(max_length=200, null=True, help_text="qualys_payload_response")
-    Qualys_state = models.CharField(max_length=200, null=True, help_text="qualys_state")
-    Qualys_owasp_name = models.CharField(max_length=200, null=True, help_text="qualys_owasp_name")
-    Qualys_impact = models.CharField(max_length=200, null=True, help_text="Iqualys_impact")
-    Qualys_owasp = models.CharField(max_length=200, null=True, help_text="qualys_owasp")
-    Qualys_solution = models.CharField(max_length=200, null=True, help_text="qualys_solution")
-    Qualys_cvss_base = models.CharField(max_length=200, null=True, help_text="qualys_cvss_base")
-    Qualys_cvss_temporary = models.CharField(max_length=200, null=True, help_text="qualys_cvss_temporary")
-    Qualys_id = models.CharField(max_length=200, null=True, help_text="qualys_id")
-    Sensor = models.CharField(max_length=200, null=True, help_text="Sensor")
-    ID = models.IntegerField(null=True, help_text="Id")
-    Case_With_Manufacturer = models.CharField(max_length=200, null=True, help_text="Case_With_Manufacturer")
-    Spare_Parts_Stock_Delivery_Date = models.CharField(max_length=200, null=True,
-                                                       help_text="Spare_Parts_Stock_Delivery_Date")
-    Onsite_engineer_request_date = models.CharField(max_length=200, null=True, help_text="Onsite_engineer_request_date")
-    Onsite_care_date = models.CharField(max_length=200, null=True, help_text="Onsite_care_date")
-    Onsite_service_SLA = models.CharField(max_length=200, null=True, help_text="Onsite_service_SLA")
-    Neutralization_SLA = models.CharField(max_length=200, null=True, help_text="Neutralization_SLA")
-    Fault_Neutralization_Date = models.CharField(max_length=200, null=True, help_text="Fault_Neutralization_Date")
-    Telephone_notification_date = models.CharField(max_length=200, null=True, help_text="Telephone_notification_date")
-    SLA_Service_time_for_remote_connection = models.CharField(max_length=200, null=True,
-                                                              help_text="SLA_Service_time_for_remote_connection")
-    SLA_Stock_of_Spare_Parts = models.CharField(max_length=200, null=True, help_text="SLA_Stock_of_Spare_Parts")
-    Hardware_Damage_Confirmation_Date_Manufacturer = models.CharField(max_length=200, null=True,
-                                                                      help_text="Hardware_Damage_Confirmation_Date")
-    SLA_Spare_Parts_Stock_Delivery_Time = models.CharField(max_length=200, null=True,
-                                                           help_text="SLA_Spare_Parts_Stock_Delivery_Time")
-    Contract_start_date = models.CharField(max_length=200, null=True, help_text="Contract_start_date")
-    Bill = models.CharField(max_length=200, null=True, help_text="Bill")
-    Response_due_time = models.DateTimeField(null=True, help_text="Response Due Time")
-    First_Responder_Status_Expired = models.BooleanField(null=True, help_text="First sponder status expired")
-    Last_update_time = models.DateTimeField(null=True, help_text="Last_update_time")
-    Resolution_time = models.DateTimeField(null=True, help_text="Resolution_time")
-    VIP_user = models.BooleanField(null=True, help_text="VIP_user")
-    SIEM_id = models.CharField(null=True, max_length=200, help_text="SIEM Id")
+    RequestID = models.CharField(_("RequestID"), max_length=200, null=True, help_text=_("Request Id"))
+    Request_mode = models.CharField(_("Request_mode"), max_length=200, choices=ModeOfRequest.choices, null=True,
+                                    help_text="Request Mode")
+    Cluster = models.CharField(_("Cluster"), max_length=200, null=True, help_text=_("Cluster"))
+    Applicant = models.CharField(_("Applicant"), max_length=200, null=True, help_text=_("Applicant"))
+    Department = models.CharField(_("Department"), max_length=200, null=True, help_text=_("Department"))
+    Category = models.CharField(_("Category"), max_length=200, null=True, help_text=_("Category"))
+    Subcategory = models.CharField(_("Subcategory"), max_length=200, null=True, help_text=_("Sub Category"))
+    Article = models.CharField(_("Article"), max_length=200, null=True, help_text=_("Article"))
+    Affair = models.CharField(_("Affair"), max_length=200, help_text=_("Affair"))
+    Created_by = models.CharField(_("Created_by"), max_length=200, null=True, help_text=_("Created By"))
+    Urgency = models.CharField(_("Urgency"), max_length=200, choices=PriorityValue.choices, null=True,
+                               help_text=_("Urgency"))
+    Impact = models.CharField(_("Impact"), max_length=200, choices=PriorityValue.choices, null=True,
+                              help_text=_("Impact"))
+    RequestType = models.CharField(_("RequestType"), max_length=200, null=True, help_text=_("Request Type"))
+    Technician = models.CharField(_("Technician"), max_length=200, null=True, help_text=_("Technician"))
+    Description = models.CharField(_("Description"), max_length=200, null=True, help_text=_("Description"))
+    Site = models.CharField(_("Site"), max_length=200, null=True, help_text=_("Site"))
+    Region = models.CharField(_("Region"), max_length=200, null=True, help_text=_("Region"))
+    Approval_Status = models.CharField(_("Approval_Status"), max_length=200, null=True, help_text=_("Approval Status"))
+    Request_closing_code = models.CharField(_("Request_closing_code"), max_length=200, null=True,
+                                            help_text=_("Request Closing Code"))
+    Request_Closure_Comments = models.CharField(_("Request_Closure_Comments"), max_length=200, null=True,
+                                                help_text=_("Request_Closure_Comments"))
+    service_category = models.CharField(_("service_category"), max_length=200, null=True,
+                                        help_text=_("Service Category"))
+    Priority = models.CharField(_("Priority"), max_length=200, choices=PriorityValue.choices, null=True,
+                                help_text=_("Priority"))
+    Level = models.CharField(_("Level"), max_length=200, null=True, help_text=_("Level"))
+    Asset_Name = models.CharField(_("Asset_Name"), max_length=200, null=True, help_text=_("Asset Name"))
+    Application_Status = models.CharField(_("Application_Status"), max_length=200, null=True,
+                                          help_text=_("Application status"))
+    Pending_status = models.BooleanField(_("Pending_status"), null=True, help_text=_("Pending Status"))
+    CreatedTime = models.DateTimeField(_("CreatedTime"), max_length=200, null=True,
+                                       help_text=_("Created Time"))
+    Answer_date = models.DateTimeField(_("Answer_date"), max_length=200, null=True, help_text=_("Answer Date"))
+    Expiration_time = models.DateTimeField(_("Expiration_time"), max_length=200, null=True,
+                                           help_text=_("Expiration Time"))
+    Ending_time = models.DateTimeField(_("Ending_time"), max_length=200, null=True,
+                                       help_text=_("Ending Time"))
+    Time_elapsed = models.DateTimeField(_("Time_elapsed"), max_length=200, null=True,
+                                        help_text=_("Time Elapsed"))
+    Expired_status = models.BooleanField(_("Expired_status"), null=True, help_text=_("Expire Status"))
+    Itsm_id = models.CharField(_("Itsm_id"), max_length=200, null=True, help_text=_("ITSM Id"))
+    Subject = models.CharField(_("Subject"), max_length=200, null=True, help_text=_("Subject"))
+    RequestStatus = models.CharField(_("RequestStatus"), max_length=200, null=True, help_text="Request Status")
+    Account = models.CharField(_("Account"), max_length=200, null=True, help_text="Account")
+    Resolution = models.CharField(_("Resolution"), max_length=200, null=True, help_text="Resolution")
+    Reopened = models.BooleanField(_("Reopened"), null=True, help_text="Reopened")
+    RCF = models.BooleanField(_("RCF"), null=True, help_text="RCF")
+    User_On_Behalf_Of_OBO = models.CharField(_("User_On_Behalf_Of_OBO"), max_length=200, null=True,
+                                             help_text=_("User_On_Behalf_Of_OBO"))
+    Total_cost = models.CharField(_("Total_cost"), max_length=200, null=True, help_text=_("Total_cost"))
+    Exchanged_Service = models.CharField(_("Exchanged_Service"), max_length=200, null=True,
+                                         help_text=_("Exchanged_Service"))
+    Sale_order = models.CharField(_("Sale_order"), max_length=200, null=True, help_text=_("Sale_order"))
+    Number_of_Services = models.IntegerField(_("Number_of_Services"), null=True,
+                                             help_text=_("Number_of_Services"))
+    Solicitant_area = models.CharField(_("Solicitant_area"), max_length=200, null=True,
+                                       help_text=_("Solicitant_area"))
+    Complexity = models.CharField(_("Complexity"), max_length=200, null=True, help_text=_("Complexity"))
+    Type = models.CharField(_("Type"), max_length=200, null=True, help_text=_("Type"))
+    Opportunity_Status = models.CharField(_("Opportunity_Status"), max_length=200, null=True,
+                                          help_text=_("Opportunity_Status"))
+    Qualys_first_time_detected = models.CharField(_("Qualys_first_time_detected"), max_length=200, null=True,
+                                                  help_text=_("qualys_first_time_detected"))
+    Qualys_url = models.CharField(_("Qualys_url"), max_length=200, null=True, help_text=_("qualys_url"))
+    Qualys_last_time_detected = models.CharField(_("Qualys_last_time_detected"), max_length=200, null=True,
+                                                 help_text=_("Iqualys_last_time_detected"))
+    Qualys_last_time_tested = models.CharField(_("Qualys_last_time_tested"), max_length=200, null=True,
+                                               help_text=_("qualys_last_time_tested"))
+    Qualys_category = models.CharField(_("Qualys_category"), max_length=200, null=True,
+                                       help_text=_("Iqualys_category"))
+    Qualys_severity = models.CharField(_("Qualys_severity"), max_length=200, null=True, help_text=_("qualys_severity"))
+    Qualys_group = models.CharField(_("Qualys_group"), max_length=200, null=True, help_text=_("qualys_group"))
+    Qualys_payload_method = models.CharField(_("Qualys_payload_method"), max_length=200, null=True,
+                                             help_text=_("qualys_payload_method"))
+    Qualys_payload_response = models.CharField(_("Qualys_payload_response"), max_length=200, null=True,
+                                               help_text=_("qualys_payload_response"))
+    Qualys_state = models.CharField(_("Qualys_state"), max_length=200, null=True, help_text=_("qualys_state"))
+    Qualys_owasp_name = models.CharField(_("Qualys_owasp_name"), max_length=200, null=True,
+                                         help_text=_("qualys_owasp_name"))
+    Qualys_impact = models.CharField(_("Qualys_impact"), max_length=200, null=True, help_text=_("Iqualys_impact"))
+    Qualys_owasp = models.CharField(_("Qualys_owasp"), max_length=200, null=True, help_text=_("qualys_owasp"))
+    Qualys_solution = models.CharField(_("Qualys_solution"), max_length=200, null=True, help_text=_("qualys_solution"))
+    Qualys_cvss_base = models.CharField(_("Qualys_cvss_base"), max_length=200, null=True, help_text=_("qualys_cvss_base"))
+    Qualys_cvss_temporary = models.CharField(_("Qualys_cvss_temporary"), max_length=200, null=True,
+                                             help_text=_("qualys_cvss_temporary"))
+    Qualys_id = models.CharField(_("Qualys_id"), max_length=200, null=True, help_text=_("qualys_id"))
+    Sensor = models.CharField(_("Sensor"), max_length=200, null=True, help_text=_("Sensor"))
+    ID = models.IntegerField(_("ID"), null=True, help_text=_("Id"))
+    Case_With_Manufacturer = models.CharField(_("Case_With_Manufacturer"), max_length=200, null=True,
+                                              help_text=_("Case_With_Manufacturer"))
+    Spare_Parts_Stock_Delivery_Date = models.CharField(_("Spare_Parts_Stock_Delivery_Date"), max_length=200, null=True,
+                                                       help_text=_("Spare_Parts_Stock_Delivery_Date"))
+    Onsite_engineer_request_date = models.CharField(_("Case_With_Manufacturer"), max_length=200, null=True,
+                                                    help_text=_("Onsite_engineer_request_date"))
+    Onsite_care_date = models.CharField(_("Case_With_Manufacturer"), max_length=200, null=True,
+                                        help_text=_("Onsite_care_date"))
+    Onsite_service_SLA = models.CharField(_("Onsite_service_SLA"), max_length=200, null=True,
+                                          help_text=_("Onsite_service_SLA"))
+    Neutralization_SLA = models.CharField(_("Neutralization_SLA"), max_length=200, null=True,
+                                          help_text=_("Neutralization_SLA"))
+    Fault_Neutralization_Date = models.CharField(_("Fault_Neutralization_Date"), max_length=200, null=True,
+                                                 help_text=_("Fault_Neutralization_Date"))
+    Telephone_notification_date = models.CharField(_("Telephone_notification_date"), max_length=200, null=True,
+                                                   help_text=_("Telephone_notification_date"))
+    SLA_Service_time_for_remote_connection = models.CharField(_("SLA_Service_time_for_remote_connection"), max_length=200, null=True,
+                                                              help_text=_("SLA_Service_time_for_remote_connection"))
+    SLA_Stock_of_Spare_Parts = models.CharField(_("SLA_Stock_of_Spare_Parts"), max_length=200, null=True,
+                                                help_text=_("SLA_Stock_of_Spare_Parts"))
+    Hardware_Damage_Confirmation_Date_Manufacturer = models.CharField(_("Hardware_Damage_Confirmation_Date_Manufacturer"), max_length=200, null=True,
+                                                                      help_text=_("Hardware_Damage_Confirmation_Date"))
+    SLA_Spare_Parts_Stock_Delivery_Time = models.CharField(_("SLA_Spare_Parts_Stock_Delivery_Time"), max_length=200,
+                                                           null=True,
+                                                           help_text=_("SLA_Spare_Parts_Stock_Delivery_Time"))
+    Contract_start_date = models.CharField(_("Contract_start_date"), max_length=200, null=True,
+                                           help_text=_("Contract_start_date"))
+    Bill = models.CharField(_("Bill"), max_length=200, null=True, help_text=_("Bill"))
+    Response_due_time = models.DateTimeField(_("Response_due_time"), null=True, help_text=_("Response Due Time"))
+    First_Responder_Status_Expired = models.BooleanField(_("First_Responder_Status_Expired"), null=True,
+                                                         help_text=_("First sponder status expired"))
+    Last_update_time = models.DateTimeField(_("Last_update_time"), null=True, help_text=_("Last_update_time"))
+    Resolution_time = models.DateTimeField(_("Resolution_time"), null=True, help_text=_("Resolution_time"))
+    VIP_user = models.BooleanField(_("VIP_user"), null=True, help_text=_("VIP_user"))
+    SIEM_id = models.CharField(_("SIEM_id"), null=True, max_length=200, help_text=_("SIEM Id"))
+    events = models.IntegerField(_("events"), null=True, help_text=_("events"))
+    sla_name = models.CharField(_("sla_name"), null=True, max_length=200, help_text=_("sla_name"))
+    is_overdue = models.CharField(_("is_overdue"), max_length=200, help_text=_("Overdue Status"), null=True)

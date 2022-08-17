@@ -1,5 +1,8 @@
 import logging
+from datetime import timezone
+
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import json
@@ -7,11 +10,13 @@ import json
 from collections import defaultdict as dd
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from hub.serializers.oei_serializers import OeiSerializer
 from hub.services.insight_hub_service import HubService
 from hub.constants.dataset import Dataset
 from hub.serializers.hub import InsightsSerializer
 from hub.serializers.ticket_details import TicketDetailsSerializer
 from hub.serializers.masterdata import MasterDataSerialiser
+from hub.services.itsm import ITSMService
 from hub.services.tickets_service import TicketsService
 from hub.services.masterdata import MasterDataService
 
@@ -245,5 +250,50 @@ class InsightHub(viewsets.GenericViewSet):
         incident = request_param.get("incident", None)
         queryset = HubService.asset_details(incident)
 
-        return Response(queryset, status=status.HTTP_201_CREATED)
+        return Response(queryset, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=["post"])
+    def oei(self, request, **kwargs):
+        logger.info("Validating data for Log In.")
+        serializser = OeiSerializer(request)
+        result = ITSMService.get_oei(serializser)
+        print(result)
+        hirarchial_data = self.convert_data(result)
+        print(f"hirarchial_data{hirarchial_data}")
+        self.update_events(hirarchial_data)
+        ticket = serializser.donut_center['MULTIPLE LOGIN FAILURES FROM THE SAME SOURCE WITH ANY USERNAME']if "MULTIPLE LOGIN FAILURES FROM THE SAME SOURCE WITH ANY USERNAME" in serializser.donut_center.keys() else 0
+        tickets = serializser.donut_center['SURA: LOGIN FAILURE TO DISABLED ACCOUNT']if "SURA: LOGIN FAILURE TO DISABLED ACCOUNT" in serializser.donut_center.keys() else 0
+        ticketss = serializser.donut_center['MULTIPLE LOGIN FAILURES FOR SINGLE USERNAME']if "MULTIPLE LOGIN FAILURES FOR SINGLE USERNAME" in serializser.donut_center.keys() else 0
+        print(tickets)
+        total_ticket = tickets + ticket + ticketss
+        print(f"total{total_ticket}")
+        print(f"serializser.donut_center{serializser.donut_center}")
+
+        legends = []
+
+        final_response = {
+            "charFooter": {
+                "label": "SLA  Compliance",
+                "value": "95%",
+                "valueFontColor": "green"
+            },
+            "legends": {
+                "header": request.data.get('filterOptions').get('headerOption'),
+                "items": legends
+            },
+            "doughnutlabel": {
+                "labels": [
+                    {
+                        "text": "Tickets {total_ticket}".format(total_ticket=total_ticket),
+                        "font": {
+                            "size": "25"
+                        },
+                        "color": "black"
+                    },
+                ]
+            },
+            "datasets": serializser.datasets
+
+        }
+
+        return Response(final_response, status=status.HTTP_201_CREATED)

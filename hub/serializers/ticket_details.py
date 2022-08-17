@@ -1,5 +1,6 @@
 from hub.constants import constants
 
+
 class TicketDetailsSerializer:
 
     def __init__(self, request) -> None:

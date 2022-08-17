@@ -1,9 +1,9 @@
-from hub.constants.filter_map import Map
-from hub.constants.dataset import Dataset
-from hub.constants.color import ColorMap
+from constants.dataset import Dataset
+from hub.constants.oei_color import ColorMap
+from hub.constants.oei_filters import Map
 
 
-class InsightsSerializer:
+class OeiSerializer:
     def __init__(self, request) -> None:
         self.request_filters = []
         self.model_group_map = []
@@ -16,31 +16,25 @@ class InsightsSerializer:
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
-        print(filterOptions)
-        add_criticality = False
         for filter in filterOptions:
-            if filter == 'Criticality':
-                add_criticality = True
-            else:
-                self.request_filters.append(filter)
-                print(self.request_filters)
+            self.request_filters.append(filter)
         self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
-        print(f"{self.request_filters}self.request_filters")
+        print(self.request_filters)
         header_option = filter_data.get('filterOptions').get('headerOption')
-        print(header_option)
+        print(f"header_options{Map.get_filter(header_option)}")
         filters = Map.get_filter(header_option).split(",")
-        print(f"filter{filters}")
+        print(f"header{header_option}")
         if len(filters) > 1:
             self.legend_filter = filters[1]
         else:
             self.legend_filter = filters[0]
-        if add_criticality:
-            self.request_filters.append('Criticality')
         self.depth = len(self.request_filters)
         index = 1
         print(f"request{self.request_filters}")
         print(f"filter{filter}")
+        print(Map.get_filter(filter))
         for filter in self.request_filters:
+            print(f"filter_name{filter}")
             self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
             ds = Dataset().init_response_dataset()
             ds['id'] = index
@@ -93,7 +87,7 @@ class InsightsSerializer:
                 self.insert_children(index + 1, val, data, events)
             break
 
-    def update_hierarcy_data(self, data, events):
+    def update_hierarchy_data(self, data, events):
         for index in range(len(self.request_filters)):
             key = self.request_filters[index]
             if key in self.hier_data.keys():
@@ -138,6 +132,7 @@ class InsightsSerializer:
                 id = item['name']
                 if '-' in item['name']:
                     id = item['name'].split("-")[0]
+                print(ColorMap.get_color(self.datasets[0]['label'], id))
                 backgroundColor.append(ColorMap.get_color(self.datasets[0]['label'], id))
         self.datasets[0]['data'] = data
         self.datasets[0]['originalData'] = originalData
@@ -278,7 +273,7 @@ class InsightsSerializer:
             temp_datasets.append(dataaet)
         self.datasets = temp_datasets
 
-    def set_requst_queryset(self, obj):
+    def set_request_queryset(self, obj):
         self.queryset = obj
         for row in obj:
             filter_vals = []
@@ -286,11 +281,10 @@ class InsightsSerializer:
                 col_data = ""
                 for col_name in Map.get_filter(filter).split(','):
                     print(col_name)
-                    print(f"{row.get(col_name)}row.get(col_name)")
+                    print(row.get(col_name))
                     col_data = col_data + "-" + row.get(col_name)
-                    print(f"col_data{col_data}")
                 col_data = col_data[1:]
                 temp_label = col_data
                 filter_vals.append(temp_label)
-            self.update_hierarcy_data(filter_vals, row.get('events'))
+            self.update_hierarchy_data(filter_vals, row.get('events'))
         self.build_dataset()
