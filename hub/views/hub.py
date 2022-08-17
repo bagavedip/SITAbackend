@@ -254,7 +254,7 @@ class InsightHub(viewsets.GenericViewSet):
         return Response(queryset, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"])
-    def oei(self, request, reesponse_obj: OeiSerializer, **kwargs):
+    def oei(self, request, **kwargs):
         logger.info("Validating data for Log In.")
         serializser = OeiSerializer(request)
         result = ITSMService.get_oei(serializser)
