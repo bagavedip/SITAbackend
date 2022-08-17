@@ -268,7 +268,6 @@ class InsightHub(viewsets.GenericViewSet):
         print(tickets)
         total_ticket = tickets + ticket + ticketss
         legends = []
-
         final_response = {
             "charFooter": {
                 "label": "SLA  Compliance",

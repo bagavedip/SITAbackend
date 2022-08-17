@@ -39,7 +39,6 @@ class ITSMService:
             print(f"percentage_true{round(percentage_true, 4)}")
             percentage_false = 100 * float(is_overdue_false) / float(total)
             print(f"percentage_false{round(percentage_false, 4)}")
-
         ticket = ITSM.objects.filter(CreatedTime__lte=reesponse_obj.start_date, Ending_time__lte=reesponse_obj.end_date).values('Subject').order_by().annotate(events=Sum('events'))
         for row in ticket:
             reesponse_obj.donut_center[row.get('Subject')] = row.get('events')
