@@ -1,6 +1,7 @@
 import logging
 
-from django.db.models import Sum
+from django.db.models import Sum, Count
+from django.db.models.functions import Round
 
 from hub.models.itsm_data import ITSM
 
@@ -29,6 +30,16 @@ class ITSMService:
         query_data = ITSM.objects.filter(CreatedTime__lte=reesponse_obj.start_date, Ending_time__lte=reesponse_obj.end_date).values(*reesponse_obj.model_group_map).order_by().annotate(events=Sum('events'))
         print(query_data)
         reesponse_obj.set_request_queryset(query_data)
+        sal = ITSM.objects.filter(CreatedTime__lte=reesponse_obj.start_date, Ending_time__lte=reesponse_obj.end_date)
+        total = sal.count()
+        for sla in sal:
+            is_overdue_false = ITSM.objects.filter(is_overdue=0).count()
+            is_overdue_true = ITSM.objects.filter(is_overdue=1).count()
+            percentage_true = 100 * float(is_overdue_true) / float(total)
+            print(f"percentage_true{int(percentage_true)}")
+            percentage_false = 100 * float(is_overdue_false) / float(total)
+            print(f"percentage_false{int(percentage_false)}")
+
         ticket = ITSM.objects.filter(CreatedTime__lte=reesponse_obj.start_date, Ending_time__lte=reesponse_obj.end_date).values('Subject').order_by().annotate(events=Sum('events'))
         for row in ticket:
             reesponse_obj.donut_center[row.get('Subject')] = row.get('events')

@@ -10,6 +10,7 @@ import json
 from collections import defaultdict as dd
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from hub.models import ITSM
 from hub.serializers.oei_serializers import OeiSerializer
 from hub.services.insight_hub_service import HubService
 from hub.constants.dataset import Dataset
@@ -253,7 +254,7 @@ class InsightHub(viewsets.GenericViewSet):
         return Response(queryset, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"])
-    def oei(self, request, **kwargs):
+    def oei(self, request, reesponse_obj: OeiSerializer, **kwargs):
         logger.info("Validating data for Log In.")
         serializser = OeiSerializer(request)
         result = ITSMService.get_oei(serializser)
@@ -266,9 +267,6 @@ class InsightHub(viewsets.GenericViewSet):
         ticketss = serializser.donut_center['MULTIPLE LOGIN FAILURES FOR SINGLE USERNAME']if "MULTIPLE LOGIN FAILURES FOR SINGLE USERNAME" in serializser.donut_center.keys() else 0
         print(tickets)
         total_ticket = tickets + ticket + ticketss
-        print(f"total{total_ticket}")
-        print(f"serializser.donut_center{serializser.donut_center}")
-
         legends = []
 
         final_response = {
