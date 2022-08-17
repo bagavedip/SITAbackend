@@ -28,7 +28,7 @@ class ColorMap:
             "9": "#27cc48"
         }
 
-        Assets = {
+        Category = {
             "1": "#1a47ba",
             "10": "#fcba03",
             "11": "#9da3b3",
@@ -44,7 +44,7 @@ class ColorMap:
             "9": "#27cc48"
         }
 
-        UseCase = {
+        status = {
             "1": "#1a47ba",
             "12": "#fcba03",
             "13": "#9da3b3",
@@ -59,12 +59,29 @@ class ColorMap:
             "9": "#27cc48"
         }
 
-        if filter == 'Entity':
+        Priority = {
+            "1": "#1a47ba",
+            "12": "#fcba03",
+            "13": "#9da3b3",
+            "15": "#64adb5",
+            "16": "#595446",
+            "17": "#1a47ba",
+            "19": "#27cc48",
+            "20": "#595446",
+            "2": "#1a47ba",
+            "4": "#64adb5",
+            "8": "#9da3b3",
+            "9": "#27cc48"
+        }
+
+        if filter == 'SLA':
             return SLA.get(id)
-        elif filter == 'Location':
+        elif filter == 'value0':
             return value0.get(id)
-        elif filter == 'Assets':
-            return Assets.get(id)
-        elif filter == 'UseCase':
-            return UseCase.get(id)
+        elif filter == 'status':
+            return status.get(id)
+        elif filter == 'Priority':
+            return Priority.get(id)
+        elif filter == 'Category':
+            return Category.get(id)
 

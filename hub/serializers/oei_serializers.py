@@ -132,7 +132,6 @@ class OeiSerializer:
                 id = item['name']
                 if '-' in item['name']:
                     id = item['name'].split("-")[0]
-                print(ColorMap.get_color(self.datasets[0]['label'], id))
                 backgroundColor.append(ColorMap.get_color(self.datasets[0]['label'], id))
         self.datasets[0]['data'] = data
         self.datasets[0]['originalData'] = originalData
