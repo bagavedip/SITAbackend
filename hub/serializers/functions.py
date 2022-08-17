@@ -6,10 +6,11 @@ class FunctionSerializer(serializers.ModelSerializer):
     """
     Model serializer for function information
     """
+    location_name = serializers.CharField(source='location_id.location')
 
     class Meta:
         model = Function
         fields = (
             "function_name",
-            "location_id",
+            "location_name",
         )
