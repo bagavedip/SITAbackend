@@ -1,4 +1,4 @@
-from constants.dataset import Dataset
+from hub.constants.dataset import Dataset
 from hub.constants.oei_color import ColorMap
 from hub.constants.oei_filters import Map
 
