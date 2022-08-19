@@ -147,3 +147,4 @@ class ITSM(models.Model):
     events = models.IntegerField(_("events"), null=True, help_text=_("events"))
     sla_name = models.CharField(_("sla_name"), null=True, max_length=200, help_text=_("sla_name"))
     is_overdue = models.CharField(_("is_overdue"), max_length=200, help_text=_("Overdue Status"), null=True)
+    category_id = models.CharField(_("sla_id"), null=True, max_length=200, help_text=_("sla_id"))

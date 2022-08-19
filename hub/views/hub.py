@@ -1,6 +1,8 @@
 import logging
 from datetime import timezone
 
+from django.db.models import Count
+from django.db.models.functions import Round
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -44,9 +46,8 @@ class InsightHub(viewsets.GenericViewSet):
                     key_index += 1
 
             nested_dict = eval(nested_dict_str)
-
+            # sala = ITSM.objects.filter(sla_name=keys.).count()
             temp1 = "nested_dict" + key_var + ".append(data.get('events'))"
-
             # Note that variable name here has to be "data" as this is what is used to build the executable string above
             for data in dataset:
                 exec(temp1)
@@ -258,20 +259,20 @@ class InsightHub(viewsets.GenericViewSet):
         logger.info("Validating data for Log In.")
         serializser = OeiSerializer(request)
         result = ITSMService.get_oei(serializser)
-        print(result)
         hirarchial_data = self.convert_data(result)
-        print(f"hirarchial_data{hirarchial_data}")
         self.update_events(hirarchial_data)
-        ticket = serializser.donut_center['MULTIPLE LOGIN FAILURES FROM THE SAME SOURCE WITH ANY USERNAME']if "MULTIPLE LOGIN FAILURES FROM THE SAME SOURCE WITH ANY USERNAME" in serializser.donut_center.keys() else 0
-        tickets = serializser.donut_center['SURA: LOGIN FAILURE TO DISABLED ACCOUNT']if "SURA: LOGIN FAILURE TO DISABLED ACCOUNT" in serializser.donut_center.keys() else 0
-        ticketss = serializser.donut_center['MULTIPLE LOGIN FAILURES FOR SINGLE USERNAME']if "MULTIPLE LOGIN FAILURES FOR SINGLE USERNAME" in serializser.donut_center.keys() else 0
-        print(tickets)
-        total_ticket = tickets + ticket + ticketss
+        query_data = ITSM.objects.filter(CreatedTime__lte=serializser.start_date,
+                                         Ending_time__lte=serializser.end_date).count()
+        data = ITSM.objects.filter(CreatedTime__lte=serializser.start_date,
+                                   Ending_time__lte=serializser.end_date, is_overdue='1').count()
+        percentage = round((data*100)/query_data)
+        total_ticket = query_data
         legends = []
+        Compliance = percentage
         final_response = {
             "charFooter": {
                 "label": "SLA  Compliance",
-                "value": "95%",
+                "value": str(int(Compliance)) + "%",
                 "valueFontColor": "green"
             },
             "legends": {
@@ -290,7 +291,5 @@ class InsightHub(viewsets.GenericViewSet):
                 ]
             },
             "datasets": serializser.datasets
-
         }
-
         return Response(final_response, status=status.HTTP_201_CREATED)

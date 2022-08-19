@@ -16,20 +16,15 @@ class InsightsSerializer:
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
-        print(filterOptions)
         add_criticality = False
         for filter in filterOptions:
             if filter == 'Criticality':
                 add_criticality = True
             else:
                 self.request_filters.append(filter)
-                print(self.request_filters)
         self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
-        print(f"{self.request_filters}self.request_filters")
         header_option = filter_data.get('filterOptions').get('headerOption')
-        print(header_option)
         filters = Map.get_filter(header_option).split(",")
-        print(f"filter{filters}")
         if len(filters) > 1:
             self.legend_filter = filters[1]
         else:
@@ -38,8 +33,6 @@ class InsightsSerializer:
             self.request_filters.append('Criticality')
         self.depth = len(self.request_filters)
         index = 1
-        print(f"request{self.request_filters}")
-        print(f"filter{filter}")
         for filter in self.request_filters:
             self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
             ds = Dataset().init_response_dataset()
@@ -136,6 +129,7 @@ class InsightsSerializer:
                 hierarchy.append(id_col + "=" + item['name'] + "~" + str(item['events']))
                 labels.append(item['name'])
                 id = item['name']
+                print(f"id{id}")
                 if '-' in item['name']:
                     id = item['name'].split("-")[0]
                 backgroundColor.append(ColorMap.get_color(self.datasets[0]['label'], id))
@@ -285,10 +279,7 @@ class InsightsSerializer:
             for filter in self.request_filters:
                 col_data = ""
                 for col_name in Map.get_filter(filter).split(','):
-                    print(col_name)
-                    print(f"{row.get(col_name)}row.get(col_name)")
                     col_data = col_data + "-" + row.get(col_name)
-                    print(f"col_data{col_data}")
                 col_data = col_data[1:]
                 temp_label = col_data
                 filter_vals.append(temp_label)

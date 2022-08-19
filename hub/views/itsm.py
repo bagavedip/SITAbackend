@@ -2,11 +2,10 @@ import logging
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from hub.serializers.itsm import ITSMSerializer
-from hub.serializers.masterdata import OeiMasterDataSerialiser
+from hub.serializers.oei_ticket_details import TicketDetailsSerializer
 from hub.services.itsm import ITSMService
-
+from hub.services.tickets_service import TicketsService
 
 logger = logging.getLogger(__name__)
 
@@ -203,5 +202,13 @@ class ITSMViewSet(viewsets.ModelViewSet):
             ]
 
         return Response(response, status=status.HTTP_201_CREATED)
+
+    def oei_tickets(self, request):
+        logger.debug(f"Received request body {request.data}")
+        response_obj = TicketDetailsSerializer(request)
+        print(response_obj)
+        data = ITSMService.get_tickets(response_obj)
+        print('Sending Response', data)
+        return Response(response_obj.get_response(data), status=status.HTTP_201_CREATED)
 
     

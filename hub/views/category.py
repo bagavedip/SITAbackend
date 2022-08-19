@@ -22,7 +22,7 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             Serializer = CategorySerializer(data=request.data)
             data = {}
             if Serializer.is_valid():
-                if not CategoryService.get_queryset().filter(category=request.data["category"]).exists():
+                if not CategoryService.get_queryset().filter(category__iexact=request.data["category"]).exists():
                     category = Serializer.save()
                     data['Id'] = category.id
                     data['Category'] = category.category
@@ -44,7 +44,7 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 data = Serializer.errors
                 return Response(
                     {
-                        "Status": status.HTTP_400_BAD_REQUEST,
+                        "Status": status.HTTP_204_NO_CONTENT,
                         "Message": "Fill required data",
                         "Category_Details": data
                     }

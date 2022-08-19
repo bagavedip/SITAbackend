@@ -53,7 +53,7 @@ class AssetViewSet(viewsets.ModelViewSet):
             Serializer = AssetSerializer(data=request.data)
             data = {}
             if Serializer.is_valid():
-                if not AssetService.get_queryset().filter(AssetName=request.data["AssetName"]).exists():
+                if not AssetService.get_queryset().filter(AssetName__iexact=request.data["AssetName"]).exists():
                     function_query = Function.objects.get(function_name=request.data["function_name"])
                     category_query = Category.objects.get(category=request.data["category_name"])
                     # asset = Serializer.save()
@@ -75,11 +75,18 @@ class AssetViewSet(viewsets.ModelViewSet):
                             "Asset_Details": data,
                         }
                     )
+                else:
+                    return Response(
+                        {
+                            "Status": status.HTTP_400_BAD_REQUEST,
+                            "Message": "Data Already Exist."
+                        }
+                    )
             else:
                 data = Serializer.errors
                 return Response(
                     {
-                        "Status": status.HTTP_400_BAD_REQUEST,
+                        "Status": status.HTTP_204_NO_CONTENT,
                         "Message": "Fill required data",
                         "Asset_Details": data
                     }

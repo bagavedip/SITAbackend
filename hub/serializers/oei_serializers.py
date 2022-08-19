@@ -16,25 +16,20 @@ class OeiSerializer:
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
+        self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
         for filter in filterOptions:
             self.request_filters.append(filter)
-        self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
-        print(self.request_filters)
         header_option = filter_data.get('filterOptions').get('headerOption')
-        print(f"header_options{Map.get_filter(header_option)}")
         filters = Map.get_filter(header_option).split(",")
-        print(f"header{header_option}")
         if len(filters) > 1:
             self.legend_filter = filters[1]
         else:
             self.legend_filter = filters[0]
         self.depth = len(self.request_filters)
         index = 1
-        print(f"request{self.request_filters}")
-        print(f"filter{filter}")
-        print(Map.get_filter(filter))
+        if "Tickets" in self.request_filters:
+            self.request_filters.remove("Tickets")
         for filter in self.request_filters:
-            print(f"filter_name{filter}")
             self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
             ds = Dataset().init_response_dataset()
             ds['id'] = index
@@ -279,8 +274,6 @@ class OeiSerializer:
             for filter in self.request_filters:
                 col_data = ""
                 for col_name in Map.get_filter(filter).split(','):
-                    print(col_name)
-                    print(row.get(col_name))
                     col_data = col_data + "-" + row.get(col_name)
                 col_data = col_data[1:]
                 temp_label = col_data

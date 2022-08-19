@@ -100,7 +100,7 @@ grid_master = InsightHub.as_view({"post": "master_data"})
 asset_details = InsightHub.as_view({"get": "asset_details"})
 oei_chart_data = InsightHub.as_view({"post": "oei"})
 oei_master_data = ITSMViewSet.as_view({"post": "master_data"})
-
+oei_tickets = ITSMViewSet.as_view({"post": "oei_tickets"})
 
 urlpatterns = [
     path(r"update_asset/<int:asset>", update_asset, name="update_asset"),
@@ -187,5 +187,6 @@ urlpatterns = [
     path(r"insight-grid-master-dropdowns", grid_master, name="grid_master"),
     path(r"asset_details/", asset_details, name="asset_details"),
     path(r"oei/", oei_chart_data, name="oei"),
+    path(r"oei_grid_data/", oei_tickets, name="oei_tickets"),
     path(r"oei_master_data", oei_master_data, name="oei_master_data")
 ]
