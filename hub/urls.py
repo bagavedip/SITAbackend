@@ -21,8 +21,8 @@ SIEM_event_count_by_usecase = SIEMViewSet.as_view({"get": "event_count_by_usecas
 Severity_Importance = SIEMViewSet.as_view({"get": "severity_by_offenses"})
 avg_res_time = SIEMViewSet.as_view({"get": "avg_res_time"})
 severity = SIEMViewSet.as_view({"get": "severity"})
-severity_by_usecase = SIEMViewSet.as_view({"get":"severity_by_usecase"})
-usecase_details = SIEMViewSet.as_view({"get":"usecase_details"})
+severity_by_usecase = SIEMViewSet.as_view({"get": "severity_by_usecase"})
+usecase_details = SIEMViewSet.as_view({"get": "usecase_details"})
 usecase_offences = SIEMViewSet.as_view({"get": "offence_by_usecases"})
 
 
@@ -64,11 +64,11 @@ offence_location = GeoLocationViewSet.as_view({"get": "offence_location"})
 
 # entity
 entities = EntityViewSet.as_view({"get": "entities"})
-add_entity = EntityViewSet.as_view({"post":"addentity"})
+add_entity = EntityViewSet.as_view({"post": "addentity"})
 validate_entity = EntityViewSet.as_view({"post": "validate_entity"})
 upload_entity = EntityViewSet.as_view({"post": "upload_entity"})
-delete_entity = EntityViewSet.as_view({"delete":"entity_delete"})
-update_entity = EntityViewSet.as_view({"put":"update_entity"})
+delete_entity = EntityViewSet.as_view({"delete": "entity_delete"})
+update_entity = EntityViewSet.as_view({"put": "update_entity"})
 offence_entity = EntityViewSet.as_view({"get": "offence_entity"})
 offence_entity_assets = EntityViewSet.as_view({"get": "offence_entity_asset_types"})
 offence_entity_location = EntityViewSet.as_view({"get": "offence_entity_location"})
@@ -97,10 +97,11 @@ update_process = ProcessViewSet.as_view({"put": "update_process"})
 insight_tickets = InsightHub.as_view({"post": "insight_tickets"})
 hub = InsightHub.as_view({"post": "insights_hub"})
 grid_master = InsightHub.as_view({"post": "master_data"})
-asset_details = InsightHub.as_view({"get": "asset_details"})
+asset_details = InsightHub.as_view({"post": "asset_details"})
 oei_chart_data = InsightHub.as_view({"post": "oei"})
 oei_master_data = ITSMViewSet.as_view({"post": "master_data"})
 oei_tickets = ITSMViewSet.as_view({"post": "oei_tickets"})
+ticket_details = ITSMViewSet.as_view({"post": "ticket_details"})
 
 urlpatterns = [
     path(r"update_asset/<int:asset>", update_asset, name="update_asset"),
@@ -188,5 +189,6 @@ urlpatterns = [
     path(r"asset_details/", asset_details, name="asset_details"),
     path(r"oei/", oei_chart_data, name="oei"),
     path(r"oei_grid_data/", oei_tickets, name="oei_tickets"),
-    path(r"oei_master_data", oei_master_data, name="oei_master_data")
+    path(r"oei_master_data", oei_master_data, name="oei_master_data"),
+    path(r"ticket_details/", ticket_details, name="ticket_details")
 ]

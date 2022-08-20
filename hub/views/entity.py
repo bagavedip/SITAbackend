@@ -239,7 +239,7 @@ class EntityViewSet(viewsets.ModelViewSet):
             Serializer = EntitySerializer(data=request.data)
             data = {}
             if Serializer.is_valid():
-                if not EntityService.get_queryset().filter(entityname=request.data["entityname"]).exists():
+                if not EntityService.get_queryset().filter(entityname__iexact=request.data["entityname"]).exists():
                     entity = Serializer.save()
                     data["Id"] = entity.id
                     data['Entity'] = entity.entityname

@@ -282,9 +282,8 @@ class FunctionViewSet(viewsets.ModelViewSet):
             Serializer = self.serializer_class(data=request.data)
             data = {}
             if Serializer.is_valid():
-                if not FunctionService.get_queryset().filter(function_name=request.data["function_name"]).exists():
+                if not FunctionService.get_queryset().filter(function_name__iexact=request.data["function_name"]).exists():
                     location_queryset = GeoLocation.objects.get(location=request.data["location_name"])
-                    # print(location_queryset)
                     function_list = Function(
                         function_name=request.data["function_name"],
                         location_id=location_queryset

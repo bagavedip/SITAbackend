@@ -56,7 +56,7 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             Serializer = ProcessSerializer(data=request.data)
             data = {}
             if Serializer.is_valid():
-                if not ProcessService.get_queryset().filter(process=request.data["process"]).exists():
+                if not ProcessService.get_queryset().filter(process__iexact=request.data["process"]).exists():
                     process = Serializer.save()
                     data["Id"] = process.id
                     data['Process'] = process.process

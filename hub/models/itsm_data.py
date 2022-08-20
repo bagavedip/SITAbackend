@@ -131,9 +131,8 @@ class ITSM(models.Model):
                                                 help_text=_("SLA_Stock_of_Spare_Parts"))
     Hardware_Damage_Confirmation_Date_Manufacturer = models.CharField(_("Hardware_Damage_Confirmation_Date_Manufacturer"), max_length=200, null=True,
                                                                       help_text=_("Hardware_Damage_Confirmation_Date"))
-    SLA_Spare_Parts_Stock_Delivery_Time = models.CharField(_("SLA_Spare_Parts_Stock_Delivery_Time"), max_length=200,
-                                                           null=True,
-                                                           help_text=_("SLA_Spare_Parts_Stock_Delivery_Time"))
+    SLA_Spare_Parts_Stock_Delivery_Time = models.DateTimeField(_("SLA_Spare_Parts_Stock_Delivery_Time"), null=True,
+                                                               help_text=_("SLA_Spare_Parts_Stock_Delivery_Time"))
     Contract_start_date = models.CharField(_("Contract_start_date"), max_length=200, null=True,
                                            help_text=_("Contract_start_date"))
     Bill = models.CharField(_("Bill"), max_length=200, null=True, help_text=_("Bill"))
@@ -148,3 +147,8 @@ class ITSM(models.Model):
     sla_name = models.CharField(_("sla_name"), null=True, max_length=200, help_text=_("sla_name"))
     is_overdue = models.CharField(_("is_overdue"), max_length=200, help_text=_("Overdue Status"), null=True)
     category_id = models.CharField(_("sla_id"), null=True, max_length=200, help_text=_("sla_id"))
+    submitted_by = models.CharField(_("submitted_by"), null=True, max_length=200, help_text=_("submmited by"))
+    location_name = models.CharField(_("location_name"), null=True, max_length=200, help_text=_("location name"))
+    reply = models.CharField(_("replys"), max_length=200, help_text=_("Replies"), null=True)
+    Child_CI_type = models.CharField(_("Child ci name"), max_length=200, null=True, help_text=_("Asset Affected"))
+    assigned_time = models.DateTimeField(_("assigned_time"), max_length=200, null=True, help_text=_("Time send mail"))

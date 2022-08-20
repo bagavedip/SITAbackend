@@ -96,7 +96,7 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
             Serializer = self.serializer_class(data=request.data)
             data = {}
             if Serializer.is_valid():
-                if not GeoLocationService.get_queryset().filter(location=request.data["location"]).exists():
+                if not GeoLocationService.get_queryset().filter(location__iexact=request.data["location"]).exists():
                     entity_query = Entity.objects.get(entityname=request.data['entity_name'])
                     location_list = GeoLocation(
                         location=request.data["location"],

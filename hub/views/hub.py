@@ -248,11 +248,13 @@ class InsightHub(viewsets.GenericViewSet):
         return Response(response, status=status.HTTP_201_CREATED)
 
     def asset_details(self, request):
-        request_param = request.query_params.dict()
-        incident = request_param.get("incident", None)
+        request_data = request.data
+        print('Request Data', request_data)
+        incident = request_data.get("incidentId", None)
+        print('Incident', incident)
         queryset = HubService.asset_details(incident)
-
-        return Response(queryset, status=status.HTTP_200_OK)
+        print('queryset', queryset)
+        return Response(queryset, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=["post"])
     def oei(self, request, **kwargs):
