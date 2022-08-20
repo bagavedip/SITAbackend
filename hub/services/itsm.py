@@ -1,4 +1,6 @@
 import logging
+from datetime import timedelta
+
 from django.db.models import Count, Q
 from hub.models.itsm_data import ITSM
 from hub.serializers.oei_serializers import OeiSerializer
@@ -39,13 +41,15 @@ class ITSMService:
         assets = data.count()
         for query in data:
             request_status = {"text": query.Subject + " " + query.SIEM_id, "color": "#ffc107"}
-            time_to_close = (query.Ending_time - query.CreatedTime)
+            time_to_close = (query.assigned_time - query.CreatedTime)
             time = int(abs(time_to_close).total_seconds() / 3600)
             time_to_close = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107", "cardSubTitle": "Time to close",
                              "cardIcon": "OrangeWait"}
-            expected_closure = (query.CreatedTime + query.SLA_Spare_Parts_Stock_Delivery_Time)
+            a = query.CreatedTime
+            b = query.sla_completion_time
+            c = a + timedelta(days=int(b))
+            expected_closure = (c - query.CreatedTime)
             time = int(abs(expected_closure).total_seconds() / 3600)
-            print(time, "time")
             expected_closure = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107",
                                 "cardSubTitle": "Time to close", "cardIcon": "OrangeWait"}
             if query.Priority == "High":

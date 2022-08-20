@@ -143,7 +143,6 @@ class ITSM(models.Model):
     Resolution_time = models.DateTimeField(_("Resolution_time"), null=True, help_text=_("Resolution_time"))
     VIP_user = models.BooleanField(_("VIP_user"), null=True, help_text=_("VIP_user"))
     SIEM_id = models.CharField(_("SIEM_id"), null=True, max_length=200, help_text=_("SIEM Id"))
-    events = models.IntegerField(_("events"), null=True, help_text=_("events"))
     sla_name = models.CharField(_("sla_name"), null=True, max_length=200, help_text=_("sla_name"))
     is_overdue = models.CharField(_("is_overdue"), max_length=200, help_text=_("Overdue Status"), null=True)
     category_id = models.CharField(_("sla_id"), null=True, max_length=200, help_text=_("sla_id"))
@@ -152,3 +151,5 @@ class ITSM(models.Model):
     reply = models.CharField(_("replys"), max_length=200, help_text=_("Replies"), null=True)
     Child_CI_type = models.CharField(_("Child ci name"), max_length=200, null=True, help_text=_("Asset Affected"))
     assigned_time = models.DateTimeField(_("assigned_time"), max_length=200, null=True, help_text=_("Time send mail"))
+    sla_completion_time = models.CharField(_("sla_completion_time"), max_length=200, null=True,
+                                           help_text=_("sla_completion_time"))
