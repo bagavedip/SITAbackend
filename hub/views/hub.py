@@ -8,18 +8,13 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import json
-
 from collections import defaultdict as dd
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from hub.models import ITSM
-from hub.serializers.oei_serializers import OeiSerializer
 from hub.services.insight_hub_service import HubService
 from hub.constants.dataset import Dataset
 from hub.serializers.hub import InsightsSerializer
 from hub.serializers.ticket_details import TicketDetailsSerializer
 from hub.serializers.masterdata import MasterDataSerialiser
-from hub.services.itsm import ITSMService
 from hub.services.tickets_service import TicketsService
 from hub.services.masterdata import MasterDataService
 
@@ -255,43 +250,3 @@ class InsightHub(viewsets.GenericViewSet):
         queryset = HubService.asset_details(incident)
         print('queryset', queryset)
         return Response(queryset, status=status.HTTP_201_CREATED)
-
-    @action(detail=False, methods=["post"])
-    def oei(self, request, **kwargs):
-        logger.info("Validating data for Log In.")
-        serializser = OeiSerializer(request)
-        result = ITSMService.get_oei(serializser)
-        hirarchial_data = self.convert_data(result)
-        self.update_events(hirarchial_data)
-        query_data = ITSM.objects.filter(CreatedTime__lte=serializser.start_date,
-                                         Ending_time__lte=serializser.end_date).count()
-        data = ITSM.objects.filter(CreatedTime__lte=serializser.start_date,
-                                   Ending_time__lte=serializser.end_date, is_overdue='1').count()
-        percentage = round((data*100)/query_data)
-        total_ticket = query_data
-        legends = []
-        Compliance = percentage
-        final_response = {
-            "charFooter": {
-                "label": "SLA  Compliance",
-                "value": str(int(Compliance)) + "%",
-                "valueFontColor": "green"
-            },
-            "legends": {
-                "header": request.data.get('filterOptions').get('headerOption'),
-                "items": legends
-            },
-            "doughnutlabel": {
-                "labels": [
-                    {
-                        "text": "Tickets {total_ticket}".format(total_ticket=total_ticket),
-                        "font": {
-                            "size": "25"
-                        },
-                        "color": "black"
-                    },
-                ]
-            },
-            "datasets": serializser.datasets
-        }
-        return Response(final_response, status=status.HTTP_201_CREATED)

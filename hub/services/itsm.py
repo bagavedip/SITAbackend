@@ -43,7 +43,7 @@ class ITSMService:
             time = int(abs(time_to_close).total_seconds() / 3600)
             time_to_close = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107", "cardSubTitle": "Time to close",
                              "cardIcon": "OrangeWait"}
-            expected_closure = (query.CreatedTime - query.SLA_Spare_Parts_Stock_Delivery_Time)
+            expected_closure = (query.CreatedTime + query.SLA_Spare_Parts_Stock_Delivery_Time)
             time = int(abs(expected_closure).total_seconds() / 3600)
             print(time, "time")
             expected_closure = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107",
