@@ -41,7 +41,7 @@ class HubService:
         laptop = 0
         mobile = 0
         entityes = 0
-        assets = data.count()
+        assets = str(data.count())
         for type in data:
             asset_type = type.asset_type
             entity = type.entity_name
@@ -54,7 +54,7 @@ class HubService:
             if asset_type == "Mobile":
                 mobile = mobile + 1
         asset_types = "MOBILE" + "~" + str(mobile) + "*" + "DESKTOP" + "~" + str(desktop) + "*" + "LAPTOP" + "~" + str(laptop)
-        entity_count = entityes
+        entity_count = str(entityes)
         for query in data:
             incident_status = {"text": query.status, "color": "#ffc107"}
             time_to_close = (query.assigned_time - query.starttime)

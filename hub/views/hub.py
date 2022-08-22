@@ -1,10 +1,5 @@
 import logging
-from datetime import timezone
-
-from django.db.models import Count
-from django.db.models.functions import Round
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import json
@@ -41,7 +36,6 @@ class InsightHub(viewsets.GenericViewSet):
                     key_index += 1
 
             nested_dict = eval(nested_dict_str)
-            # sala = ITSM.objects.filter(sla_name=keys.).count()
             temp1 = "nested_dict" + key_var + ".append(data.get('events'))"
             # Note that variable name here has to be "data" as this is what is used to build the executable string above
             for data in dataset:
@@ -106,7 +100,6 @@ class InsightHub(viewsets.GenericViewSet):
         incidents_medium = serializser.donut_center['Medium'] if "Medium" in serializser.donut_center.keys() else 0
         incidents_low = serializser.donut_center['Low'] if "Low" in serializser.donut_center.keys() else 0
         total_incidents = incidents_high + incidents_medium + incidents_low
-        print(serializser.donut_center)
 
         # legends = HubService.get_legends(serializser)
         legends = []
@@ -161,8 +154,6 @@ class InsightHub(viewsets.GenericViewSet):
 
         data = TicketsService.get_tickets(response_obj)
 
-        print('Sending Response', data)
-
         return Response(response_obj.get_response(data), status=status.HTTP_201_CREATED)
 
     def master_data(self, request):
@@ -171,8 +162,6 @@ class InsightHub(viewsets.GenericViewSet):
         response_obj = MasterDataSerialiser()
 
         data = MasterDataService.get_master_data(response_obj)
-
-        print('Sending Response', data)
 
         response = [
             {

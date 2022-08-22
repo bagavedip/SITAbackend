@@ -3,20 +3,20 @@ class ColorMap:
     @staticmethod
     def get_color(filter, id):
         SLA = {
-            "Alta": "#1a47ba",
-            "Baja": "#fcba03",
-            "Media": "#9da3b3",
+            "Alta": "#165B65",
+            "Baja": "#16293A",
+            "Media": "#437DB1",
         }
 
         value0 = {
-            "0": "#FF0000",
-            "1": "#0000FF",
+            "0": "#B72A35",
+            "1": "#1DBC36",
         }
 
         Category = {
-            "1": "#1a47ba",
-            "10": "#fcba03",
-            "11": "#9da3b3",
+            "1": "#2CB6C9",
+            "10": "#54CADA",
+            "11": "#2498AB",
             "12": "#64adb5",
             "13": "#595446",
             "2": "#1a47ba",
@@ -31,14 +31,14 @@ class ColorMap:
         }
 
         status = {
-            "open": "#1a47ba",
-            "backlog": "#fcba03",
+            "open": "#9DBD6F",
+            "backlog": "#6E9537",
         }
 
         Priority = {
-            "High": "#1a47ba",
-            "Low": "#fcba03",
-            "Medium": "#9da3b3"
+            "High": "#B72A35",
+            "Low": "#1DBC36",
+            "Medium": "#F0AE0c"
         }
 
         if filter == 'SLA':

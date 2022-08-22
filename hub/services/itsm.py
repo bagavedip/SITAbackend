@@ -37,8 +37,7 @@ class ITSMService:
     @staticmethod
     def asset_details(ticket):
         data = ITSMService.get_queryset().filter(SIEM_id=ticket)
-        asset = []
-        assets = data.count()
+        assets = str(data.count())
         for query in data:
             request_status = {"text": query.Subject + " " + query.SIEM_id, "color": "#ffc107"}
             time_to_close = (query.assigned_time - query.CreatedTime)
@@ -76,7 +75,7 @@ class ITSMService:
                     "description": query.Resolution,
                     "isEditable": "true"
                 },
-                "resolution_owner": {
+                "resolutionOwner": {
 
                     "title": "Resolution Owner",
                     "description": query.submitted_by,
@@ -126,7 +125,6 @@ class ITSMService:
                 "incidentDetails": incident_details,
                 "resolutionStatus": resolution_status,
                 "otherDetails": other_details,
-                "update": updates
+                "updates": updates
             }
-            asset.append(data_dict)
-        return asset
+        return data_dict

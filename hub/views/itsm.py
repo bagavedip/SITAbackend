@@ -290,8 +290,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
         queryset = ITSMService.asset_details(ticket)
         return Response(queryset, status=status.HTTP_201_CREATED)
 
-    @action(detail=False, methods=["post"])
-    def oei(self, request, **kwargs):
+    def oei_chart_data(self, request, **kwargs):
         logger.info("Validating data for Log In.")
         serializser = OeiSerializer(request)
         result = ITSMService.get_oei(serializser)
