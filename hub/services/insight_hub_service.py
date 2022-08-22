@@ -36,7 +36,6 @@ class HubService:
     @staticmethod
     def asset_details(incident):
         data = HubService.get_queryset().filter(soar_id=incident)
-        asset = []
         desktop = 0
         laptop = 0
         mobile = 0
@@ -91,7 +90,7 @@ class HubService:
                     "description": query.resolution,
                     "isEditable": "true"
                 },
-                "resolution_owner": {
+                "resolutionOwner": {
 
                     "title": "Resolution Owner",
                     "description": query.group,
@@ -141,7 +140,6 @@ class HubService:
                 "incidentDetails": incident_details,
                 "resolutionStatus": resolution_status,
                 "otherDetails": other_details,
-                "update": updates
+                "updates": updates
             }
-            asset.append(data_dict)
-        return asset
+        return data_dict
