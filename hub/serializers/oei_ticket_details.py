@@ -19,6 +19,7 @@ class TicketDetailsSerializer:
             filter = filter_str.split("*")[0].split("~")[0]
             filter_key_val = filter.split("=")
             self.filters[filter_key_val[0]] = filter_key_val[1].split('-')[0]
+            print(self.filters[filter_key_val[0]], "self.filters[filter_key_val[0]]")
 
         self.columns_headers = []
         self.select_cols = []

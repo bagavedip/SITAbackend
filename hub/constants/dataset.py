@@ -19,7 +19,7 @@ class Dataset:
     def _get_dict(self, key):
         return {
             "key": key,
-            "label" : "",
+            "label": "",
             "incident_count": 0
         }
 

@@ -148,7 +148,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
         logger.info("Successfully Fetch for ticket id.")
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def master_data(self, request):
+    def ticket_dropdown_data(self, request):
         logger.debug(f"Received request body {request.data}")
         response = [
                 {
@@ -278,6 +278,30 @@ class ITSMViewSet(viewsets.ModelViewSet):
 
         return Response(response, status=status.HTTP_201_CREATED)
 
+    def sla_dropdown_data(self, request):
+        data = {
+                "id": "Service",
+                "dropdownoption": [
+                    {
+                        "value": "Select",
+                        "label": "Service | Select"
+                    },
+                    {
+                        "label": "Service | SOC",
+                        "value": "SOC"
+                    },
+                    {
+                        "label": "Service | value2",
+                        "value": "value2"
+                    },
+                    {
+                        "label": "Service | value3",
+                        "value": "value3"
+                    }
+                ]
+            }
+        return Response(data, status=status.HTTP_201_CREATED)
+
     def oei_tickets(self, request):
         logger.debug(f"Received request body {request.data}")
         response_obj = TicketDetailsSerializer(request)
@@ -296,9 +320,9 @@ class ITSMViewSet(viewsets.ModelViewSet):
         result = ITSMService.get_oei(serializser)
         hirarchial_data = self.convert_data(result)
         self.update_events(hirarchial_data)
-        query_data = ITSM.objects.filter(CreatedTime__lte=serializser.start_date,
+        query_data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
                                          Ending_time__lte=serializser.end_date).count()
-        data = ITSM.objects.filter(CreatedTime__lte=serializser.start_date,
+        data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
                                    Ending_time__lte=serializser.end_date, is_overdue='1').count()
         percentage = round((data*100)/query_data)
         total_ticket = query_data
@@ -307,7 +331,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
         final_response = {
             "charFooter": {
                 "label": "SLA  Compliance",
-                "value": str(int(Compliance)) + "%",
+                "value": str((Compliance)) + "%",
                 "valueFontColor": "green"
             },
             "legends": {

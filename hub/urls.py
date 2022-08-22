@@ -100,9 +100,10 @@ hub = InsightHub.as_view({"post": "insights_hub"})
 grid_master = InsightHub.as_view({"post": "master_data"})
 asset_details = InsightHub.as_view({"post": "asset_details"})
 oei_chart_data = ITSMViewSet.as_view({"post": "oei_chart_data"})
-oei_master_data = ITSMViewSet.as_view({"post": "master_data"})
+ticket_dropdown_data = ITSMViewSet.as_view({"post": "ticket_dropdown_data"})
 oei_tickets = ITSMViewSet.as_view({"post": "oei_tickets"})
 ticket_details = ITSMViewSet.as_view({"post": "ticket_details"})
+sla_dropdown_data = ITSMViewSet.as_view({"post": "sla_dropdown_data"})
 
 urlpatterns = simple_router.urls
 urlpatterns = urlpatterns + [
@@ -191,6 +192,7 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/asset_details/", asset_details, name="asset_details"),
     path(r"api/v1/oei_chart_data/", oei_chart_data, name="oei_chart_data"),
     path(r"api/v1/oei_grid_data/", oei_tickets, name="oei_tickets"),
-    path(r"api/v1/oei_master_data", oei_master_data, name="oei_master_data"),
-    path(r"api/v1/ticket_details/", ticket_details, name="ticket_details")
+    path(r"api/v1/ticket_dropdown_data", ticket_dropdown_data, name="ticket_dropdown_data"),
+    path(r"api/v1/ticket_details/", ticket_details, name="ticket_details"),
+    path(r"api/v1/sla_dropdown_data", sla_dropdown_data, name="sla_dropdown_data")
 ]

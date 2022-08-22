@@ -6,10 +6,10 @@ filter_map = {
     "First_Response_Time": "Response_due_time",
     "Response_Time": "Response_due_time",
     "False_Positives": "Itsm_id",
-    "Tickets": "Itsm_id",
     "Reopened": "Reopened",
     "status": "RequestStatus",
-    "value0": "is_overdue"
+    "value0": "is_overdue",
+    "Tickets": "Itsm_id"
 }
 
 
