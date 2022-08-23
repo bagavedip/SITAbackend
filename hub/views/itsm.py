@@ -279,7 +279,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
         return Response(response, status=status.HTTP_201_CREATED)
 
     def sla_dropdown_data(self, request):
-        data = {
+        data = [{
                 "id": "Service",
                 "dropdownoption": [
                     {
@@ -299,7 +299,8 @@ class ITSMViewSet(viewsets.ModelViewSet):
                         "value": "value3"
                     }
                 ]
-            }
+                }
+                ]
         return Response(data, status=status.HTTP_201_CREATED)
 
     def oei_tickets(self, request):
