@@ -95,8 +95,8 @@ delete_process = ProcessViewSet.as_view({"delete": "process_delete"})
 update_process = ProcessViewSet.as_view({"put": "update_process"})
 
 # Hub
-insight_tickets = InsightHub.as_view({"post": "insight_tickets"})
 hub = InsightHub.as_view({"post": "insights_hub"})
+insight_tickets = InsightHub.as_view({"post": "insight_tickets"})
 grid_master = InsightHub.as_view({"post": "master_data"})
 asset_details = InsightHub.as_view({"post": "asset_details"})
 oei_chart_data = ITSMViewSet.as_view({"post": "oei_chart_data"})
@@ -104,6 +104,7 @@ ticket_dropdown_data = ITSMViewSet.as_view({"post": "ticket_dropdown_data"})
 oei_tickets = ITSMViewSet.as_view({"post": "oei_tickets"})
 ticket_details = ITSMViewSet.as_view({"post": "ticket_details"})
 sla_dropdown_data = ITSMViewSet.as_view({"post": "sla_dropdown_data"})
+incident_close = ITSMViewSet.as_view({"post": "incident_close"})
 
 urlpatterns = simple_router.urls
 urlpatterns = urlpatterns + [
@@ -194,5 +195,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/oei_grid_data/", oei_tickets, name="oei_tickets"),
     path(r"api/v1/ticket_dropdown_data", ticket_dropdown_data, name="ticket_dropdown_data"),
     path(r"api/v1/ticket_details/", ticket_details, name="ticket_details"),
-    path(r"api/v1/sla_dropdown_data", sla_dropdown_data, name="sla_dropdown_data")
+    path(r"api/v1/sla_dropdown_data", sla_dropdown_data, name="sla_dropdown_data"),
+    path(r"api/v1/incident_close", incident_close, name="close")
 ]

@@ -356,4 +356,10 @@ class ITSMViewSet(viewsets.ModelViewSet):
             }
             return Response(final_response, status=status.HTTP_201_CREATED)
 
+    def incident_close(self, request):
+        data = {
+            "message": "Thanks"
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
+
     
