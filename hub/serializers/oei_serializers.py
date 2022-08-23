@@ -28,8 +28,6 @@ class OeiSerializer:
                 self.legend_filter = filters[0]
             self.depth = len(self.request_filters)
             index = 1
-            # if "Tickets" in self.request_filters:
-            #     self.request_filters.remove("Tickets")
             for filter in self.request_filters:
                 self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
                 ds = Dataset().init_response_dataset()
@@ -49,8 +47,6 @@ class OeiSerializer:
                 self.legend_filter = filters[0]
             self.depth = len(self.request_filters)
             index = 1
-            # if "Tickets" in self.request_filters:
-            #     self.request_filters.remove("Tickets")
             for filter in self.request_filters:
                 self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
                 ds = Dataset().init_response_dataset()

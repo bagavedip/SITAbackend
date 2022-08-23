@@ -70,8 +70,8 @@ GRANT ALL PRIVILEGES ON DATABASE your_database_user to your_database_name;
 ## Project Setup
 
 ```console
-git clone https://github.com/HPL-Singapore/insightservices.git
-cd insightservices
+git clone https://github.com/bagavedip/SITAbackend.git
+cd SITAbackend
 pipenv install
 ```
 
