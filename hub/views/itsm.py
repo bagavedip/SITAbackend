@@ -324,33 +324,36 @@ class ITSMViewSet(viewsets.ModelViewSet):
                                          Ending_time__lte=serializser.end_date).count()
         data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
                                    Ending_time__lte=serializser.end_date, is_overdue='1').count()
-        percentage = round((data*100)/query_data)
         total_ticket = query_data
         legends = []
-        Compliance = percentage
-        final_response = {
-            "charFooter": {
-                "label": "SLA  Compliance",
-                "value": str((Compliance)) + "%",
-                "valueFontColor": "green"
-            },
-            "legends": {
-                "header": request.data.get('filterOptions').get('headerOption'),
-                "items": legends
-            },
-            "doughnutlabel": {
-                "labels": [
-                    {
-                        "text": "Tickets {total_ticket}".format(total_ticket=total_ticket),
-                        "font": {
-                            "size": "25"
+        if total_ticket == 0:
+            return Response(None, status=status.HTTP_201_CREATED)
+        else:
+            percentage = round((data * 100) / query_data)
+            Compliance = percentage
+            final_response = {
+                "charFooter": {
+                    "label": "SLA  Compliance",
+                    "value": str((Compliance)) + "%",
+                    "valueFontColor": "green"
+                },
+                "legends": {
+                    "header": request.data.get('filterOptions').get('headerOption'),
+                    "items": legends
+                },
+                "doughnutlabel": {
+                    "labels": [
+                        {
+                            "text": "Tickets {total_ticket}".format(total_ticket=total_ticket),
+                            "font": {
+                                "size": "25"
+                            },
+                            "color": "black"
                         },
-                        "color": "black"
-                    },
-                ]
-            },
-            "datasets": serializser.datasets
-        }
-        return Response(final_response, status=status.HTTP_201_CREATED)
+                    ]
+                },
+                "datasets": serializser.datasets
+            }
+            return Response(final_response, status=status.HTTP_201_CREATED)
 
     

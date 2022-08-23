@@ -15,28 +15,50 @@ class OeiSerializer:
         filter_data = request.data
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
-        filterOptions = filter_data.get('filterOptions').get('headerFilters')
-        for filter in filterOptions:
-            self.request_filters.append(filter)
-        self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
         header_option = filter_data.get('filterOptions').get('headerOption')
-        filters = Map.get_filter(header_option).split(",")
-        if len(filters) > 1:
-            self.legend_filter = filters[1]
-        else:
-            self.legend_filter = filters[0]
-        self.depth = len(self.request_filters)
-        index = 1
-        # if "Tickets" in self.request_filters:
-        #     self.request_filters.remove("Tickets")
-        print(self.request_filters, "self.request_filters")
-        for filter in self.request_filters:
-            self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
-            ds = Dataset().init_response_dataset()
-            ds['id'] = index
-            ds['label'] = filter
-            self.datasets.append(ds)
-            index += 1
+        if header_option == "Tickets":
+            filterOptions = filter_data.get('filterOptions').get('headerFilters')
+            for filter in filterOptions:
+                self.request_filters.append(filter)
+            self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
+            filters = Map.get_filter(header_option).split(",")
+            if len(filters) > 1:
+                self.legend_filter = filters[1]
+            else:
+                self.legend_filter = filters[0]
+            self.depth = len(self.request_filters)
+            index = 1
+            # if "Tickets" in self.request_filters:
+            #     self.request_filters.remove("Tickets")
+            for filter in self.request_filters:
+                self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
+                ds = Dataset().init_response_dataset()
+                ds['id'] = index
+                ds['label'] = filter
+                self.datasets.append(ds)
+                index += 1
+        if header_option == "SLA":
+            self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
+            filterOptions = filter_data.get('filterOptions').get('headerFilters')
+            for filter in filterOptions:
+                self.request_filters.append(filter)
+            filters = Map.get_filter(header_option).split(",")
+            if len(filters) > 1:
+                self.legend_filter = filters[1]
+            else:
+                self.legend_filter = filters[0]
+            self.depth = len(self.request_filters)
+            index = 1
+            # if "Tickets" in self.request_filters:
+            #     self.request_filters.remove("Tickets")
+            for filter in self.request_filters:
+                self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
+                ds = Dataset().init_response_dataset()
+                ds['id'] = index
+                ds['label'] = filter
+                self.datasets.append(ds)
+                index += 1
+
 
     def insert_children(self, start_index, data_dict, data, events):
         for index in range(start_index, len(self.request_filters)):
