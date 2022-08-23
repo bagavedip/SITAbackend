@@ -238,7 +238,12 @@ class InsightHub(viewsets.GenericViewSet):
         return Response(queryset, status=status.HTTP_201_CREATED)
 
     def assign_task(self, request):
+        assign_task = request.data
+        print(assign_task)
+        request_param = request.data.get("selectedIncidents", None)
+        print(request_param)
         data = {
-            "message": "Thanks"
+            "msg": "Resolution Request Recieved",
+            "status": True
         }
         return Response(data, status=status.HTTP_201_CREATED)

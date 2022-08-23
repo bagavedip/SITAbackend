@@ -358,8 +358,10 @@ class ITSMViewSet(viewsets.ModelViewSet):
             return Response(final_response, status=status.HTTP_201_CREATED)
 
     def incident_close(self, request):
+        incidentId = request.data.get("incidentId", None)
+        print(incidentId)
         data = {
-            "message": "Thanks"
+            "status": True
         }
         return Response(data, status=status.HTTP_201_CREATED)
     
