@@ -233,9 +233,12 @@ class InsightHub(viewsets.GenericViewSet):
 
     def asset_details(self, request):
         request_data = request.data
-        print('Request Data', request_data)
         incident = request_data.get("incidentId", None)
-        print('Incident', incident)
         queryset = HubService.asset_details(incident)
-        print('queryset', queryset)
         return Response(queryset, status=status.HTTP_201_CREATED)
+
+    def assign_task(self, request):
+        data = {
+            "message": "Thanks"
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
