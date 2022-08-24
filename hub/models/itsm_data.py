@@ -70,7 +70,7 @@ class ITSM(models.Model):
     RCF = models.BooleanField(_("RCF"), null=True, help_text="RCF")
     User_On_Behalf_Of_OBO = models.CharField(_("User_On_Behalf_Of_OBO"), max_length=200, null=True,
                                              help_text=_("User_On_Behalf_Of_OBO"))
-    Total_cost = models.CharField(_("Total_cost"), max_length=200, null=True, help_text=_("Total_cost"))
+    total_cost = models.CharField(_("Total_cost"), max_length=200, null=True, help_text=_("Total_cost"))
     Exchanged_Service = models.CharField(_("Exchanged_Service"), max_length=200, null=True,
                                          help_text=_("Exchanged_Service"))
     Sale_order = models.CharField(_("Sale_order"), max_length=200, null=True, help_text=_("Sale_order"))
