@@ -76,7 +76,7 @@ class ColorMap:
             "0": "#27cc48"
         }
 
-        Response_Time = {
+        Resolution_time = {
             "1": "#2CB6C9",
             "10": "#54CADA",
             "11": "#2498AB",
@@ -164,8 +164,8 @@ class ColorMap:
             return random.choice(list(False_Positives.values()))
         elif filter == 'First_Response_Time':
             return random.choice(list(First_Response_Time.values()))
-        elif filter == 'Response_Time':
-            return random.choice(list(Response_Time.values()))
+        elif filter == 'Resolution_time':
+            return random.choice(list(Resolution_time.values()))
         elif filter == 'Reopened':
             return random.choice(list(Reopened.values()))
 

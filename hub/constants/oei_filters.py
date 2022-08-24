@@ -4,7 +4,7 @@ filter_map = {
     "Priority": "Priority",
     "Category": "category_id,service_category",
     "First_Response_Time": "first_response_time_id,total_cost",
-    "Response_Time": "response_time_id,total_cost",
+    "Resolution_time": "response_time_id,total_cost",
     "False_Positives": "false_positives_id,Number_of_Services",
     "Reopened": "reopened_id,Total_cost",
     "Status": "RequestStatus",
