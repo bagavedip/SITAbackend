@@ -57,6 +57,73 @@ class ColorMap:
             "Low": "#1DBC36",
             "Medium": "#F0AE0c"
         }
+        First_Response_Time = {
+            "1": "#2CB6C9",
+            "10": "#54CADA",
+            "11": "#2498AB",
+            "12": "#64adb5",
+            "13": "#595446",
+            "2": "#1a47ba",
+            "3": "#c9bfa1",
+            "4": "#64adb5",
+            "5": "#182526",
+            "6": "#1a47ba",
+            "7": "#1a47ba",
+            "8": "#9da3b3",
+            "9": "#27cc48",
+            "0": "#27cc48"
+        }
+
+        Response_Time = {
+            "1": "#2CB6C9",
+            "10": "#54CADA",
+            "11": "#2498AB",
+            "12": "#64adb5",
+            "13": "#595446",
+            "2": "#1a47ba",
+            "3": "#c9bfa1",
+            "4": "#64adb5",
+            "5": "#182526",
+            "6": "#1a47ba",
+            "7": "#1a47ba",
+            "8": "#9da3b3",
+            "9": "#27cc48",
+            "0": "#27cc48"
+        }
+
+        False_Positives = {
+            "1": "#2CB6C9",
+            "10": "#54CADA",
+            "11": "#2498AB",
+            "12": "#64adb5",
+            "13": "#595446",
+            "2": "#1a47ba",
+            "3": "#c9bfa1",
+            "4": "#64adb5",
+            "5": "#182526",
+            "6": "#1a47ba",
+            "7": "#1a47ba",
+            "8": "#9da3b3",
+            "9": "#27cc48",
+            "0": "#27cc48"
+        }
+
+        Reopened = {
+            "1": "#2CB6C9",
+            "10": "#54CADA",
+            "11": "#2498AB",
+            "12": "#64adb5",
+            "13": "#595446",
+            "2": "#1a47ba",
+            "3": "#c9bfa1",
+            "4": "#64adb5",
+            "5": "#182526",
+            "6": "#1a47ba",
+            "7": "#1a47ba",
+            "8": "#9da3b3",
+            "9": "#27cc48",
+            "0": "#27cc48"
+        }
 
         if filter == 'SLA':
             return SLA.get(id)
@@ -70,4 +137,13 @@ class ColorMap:
             return Category.get(id)
         elif filter == 'Tickets':
             return Tickets.get(id)
+        elif filter == 'False_Positives':
+            return False_Positives.get(id)
+        elif filter == 'First_Response_Time':
+            return First_Response_Time.get(id)
+        elif filter == 'Response_Time':
+            return Response_Time.get(id)
+        elif filter == 'Reopened':
+            return Reopened.get(id)
+
 

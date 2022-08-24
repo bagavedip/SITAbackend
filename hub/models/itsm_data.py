@@ -153,3 +153,10 @@ class ITSM(models.Model):
     assigned_time = models.DateTimeField(_("assigned_time"), max_length=200, null=True, help_text=_("Time send mail"))
     sla_completion_time = models.CharField(_("sla_completion_time"), max_length=200, null=True,
                                            help_text=_("sla_completion_time"))
+    first_response_time_id = models.CharField(_("first_response_time_id"), null=True, max_length=200,
+                                              help_text=_("first_response_time_id"))
+    response_time_id = models.CharField(_("response_time_id"), null=True, max_length=200,
+                                        help_text=_("response_time_id"))
+    false_positives_id = models.CharField(_("false_positives_id"), null=True, max_length=200,
+                                          help_text=_("false_positives_id"))
+    reopened_id = models.CharField(_("reopened_id"), null=True, max_length=200, help_text=_("reopened_id"))
