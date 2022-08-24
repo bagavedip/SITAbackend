@@ -47,7 +47,7 @@ class ColorMap:
             "0": "#27cc48"
         }
 
-        status = {
+        Status = {
             "open": "#9DBD6F",
             "backlog": "#6E9537",
         }
@@ -125,12 +125,33 @@ class ColorMap:
             "0": "#27cc48"
         }
 
+        value1 = {
+            "0": "#B72A35",
+            "1": "#1DBC36",
+        }
+
+        value2 = {
+            "0": "#B72A35",
+            "1": "#1DBC36",
+        }
+
+        value3 = {
+            "0": "#B72A35",
+            "1": "#1DBC36",
+        }
+
         if filter == 'SLA':
             return SLA.get(id)
         elif filter == 'value0':
             return value0.get(id)
-        elif filter == 'status':
-            return status.get(id)
+        elif filter == 'value1':
+            return value1.get(id)
+        elif filter == 'value2':
+            return value2.get(id)
+        elif filter == 'value3':
+            return value3.get(id)
+        elif filter == 'Status':
+            return Status.get(id)
         elif filter == 'Priority':
             return Priority.get(id)
         elif filter == 'Category':
