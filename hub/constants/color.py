@@ -1,18 +1,22 @@
+import random
+
+
 class ColorMap:
 
     @staticmethod
     def get_color(filter, id):
         Entity = {
-            "1": "#38392D",
-            "10": "#D1D2C6",
-            "11": "#ACAE98",
-            "3": "#3c400d",
-            "4": "#848947",
-            "5": "#dae90d",
-            "6": "#d2d78f",
-            "7": "#202206",
-            "8": "#757c29",
-            "9": "#a8af61"
+            "1": "#808080",
+            "10": "#373737",
+            "11": "#594D58",
+            "3": "#322D31",
+            "4": "#696880",
+            "5": "#ADADC9",
+            "6": "#59515E",
+            "7": "#3E3D53",
+            "8": "#41424C",
+            "9": "#564C4D",
+            "2": "#4D4C5C"
         }
 
         Location = {
@@ -66,12 +70,12 @@ class ColorMap:
         }
 
         if filter == 'Entity':
-            return Entity.get(id)
+            return random.choice(list(Entity.values()))
         elif filter == 'Location':
-            return Location.get(id)
+            return random.choice(list(Location.values()))
         elif filter == 'Assets':
-            return Assets.get(id)
+            return random.choice(list(Assets.values()))
         elif filter == 'UseCase':
-            return UseCase.get(id)
+            return random.choice(list(UseCase.values()))
         elif filter == 'Criticality' or filter == 'Severity':
             return Criticality.get(id)

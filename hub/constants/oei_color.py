@@ -1,3 +1,5 @@
+import random
+
 class ColorMap:
 
     @staticmethod
@@ -155,16 +157,16 @@ class ColorMap:
         elif filter == 'Priority':
             return Priority.get(id)
         elif filter == 'Category':
-            return Category.get(id)
+            return random.choice(list(Category.values()))
         elif filter == 'Tickets':
-            return Tickets.get(id)
+            return random.choice(list(Tickets.values()))
         elif filter == 'False_Positives':
-            return False_Positives.get(id)
+            return random.choice(list(False_Positives.values()))
         elif filter == 'First_Response_Time':
-            return First_Response_Time.get(id)
+            return random.choice(list(First_Response_Time.values()))
         elif filter == 'Response_Time':
-            return Response_Time.get(id)
+            return random.choice(list(Response_Time.values()))
         elif filter == 'Reopened':
-            return Reopened.get(id)
+            return random.choice(list(Reopened.values()))
 
 
