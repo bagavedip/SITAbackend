@@ -74,8 +74,8 @@ class ITSM(models.Model):
     Exchanged_Service = models.CharField(_("Exchanged_Service"), max_length=200, null=True,
                                          help_text=_("Exchanged_Service"))
     Sale_order = models.CharField(_("Sale_order"), max_length=200, null=True, help_text=_("Sale_order"))
-    number_of_services = models.IntegerField(_("Number_of_Services"), null=True,
-                                             help_text=_("Number_of_Services"))
+    number_of_services = models.CharField(_("Number_of_Services"), null=True, max_length=200,
+                                          help_text=_("Number_of_Services"))
     Solicitant_area = models.CharField(_("Solicitant_area"), max_length=200, null=True,
                                        help_text=_("Solicitant_area"))
     Complexity = models.CharField(_("Complexity"), max_length=200, null=True, help_text=_("Complexity"))
