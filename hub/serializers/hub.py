@@ -129,7 +129,6 @@ class InsightsSerializer:
                 hierarchy.append(id_col + "=" + item['name'] + "~" + str(item['events']))
                 labels.append(item['name'])
                 id = item['name']
-                print(f"id{id}")
                 if '-' in item['name']:
                     id = item['name'].split("-")[0]
                 backgroundColor.append(ColorMap.get_color(self.datasets[0]['label'], id))

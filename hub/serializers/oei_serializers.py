@@ -16,10 +16,10 @@ class OeiSerializer:
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
         header_option = filter_data.get('filterOptions').get('headerOption')
-        self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
         for filter in filterOptions:
             self.request_filters.append(filter)
+        self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
         filters = Map.get_filter(header_option).split(",")
         if len(filters) > 1:
             self.legend_filter = filters[1]
@@ -34,7 +34,6 @@ class OeiSerializer:
             ds['label'] = filter
             self.datasets.append(ds)
             index += 1
-
 
     def insert_children(self, start_index, data_dict, data, events):
         for index in range(start_index, len(self.request_filters)):
