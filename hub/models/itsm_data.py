@@ -66,7 +66,7 @@ class ITSM(models.Model):
     RequestStatus = models.CharField(_("RequestStatus"), max_length=200, null=True, help_text="Request Status")
     Account = models.CharField(_("Account"), max_length=200, null=True, help_text="Account")
     Resolution = models.CharField(_("Resolution"), max_length=200, null=True, help_text="Resolution")
-    Reopened = models.BooleanField(_("Reopened"), null=True, help_text="Reopened")
+    reopened = models.CharField(_("Reopened"), null=True, max_length=200, help_text="Reopened")
     RCF = models.BooleanField(_("RCF"), null=True, help_text="RCF")
     User_On_Behalf_Of_OBO = models.CharField(_("User_On_Behalf_Of_OBO"), max_length=200, null=True,
                                              help_text=_("User_On_Behalf_Of_OBO"))
@@ -155,8 +155,13 @@ class ITSM(models.Model):
                                            help_text=_("sla_completion_time"))
     first_response_time_id = models.CharField(_("first_response_time_id"), null=True, max_length=200,
                                               help_text=_("first_response_time_id"))
+    first_response_time = models.CharField(_("first_response_time"), null=True, max_length=200,
+                                           help_text=_("first_response_time"))
     response_time_id = models.CharField(_("response_time_id"), null=True, max_length=200,
                                         help_text=_("response_time_id"))
     false_positives_id = models.CharField(_("false_positives_id"), null=True, max_length=200,
                                           help_text=_("false_positives_id"))
     reopened_id = models.CharField(_("reopened_id"), null=True, max_length=200, help_text=_("reopened_id"))
+    false_positives = models.CharField(_("false_positives"), null=True, max_length=200,
+                                       help_text=_("false_positives"))
+    comments = models.CharField(_("comments"), null=True, max_length=200, help_text=_("comment for tickets"))

@@ -57,3 +57,4 @@ class Hub(models.Model):
     ticket_id = models.CharField(_("ticket_id"), max_length=20000, help_text=_("ticket id"), null=True)
     Suspicious = models.CharField(_("Suspicious"), max_length=20000, help_text=_("suspicious"), null=True)
     subject = models.CharField(_("subject"), max_length=256, help_text=_("subject"), null=True)
+    comments = models.CharField(_("comments"), null=True, max_length=200, help_text=_("comment for tickets"))
