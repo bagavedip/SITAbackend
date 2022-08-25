@@ -128,3 +128,12 @@ class ITSMService:
                 "updates": updates
             }
         return data_dict
+
+    @staticmethod
+    def get_response_time(fromdate, todate):
+        """Function to return response time data"""
+        try:
+            response_time = todate - fromdate
+            return response_time
+        except:
+            return "-"
