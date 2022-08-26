@@ -63,6 +63,21 @@ class ColorMap:
             "9": "#263d91"
         }
 
+        Function = {
+            "1": "#e6ffe6",
+            "12": "#b3ffb3",
+            "13": "#ccffcc",
+            "15": "#99ff99",
+            "16": "#80ff80",
+            "17": "#66ff66",
+            "19": "#4dff4d",
+            "20": "#33ff33",
+            "2": "#1aff1a",
+            "4": "#00ff00",
+            "8": "#00e600",
+            "9": "#00cc00"
+        }
+
         Criticality = {
             "High": "#b72a35",
             "Medium": "#f0ae0c",
@@ -77,5 +92,7 @@ class ColorMap:
             return random.choice(list(Assets.values()))
         elif filter == 'UseCase':
             return random.choice(list(UseCase.values()))
+        elif filter == 'Function':
+            return random.choice(list(Function.values()))
         elif filter == 'Criticality' or filter == 'Severity':
             return Criticality.get(id)

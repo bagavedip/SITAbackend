@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from numpy.ma import count
 
@@ -145,11 +146,19 @@ class HubService:
             }
         return data_dict
     @staticmethod
-    def hub_timeline(response:HubTimeline):
-        print(response.start_date, "start_date")
-
-        a = timedelta(year=)
-        print("year")
-        queryset = Hub.objects.filter(starttime__gte=response.start_date, endtime__lte=response.end_date).values(*response.model_group_map).order_by().annotate(events=Sum('events'))
-        print(queryset, "queryset")
-        return queryset
+    def hub_timeline(response: HubTimeline):
+        query_data = Hub.objects.filter(starttime__range=(response.start_date, response.end_date)).values(*response.model_group_map).order_by().annotate(events=Sum('events'))
+        print(query_data, "query_data")
+        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(ZoneInfo('America/New_York'))
+        end_time = datetime.strptime(response.end_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
+            ZoneInfo('America/New_York'))
+        year = int((end_time - start_time).days)
+        if year <= 365 and year > 31:
+            qyery_data = Hub.objects.filter()
+            return "month"
+        if year <= 31:
+            print("days")
+            return "days"
+        if year >365:
+            print("year")
+            return "year"
