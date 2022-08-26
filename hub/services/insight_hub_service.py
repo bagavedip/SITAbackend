@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
+from dateutil import relativedelta
 from numpy.ma import count
 
 from hub.constants.filter_map import Map
@@ -148,17 +149,42 @@ class HubService:
     @staticmethod
     def hub_timeline(response: HubTimeline):
         query_data = Hub.objects.filter(starttime__range=(response.start_date, response.end_date)).values(*response.model_group_map).order_by().annotate(events=Sum('events'))
-        print(query_data, "query_data")
         start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(ZoneInfo('America/New_York'))
         end_time = datetime.strptime(response.end_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
             ZoneInfo('America/New_York'))
         year = int((end_time - start_time).days)
+        delta = relativedelta.relativedelta(end_time, start_time)
+
+
+        start_date = start_time
+        time = []
         if year <= 365 and year > 31:
-            qyery_data = Hub.objects.filter()
-            return "month"
+            for x in range(0, delta.months):
+                query = Hub.objects.filter(starttime=start_date).values(*response.model_group_map).order_by().annotate(
+                    events=Sum('events'))
+                print(query)
+                start_date = start_date + relativedelta.relativedelta(months=1)
+                time.append(query)
+                print(time, "time")
+            return time
         if year <= 31:
-            print("days")
-            return "days"
+            print(start_date)
+            for x in range(0, year+1):
+                query = Hub.objects.filter(starttime=start_date).values(*response.model_group_map).order_by().annotate(
+                    events=Sum('events'))
+                start_date = start_date + timedelta(days=1)
+                time.append(query)
+                print(time, "time")
+            return time
         if year >365:
-            print("year")
-            return "year"
+            for x in range(0, delta.years):
+                query = Hub.objects.filter(starttime=start_date).values(*response.model_group_map).order_by().annotate(
+                    events=Sum('events'))
+                incidents = 0
+                for data in query:
+                    incidents = incidents+data.get("events")
+                print(incidents, "incidents")
+                start_date = start_date + relativedelta.relativedelta(years=1)
+                print("start", start_date)
+                time.append(query)
+            return time
