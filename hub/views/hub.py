@@ -5,6 +5,7 @@ from rest_framework.response import Response
 import json
 from collections import defaultdict as dd
 
+from hub.serializers.hub_timeline import HubTimeline
 from hub.services.insight_hub_service import HubService
 from hub.constants.dataset import Dataset
 from hub.serializers.hub import InsightsSerializer
@@ -101,51 +102,51 @@ class InsightHub(viewsets.GenericViewSet):
         incidents_low = serializser.donut_center['Low'] if "Low" in serializser.donut_center.keys() else 0
         total_incidents = incidents_high + incidents_medium + incidents_low
         legends = []
-        if total_incidents == 0:
-            return Response(None, status=status.HTTP_201_CREATED)
-        else:
-            final_response = {
-                "legends": {
-                    "header": request.data.get('filterOptions').get('headerOption'),
-                    "items": legends
-                },
-                "doughnutlabel": {
-                    "labels": [
-                        {
-                            "text": "Incidents {total_incidents}".format(total_incidents=total_incidents),
-                            "font": {
-                                "size": "25"
-                            },
-                            "color": "black"
+        # if total_incidents == 0:
+        #     return Response(None, status=status.HTTP_201_CREATED)
+        # else:
+        final_response = {
+            "legends": {
+                "header": request.data.get('filterOptions').get('headerOption'),
+                "items": legends
+            },
+            "doughnutlabel": {
+                "labels": [
+                    {
+                        "text": "Incidents {total_incidents}".format(total_incidents=total_incidents),
+                        "font": {
+                            "size": "25"
                         },
-                        {
-                            "text": "High {high}".format(high=incidents_high),
-                            "font": {
-                                "size": "25"
-                            },
-                            "color": "red"
+                        "color": "black"
+                    },
+                    {
+                        "text": "High {high}".format(high=incidents_high),
+                        "font": {
+                            "size": "25"
                         },
-                        {
-                            "text": "Medium {Medium}".format(Medium=incidents_medium),
-                            "font": {
-                                "size": "25"
-                            },
-                            "color": "yellow"
+                        "color": "red"
+                    },
+                    {
+                        "text": "Medium {Medium}".format(Medium=incidents_medium),
+                        "font": {
+                            "size": "25"
                         },
-                        {
-                            "text": "Low {Low}".format(Low=incidents_low),
-                            "font": {
-                                "size": "25"
-                            },
-                            "color": "green"
-                        }
-                    ]
-                },
-                "datasets": serializser.datasets
+                        "color": "yellow"
+                    },
+                    {
+                        "text": "Low {Low}".format(Low=incidents_low),
+                        "font": {
+                            "size": "25"
+                        },
+                        "color": "green"
+                    }
+                ]
+            },
+            "datasets": serializser.datasets
 
-            }
+        }
 
-            return Response(final_response, status=status.HTTP_201_CREATED)
+        return Response(final_response, status=status.HTTP_201_CREATED)
 
     def insight_tickets(self, request):
         logger.debug(f"Received request body {request.data}")
@@ -247,3 +248,11 @@ class InsightHub(viewsets.GenericViewSet):
             "status": True
         }
         return Response(data, status=status.HTTP_201_CREATED)
+
+    def hub_timeline(self, request):
+        serializser = HubTimeline(request)
+        print(serializser, "serializer")
+        result = HubService.hub_timeline(serializser)
+        print(result, 'result')
+        data = "data"
+        return Response(result, status=status.HTTP_200_OK)

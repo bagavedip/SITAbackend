@@ -106,6 +106,7 @@ ticket_details = ITSMViewSet.as_view({"post": "ticket_details"})
 sla_dropdown_data = ITSMViewSet.as_view({"post": "sla_dropdown_data"})
 incident_close = ITSMViewSet.as_view({"post": "incident_close"})
 assign_task = InsightHub.as_view({"post": "assign_task"})
+hub_timeline = InsightHub.as_view({"post": "hub_timeline"})
 
 urlpatterns = simple_router.urls
 urlpatterns = urlpatterns + [
@@ -198,5 +199,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/ticket_details/", ticket_details, name="ticket_details"),
     path(r"api/v1/sla_dropdown_data", sla_dropdown_data, name="sla_dropdown_data"),
     path(r"api/v1/incident_close", incident_close, name="close"),
-    path(r"api/v1/assign_task/", assign_task, name="assign_task")
+    path(r"api/v1/assign_task/", assign_task, name="assign_task"),
+    path(r"api/v1/hub_timeline/", hub_timeline, name="hub_timeline")
 ]

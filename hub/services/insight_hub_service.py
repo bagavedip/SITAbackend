@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from numpy.ma import count
 
@@ -7,6 +7,7 @@ from hub.models.hub import Hub
 from django.db.models import Count, Sum
 
 from hub.serializers.hub import InsightsSerializer
+from hub.serializers.hub_timeline import HubTimeline
 
 
 class HubService:
@@ -143,3 +144,12 @@ class HubService:
                 "updates": updates
             }
         return data_dict
+    @staticmethod
+    def hub_timeline(response:HubTimeline):
+        print(response.start_date, "start_date")
+
+        a = timedelta(year=)
+        print("year")
+        queryset = Hub.objects.filter(starttime__gte=response.start_date, endtime__lte=response.end_date).values(*response.model_group_map).order_by().annotate(events=Sum('events'))
+        print(queryset, "queryset")
+        return queryset

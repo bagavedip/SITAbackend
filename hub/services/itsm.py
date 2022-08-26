@@ -137,3 +137,24 @@ class ITSMService:
             return response_time
         except:
             return "-"
+
+    @staticmethod
+    def update(name, **kwargs):
+        """
+        Function update an asset from kwargs
+        """
+        for key, value in kwargs.items():
+            setattr(name, key, value)
+        name.save()
+
+        return name
+
+    @staticmethod
+    def oei_sla_comment(sla, comment):
+        queryset = ITSM.objects.filter(sla_name=sla)
+        comments = {
+            "comment": comment
+        }
+        for query in queryset:
+            sla_comment = ITSMService.update(query, **comments)
+            return sla_comment

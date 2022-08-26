@@ -359,9 +359,13 @@ class ITSMViewSet(viewsets.ModelViewSet):
 
     def incident_close(self, request):
         incidentId = request.data.get("incidentId", None)
-        print(incidentId)
         data = {
             "status": True
         }
         return Response(data, status=status.HTTP_201_CREATED)
+
+    def oei_sla_comment(self, request):
+        """Function to create comment for requested sla_name"""
+        data = ""
+        return Response(data, status=status.HTTP_200_OK)
     
