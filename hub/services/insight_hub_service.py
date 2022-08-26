@@ -157,8 +157,6 @@ class HubService:
             qyery_data = Hub.objects.filter()
             return "month"
         if year <= 31:
-            print("days")
             return "days"
         if year >365:
-            print("year")
             return "year"
