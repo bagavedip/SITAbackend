@@ -1,5 +1,7 @@
 from django.urls import path
 from rest_framework import routers
+
+from .views.assign_task import AssignTaskViewset
 from .views.hub import InsightHub
 from .views.process import ProcessViewSet
 from .views.siem import SIEMViewSet
@@ -107,6 +109,12 @@ sla_dropdown_data = ITSMViewSet.as_view({"post": "sla_dropdown_data"})
 incident_close = ITSMViewSet.as_view({"post": "incident_close"})
 assign_task = InsightHub.as_view({"post": "assign_task"})
 hub_timeline = InsightHub.as_view({"post": "hub_timeline"})
+oei_ticket_comment = ITSMViewSet.as_view({"post": "oei_ticket_comment"})
+incident_comment = InsightHub.as_view({"post": "incident_comment"})
+assign_user = AssignTaskViewset.as_view({"post": "assign_user"})
+hub_timeline = InsightHub.as_view({"post": "hub_timeline"})
+sla_timeline = ITSMViewSet.as_view({"post": "sla_timeline"})
+ticket_timeline = ITSMViewSet.as_view({"post": "ticket_timeline"})
 
 urlpatterns = simple_router.urls
 urlpatterns = urlpatterns + [
@@ -200,5 +208,11 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/sla_dropdown_data", sla_dropdown_data, name="sla_dropdown_data"),
     path(r"api/v1/incident_close", incident_close, name="close"),
     path(r"api/v1/assign_task/", assign_task, name="assign_task"),
-    path(r"api/v1/hub_timeline/", hub_timeline, name="hub_timeline")
+    path(r"api/v1/hub_timeline/", hub_timeline, name="hub_timeline"),
+    path(r"api/v1/oei_ticket_comment/", oei_ticket_comment, name="oei_ticket_comment"),
+    path(r"api/v1/incident_comment/", incident_comment, name="incident_comment"),
+    path(r"api/v1/assign_user/", assign_user, name="assign_user"),
+    path(r"api/v1/hub_timeline/", hub_timeline, name="hub_timeline"),
+    path(r"api/v1/sla_timeline/", sla_timeline, name="sla_timeline"),
+    path(r"api/v1/ticket_timeline/", ticket_timeline, name="ticket_timeline")
 ]

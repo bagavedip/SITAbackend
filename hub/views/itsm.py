@@ -1,11 +1,13 @@
 import logging
+
+from django.db import transaction
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from hub.constants.dataset import Dataset
 from hub.models import ITSM
+from hub.serializers.oei_timeline import OeiTimeline
 from hub.serializers.itsm import ITSMSerializer
 from hub.serializers.oei_serializers import OeiSerializer
 from hub.serializers.oei_ticket_details import TicketDetailsSerializer
@@ -364,8 +366,40 @@ class ITSMViewSet(viewsets.ModelViewSet):
         }
         return Response(data, status=status.HTTP_201_CREATED)
 
-    def oei_sla_comment(self, request):
-        """Function to create comment for requested sla_name"""
-        data = ""
-        return Response(data, status=status.HTTP_200_OK)
+    def oei_ticket_comment(self, request):
+        """
+        Function which update comment information.
+        """
+        logger.debug(f"Parsed request body {request.data}")
+
+        # Validating incoming request body
+        serializer = request.data
+
+        # update comment in sla and ticket information
+        logger.debug("Database transaction started")
+        try:
+            with transaction.atomic():
+                selectedIncidents = serializer.get("selectedIncidents")
+                comment = serializer.get("Comment")
+                comment = ITSMService.oei_sla_comment(selectedIncidents, comment)
+            logger.debug("Database transaction finished")
+
+            # response formatting
+            response_data = {
+                "msg": "Comment added successfully !!",
+                "status": True
+            }
+            return Response(response_data)
+        except UnboundLocalError:
+            return Response({"error": "there is no such selectedIncidents."})
+
+    def sla_timeline(self, request):
+        serializser = OeiTimeline(request)
+        result = ITSMService.oei_sla_timeline(serializser)
+        return Response(result, status=status.HTTP_200_OK)
+
+    def ticket_timeline(self, request):
+        serializser = OeiTimeline(request)
+        result = ITSMService.oei_ticket_timeline(serializser)
+        return Response(result, status=status.HTTP_200_OK)
     

@@ -1,10 +1,9 @@
+import calendar
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from dateutil import relativedelta
-from numpy.ma import count
 
-from hub.constants.filter_map import Map
 from hub.models.hub import Hub
 from django.db.models import Count, Sum
 
@@ -146,45 +145,100 @@ class HubService:
                 "updates": updates
             }
         return data_dict
+
     @staticmethod
     def hub_timeline(response: HubTimeline):
-        query_data = Hub.objects.filter(starttime__range=(response.start_date, response.end_date)).values(*response.model_group_map).order_by().annotate(events=Sum('events'))
-        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(ZoneInfo('America/New_York'))
+        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
+            ZoneInfo('America/New_York'))
         end_time = datetime.strptime(response.end_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
             ZoneInfo('America/New_York'))
-        year = int((end_time - start_time).days)
+        total_days = int((end_time - start_time).days)
         delta = relativedelta.relativedelta(end_time, start_time)
-
-
         start_date = start_time
+        incidents = []
         time = []
-        if year <= 365 and year > 31:
-            for x in range(0, delta.months):
-                query = Hub.objects.filter(starttime=start_date).values(*response.model_group_map).order_by().annotate(
-                    events=Sum('events'))
-                print(query)
-                start_date = start_date + relativedelta.relativedelta(months=1)
-                time.append(query)
-                print(time, "time")
-            return time
-        if year <= 31:
-            print(start_date)
-            for x in range(0, year+1):
-                query = Hub.objects.filter(starttime=start_date).values(*response.model_group_map).order_by().annotate(
-                    events=Sum('events'))
+        data = {}
+        dataset = []
+        returndata = {}
+        if total_days <= 31:
+            for x in range(1, delta.days + 1):
+                query = Hub.objects.filter(starttime__gte=start_date,
+                                           starttime__lte=start_date + timedelta(days=1)).count()
+                incidents.append(query)
+                time.append("day" + str(start_date.day))
                 start_date = start_date + timedelta(days=1)
-                time.append(query)
-                print(time, "time")
-            return time
-        if year >365:
-            for x in range(0, delta.years):
-                query = Hub.objects.filter(starttime=start_date).values(*response.model_group_map).order_by().annotate(
-                    events=Sum('events'))
-                incidents = 0
-                for data in query:
-                    incidents = incidents+data.get("events")
-                print(incidents, "incidents")
+        if total_days <= 365 and total_days > 31:
+            if (delta.days):
+                delta.months += 1
+            for x in range(0, delta.months):
+                query = Hub.objects.filter(starttime__gte=start_date,
+                                           starttime__lte=(start_date + relativedelta.relativedelta(months=1))).count()
+                incidents.append(query)
+                time.append(calendar.month_name[start_date.month])
+                start_date = start_date + relativedelta.relativedelta(months=1)
+        if total_days > 365:
+            if delta.months:
+                delta.years += 1
+            if delta.days:
+                delta.years += 1
+            for x in range(1, delta.years + 1):
+                query = Hub.objects.filter(starttime__gte=start_date,
+                                           starttime__lte=start_date + relativedelta.relativedelta(years=1)).count()
+                time.append(start_date.year)
+                incidents.append(query)
                 start_date = start_date + relativedelta.relativedelta(years=1)
-                print("start", start_date)
-                time.append(query)
-            return time
+        newdata = {
+            "data": incidents,
+            "backgroundColor": "#16293A"
+        }
+        dataset.append(newdata)
+        data = {
+            "labels": time,
+            "datasets": dataset
+        }
+        returndata = {
+            "chartOptions": {
+                "stacked": "false",
+                "stepSize": 250,
+                "showLendend": "false",
+                "legendPosition": "bottom",
+                "categoryPercentage": 0.7,
+                "scaleLabelofYaxis": {
+                    "display": "true",
+                    "labelString": "Incidents",
+                    "fontStyle": "bold",
+                    "fontSize": 14
+                },
+                "scaleLabelofXaxis": {
+                    "display": "true",
+                    "labelString": "Time",
+                    "fontStyle": "bold",
+                    "fontSize": 14
+                }
+            },
+            "data": data
+        }
+        return returndata
+
+    @staticmethod
+    def update(name, **kwargs):
+        """
+        Function update an asset from kwargs
+        """
+        for key, value in kwargs.items():
+            setattr(name, key, value)
+        name.save()
+
+        return name
+
+    @staticmethod
+    def incident_comment(selectedIncidents, comment):
+        queryset = Hub.objects.filter(events=selectedIncidents)
+        comments = {
+            "comments": comment
+        }
+        for query in queryset:
+            sla_comment = HubService.update(query, **comments)
+        return sla_comment
+
+

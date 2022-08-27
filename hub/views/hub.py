@@ -1,4 +1,7 @@
 import logging
+
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -251,8 +254,33 @@ class InsightHub(viewsets.GenericViewSet):
 
     def hub_timeline(self, request):
         serializser = HubTimeline(request)
-        print(serializser, "serializer")
         result = HubService.hub_timeline(serializser)
-        print(result, 'result')
-        data = "data"
         return Response(result, status=status.HTTP_200_OK)
+
+    def incident_comment(self, request):
+        """
+        Function which update comment information.
+        """
+        logger.debug(f"Parsed request body {request.data}")
+
+        # Validating incoming request body
+        serializer = request.data
+
+        # update comment in sla and ticket information
+        logger.debug("Database transaction started")
+        try:
+            with transaction.atomic():
+                selectedIncidents = serializer.get("selectedIncidents")
+                comment = serializer.get("Comment")
+                comment = HubService.incident_comment(selectedIncidents, comment)
+            logger.debug("Database transaction finished")
+
+            # response formatting
+            response_data = {
+                "msg": "Comment added successfully !!",
+                "status": True
+            }
+            return Response(response_data)
+        except UnboundLocalError:
+            return Response({"error": "there is no such selectedIncidents."})
+
