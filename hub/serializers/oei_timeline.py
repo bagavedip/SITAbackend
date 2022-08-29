@@ -3,6 +3,8 @@ from hub.constants.oei_filters import Map
 
 class OeiTimeline:
     def __init__(self, request) -> None:
+        print(request.data)
+        self.header_filters = []
         self.request_filters = []
         self.model_group_map = []
         self.queryset = None
@@ -14,5 +16,9 @@ class OeiTimeline:
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
         self.request_filters.append((filter_data.get('filterOptions').get('headerOption')))
+        filters = filter_data.get('filterOptions').get('headerFilters')
+        for filter in filters:
+            self.header_filters.append(filter)
         for filter in self.request_filters:
             self.model_group_map = self.model_group_map + Map.get_filter(filter).split(',')
+            
