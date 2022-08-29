@@ -165,77 +165,85 @@ class ITSMService:
 
     @staticmethod
     def oei_sla_timeline(response: OeiTimeline):
-        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
-            ZoneInfo('America/New_York'))
+        for filter_data in response.request_filters:
+            request_filter = filter_data
+        for filter_data in response.header_filters:
+            header_filter = filter_data
+        filters = (request_filter + "-" + header_filter)
+        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(ZoneInfo('America/New_York'))
         end_time = datetime.strptime(response.end_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
             ZoneInfo('America/New_York'))
         total_days = int((end_time - start_time).days)
         delta = relativedelta.relativedelta(end_time, start_time)
         start_date = start_time
         time = []
-        within_tickets = []
-        outside_tickets = []
+        within_tickets=[]
+        outside_tickets=[]
         data = {}
-        dataset = []
-        returndata = {}
+        dataset =[]
+        returndata={}
         if total_days <= 31:
-            for x in range(1, delta.days + 1):
-                within_query = ITSM.objects.filter(CreatedTime__gte=start_date,
-                                                   CreatedTime__lte=start_date + timedelta(days=1),
-                                                   service_category="within sla").count()
+            title1 = "Day"+str(start_date.day)
+            title2 = "Day"+str(end_time.day)
+            for x in range(1, delta.days+1):
+                within_query = ITSM.objects.filter(CreatedTime__gte=start_date,CreatedTime__lte=start_date + timedelta(days=1), service_category= "within sla").count()
                 within_tickets.append(within_query)
-                outside_query = ITSM.objects.filter(CreatedTime__gte=start_date,
-                                                    CreatedTime__lte=start_date + timedelta(days=1),
-                                                    service_category="outside sla").count()
+                outside_query = ITSM.objects.filter(CreatedTime__gte=start_date,CreatedTime__lte=start_date + timedelta(days=1), service_category= "outside sla").count()
                 outside_tickets.append(outside_query)
-                time.append("day" + str(start_date.day))
+
+                time.append("day"+str(start_date.day))
                 start_date = start_date + timedelta(days=1)
         if total_days <= 365 and total_days > 31:
             if (delta.days):
-                delta.months += 1
+                delta.months +=1
+            title1 = calendar.month_name[start_date.month]+str(start_date.year)
+            title2 = calendar.month_name[end_time.month]+str(end_time.year)
             for x in range(0, delta.months):
-                within_query = ITSM.objects.filter(CreatedTime__gte=start_date, CreatedTime__lte=(
-                            start_date + relativedelta.relativedelta(months=1)), service_category="within sla").count()
+                within_query = ITSM.objects.filter(CreatedTime__gte=start_date,CreatedTime__lte=(start_date+relativedelta.relativedelta(months=1)), service_category= "within sla").count()
                 within_tickets.append(within_query)
-                outside_query = ITSM.objects.filter(CreatedTime__gte=start_date, CreatedTime__lte=(
-                            start_date + relativedelta.relativedelta(months=1)), service_category="outside sla").count()
+                outside_query = ITSM.objects.filter(CreatedTime__gte=start_date,CreatedTime__lte=(start_date+relativedelta.relativedelta(months=1)), service_category= "outside sla").count()
                 outside_tickets.append(outside_query)
                 time.append(calendar.month_name[start_date.month])
                 start_date = start_date + relativedelta.relativedelta(months=1)
-        if total_days > 365:
+        if total_days >365:
             if delta.months:
                 delta.years += 1
             if delta.days:
                 delta.years += 1
-            for x in range(1, delta.years + 1):
-                within_query = ITSM.objects.filter(CreatedTime__gte=start_date,
-                                                   CreatedTime__lte=(start_date + relativedelta.relativedelta(years=1)),
-                                                   service_category="within sla").count()
+            title1 = start_date.year
+            title2= end_time.year
+            for x in range(1, delta.years+1):
+                within_query = ITSM.objects.filter(CreatedTime__gte=start_date,CreatedTime__lte=(start_date + relativedelta.relativedelta(years=1)), service_category= "within sla").count()
                 within_tickets.append(within_query)
-                outside_query = ITSM.objects.filter(CreatedTime__gte=start_date, CreatedTime__lte=(
-                            start_date + relativedelta.relativedelta(years=1)), service_category="outside sla").count()
+                outside_query = ITSM.objects.filter(CreatedTime__gte=start_date,CreatedTime__lte=(start_date + relativedelta.relativedelta(years=1)), service_category= "outside sla").count()
                 outside_tickets.append(outside_query)
                 time.append(start_date.year)
                 start_date = start_date + relativedelta.relativedelta(years=1)
+        title = title1+"-"+title2
         newdata = {
-                      "label": "within sla",
-                      "data": within_tickets,
-                      "backgroundColor": "#16293A"
-                  }, {
-                      "label": "outside sla",
-                      "data": outside_tickets,
-                      "backgroundColor": "#437DB1"
-                  }
+            "label":"within sla",
+            "data":within_tickets,
+            "backgroundColor": "#16293A"
+        },{
+            "label":"outside sla",
+            "data":outside_tickets,
+            "backgroundColor": "#437DB1"
+
+        }
         dataset.append(newdata)
         data = {
-            "labels": time,
-            "datasets": dataset
+            "labels":time,
+            "datasets":dataset
         }
         returndata = {
+            "barChartHeading":{
+                "title":filters,
+                "subTitle":title
+            },
             "chartOptions": {
                 "stacked": "false",
                 "stepSize": 250,
-                "showLendend": "false",
+                "showLendend":"false",
                 "legendPosition": "bottom",
                 "categoryPercentage": 0.7,
                 "scaleLabelofYaxis": {
@@ -251,14 +259,19 @@ class ITSMService:
                     "fontSize": 14
                 }
             },
-            "data": data
+            "data" : data
         }
         return returndata
 
+
     @staticmethod
     def oei_ticket_timeline(response: OeiTimeline):
-        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
-            ZoneInfo('America/New_York'))
+        for filter_data in response.request_filters:
+            request_filter = filter_data
+        for filter_data in response.header_filters:
+            header_filter = filter_data
+        filters = (request_filter + "-" + header_filter)
+        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(ZoneInfo('America/New_York'))
         end_time = datetime.strptime(response.end_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
             ZoneInfo('America/New_York'))
         total_days = int((end_time - start_time).days)
@@ -267,49 +280,57 @@ class ITSMService:
         tickets = []
         time = []
         data = {}
-        dataset = []
-        returndata = {}
+        dataset =[]
+        returndata={}
         if total_days <= 31:
-            for x in range(1, delta.days + 1):
-                query = ITSM.objects.filter(CreatedTime__gte=start_date,
-                                            CreatedTime__lte=start_date + timedelta(days=1)).count()
+            title1 = "Day"+str(start_date.day)
+            title2 = "Day"+str(end_time.day)
+            for x in range(1, delta.days+1):
+                query = ITSM.objects.filter(CreatedTime__gte=start_date,CreatedTime__lte=start_date + timedelta(days=1)).count()
                 tickets.append(query)
-                time.append("day" + str(start_date.day))
+                time.append("day"+str(start_date.day))
                 start_date = start_date + timedelta(days=1)
         if total_days <= 365 and total_days > 31:
             if (delta.days):
-                delta.months += 1
+                delta.months +=1
+            title1 = calendar.month_name[start_date.month]+str(start_date.year)
+            title2 = calendar.month_name[end_time.month]+str(end_time.year)
             for x in range(0, delta.months):
-                query = ITSM.objects.filter(CreatedTime__gte=start_date, CreatedTime__lte=(
-                            start_date + relativedelta.relativedelta(months=1))).count()
+                query = ITSM.objects.filter(CreatedTime__gte=start_date,CreatedTime__lte=(start_date+relativedelta.relativedelta(months=1))).count()
                 tickets.append(query)
                 time.append(calendar.month_name[start_date.month])
                 start_date = start_date + relativedelta.relativedelta(months=1)
-        if total_days > 365:
+        if total_days >365:
             if delta.months:
                 delta.years += 1
             if delta.days:
                 delta.years += 1
-            for x in range(1, delta.years + 1):
-                query = ITSM.objects.filter(CreatedTime__gte=start_date,
-                                            CreatedTime__lte=start_date + relativedelta.relativedelta(years=1)).count()
+            title1 = start_date.year
+            title2= end_time.year
+            for x in range(1, delta.years+1):
+                query = ITSM.objects.filter(CreatedTime__gte=start_date, CreatedTime__lte=start_date + relativedelta.relativedelta(years=1)).count()
                 time.append(start_date.year)
                 tickets.append(query)
                 start_date = start_date + relativedelta.relativedelta(years=1)
+        title = title1+"-"+title2
         newdata = {
-            "data": tickets,
+            "data":tickets,
             "backgroundColor": "#16293A"
         }
         dataset.append(newdata)
         data = {
-            "labels": time,
-            "datasets": dataset
+            "labels":time,
+            "datasets":dataset
         }
         returndata = {
+            "barChartHeading":{
+                "title":filters,
+                "subTitle":title
+            },
             "chartOptions": {
                 "stacked": "false",
                 "stepSize": 250,
-                "showLendend": "false",
+                "showLendend":"false",
                 "legendPosition": "bottom",
                 "categoryPercentage": 0.7,
                 "scaleLabelofYaxis": {
@@ -325,7 +346,7 @@ class ITSMService:
                     "fontSize": 14
                 }
             },
-            "data": data
+            "data" : data
         }
         return returndata
 
