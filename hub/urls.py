@@ -210,6 +210,7 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/assign_task/", assign_task, name="assign_task"),
     path(r"api/v1/hub_timeline/", hub_timeline, name="hub_timeline"),
     path(r"api/v1/oei_ticket_comment/", oei_ticket_comment, name="oei_ticket_comment"),
+    path(r"api/v1/oei_sla_comment/", oei_ticket_comment, name="oei_ticket_comment"),
     path(r"api/v1/incident_comment/", incident_comment, name="incident_comment"),
     path(r"api/v1/assign_user/", assign_user, name="assign_user"),
     path(r"api/v1/hub_timeline/", hub_timeline, name="hub_timeline"),
