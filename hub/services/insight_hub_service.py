@@ -194,7 +194,7 @@ class HubService:
                 time.append(start_date.year)
                 incidents.append(query)
                 start_date = start_date + relativedelta.relativedelta(years=1)
-        title = title1+"-"+title2
+        title = str(title1)+"-"+str(title2)
         newdata = {
             "data":incidents,
             "backgroundColor": "#16293A"
@@ -214,7 +214,7 @@ class HubService:
                 "stepSize": 250,
                 "showLendend":"false",
                 "legendPosition": "bottom",
-                "categoryPercentage": 0.7,
+                "categoryPercentage": 0.4,
                 "scaleLabelofYaxis": {
                     "display": "true",
                     "labelString": "Incidents",
