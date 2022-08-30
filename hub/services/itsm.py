@@ -224,13 +224,15 @@ class ITSMService:
             "label":"within sla",
             "data":within_tickets,
             "backgroundColor": "#16293A"
-        },{
+        }
+        newdata1 = {
             "label":"outside sla",
             "data":outside_tickets,
             "backgroundColor": "#437DB1"
 
         }
         dataset.append(newdata)
+        dataset.append(newdata1)
         data = {
             "labels":time,
             "datasets":dataset
