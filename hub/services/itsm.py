@@ -219,7 +219,7 @@ class ITSMService:
                 outside_tickets.append(outside_query)
                 time.append(start_date.year)
                 start_date = start_date + relativedelta.relativedelta(years=1)
-        title = title1+"-"+title2
+        title = str(title1)+"-"+str(title2)
         newdata = {
             "label":"within sla",
             "data":within_tickets,
@@ -314,7 +314,7 @@ class ITSMService:
                 time.append(start_date.year)
                 tickets.append(query)
                 start_date = start_date + relativedelta.relativedelta(years=1)
-        title = title1+"-"+title2
+        title = str(title1)+"-"+str(title2)
         newdata = {
             "data":tickets,
             "backgroundColor": "#16293A"
