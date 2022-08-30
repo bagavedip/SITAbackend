@@ -153,8 +153,8 @@ class HubService:
         for filter_data in response.header_filters:
             header_filter = filter_data
         filters = (request_filter + "-" + header_filter)
-        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(ZoneInfo('America/New_York'))
-        end_time = datetime.strptime(response.end_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
+        start_time = datetime.strptime(response.start_date, '%Y-%m-%d').astimezone(ZoneInfo('America/New_York'))
+        end_time = datetime.strptime(response.end_date, '%Y-%m-%d').astimezone(
             ZoneInfo('America/New_York'))
         total_days = int((end_time - start_time).days)
         delta = relativedelta.relativedelta(end_time, start_time)
