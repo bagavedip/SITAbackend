@@ -247,7 +247,7 @@ class ITSMService:
                 "stepSize": 250,
                 "showLendend":"false",
                 "legendPosition": "bottom",
-                "categoryPercentage": 0.7,
+                "categoryPercentage": 0.4,
                 "scaleLabelofYaxis": {
                     "display": "true",
                     "labelString": "Incidents",
@@ -334,7 +334,7 @@ class ITSMService:
                 "stepSize": 250,
                 "showLendend":"false",
                 "legendPosition": "bottom",
-                "categoryPercentage": 0.7,
+                "categoryPercentage": 0.4,
                 "scaleLabelofYaxis": {
                     "display": "true",
                     "labelString": "Incidents",
