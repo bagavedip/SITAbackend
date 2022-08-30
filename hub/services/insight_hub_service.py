@@ -153,9 +153,8 @@ class HubService:
         for filter_data in response.header_filters:
             header_filter = filter_data
         filters = (request_filter + "-" + header_filter)
-        start_time = datetime.strptime(response.start_date, '%Y-%m-%d').astimezone(ZoneInfo('America/New_York'))
-        end_time = datetime.strptime(response.end_date, '%Y-%m-%d').astimezone(
-            ZoneInfo('America/New_York'))
+        start_time = datetime.strptime(response.start_date, '%Y-%m-%d')
+        end_time = datetime.strptime(response.end_date, '%Y-%m-%d')
         total_days = int((end_time - start_time).days)
         delta = relativedelta.relativedelta(end_time, start_time)
         start_date = start_time
@@ -167,7 +166,7 @@ class HubService:
         if total_days <= 31:
             title1 = "Day"+str(start_date.day)
             title2 = "Day"+str(end_time.day)
-            for x in range(1, delta.days+1):
+            for x in range(0, delta.days+1):
                 query = Hub.objects.filter(starttime__gte=start_date,starttime__lte=start_date + timedelta(days=1)).count()
                 incidents.append(query)
                 time.append("day"+str(start_date.day))
@@ -189,7 +188,7 @@ class HubService:
                 delta.years += 1
             title1 = start_date.year
             title2= end_time.year
-            for x in range(1, delta.years+1):
+            for x in range(1, delta.years):
                 query = Hub.objects.filter(starttime__gte=start_date, starttime__lte=start_date + relativedelta.relativedelta(years=1)).count()
                 time.append(start_date.year)
                 incidents.append(query)
