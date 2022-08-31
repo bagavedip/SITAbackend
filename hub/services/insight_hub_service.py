@@ -244,7 +244,7 @@ class HubService:
 
     @staticmethod
     def incident_comment(selectedIncidents, comment):
-        queryset = Hub.objects.filter(events=selectedIncidents)
+        queryset = Hub.objects.filter(entity_id=selectedIncidents)
         comments = {
             "comments": comment
         }
