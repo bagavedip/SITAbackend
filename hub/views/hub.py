@@ -173,7 +173,7 @@ class InsightHub(viewsets.GenericViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "Asset Type | Select"
+                        "label": "Asset Type"
                     },
                     {
                         "value": "Email",
@@ -194,7 +194,7 @@ class InsightHub(viewsets.GenericViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "Geography | Select"
+                        "label": "Geography"
                     },
                     {
                         "label": "USA Central",
@@ -215,7 +215,7 @@ class InsightHub(viewsets.GenericViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "ORG | Select"
+                        "label": "ORG"
                     },
                     {
                         "label": "SUV22",
