@@ -162,15 +162,15 @@ class ITSMViewSet(viewsets.ModelViewSet):
                         },
                         {
                             "value": "Within SLA",
-                            "label": "Category |Within SLA"
+                            "label": "Within SLA"
                         },
                         {
                             "value": "value2",
-                            "label": "Category | value2"
+                            "label": "value2"
                         },
                         {
                             "value": "value3",
-                            "label": "Category | value3"
+                            "label": "value3"
                         }
                     ]
                 },
@@ -183,14 +183,14 @@ class ITSMViewSet(viewsets.ModelViewSet):
                         },
                         {
                             "value": "All",
-                            "label": "Priority | All"
+                            "label": "All"
                         },
                         {
-                            "label": " Priority | value2",
+                            "label": "value2",
                             "value": "value2"
                         },
                         {
-                            "label": "Priority | value3",
+                            "label": "value3",
                             "value": "value3"
                         }
                     ]
@@ -203,15 +203,15 @@ class ITSMViewSet(viewsets.ModelViewSet):
                             "label": "Status | Select"
                         },
                         {
-                            "label": "Status | All",
+                            "label": "All",
                             "value": "All"
                         },
                         {
-                            "label": "Status | value2",
+                            "label": "value2",
                             "value": "value2"
                         },
                         {
-                            "label": "Status | value3",
+                            "label": "value3",
                             "value": "value3"
                         }
                     ]
@@ -223,15 +223,15 @@ class ITSMViewSet(viewsets.ModelViewSet):
                         "label": "Service | Select"
                     },
                     {
-                        "label": "Service | SOC",
+                        "label": "SOC",
                         "value": "SOC"
                     },
                     {
-                        "label": "Service | value2",
+                        "label": "value2",
                         "value": "value2"
                     },
                     {
-                        "label": "Service | value3",
+                        "label": "value3",
                         "value": "value3"
                     }
                 ]
@@ -243,15 +243,15 @@ class ITSMViewSet(viewsets.ModelViewSet):
                         "label": "Reopened % | Select"
                     },
                     {
-                        "label": "Reopened % | All",
+                        "label": "All",
                         "value": "All"
                     },
                     {
-                        "label": "Reopened % | value2",
+                        "label": "value2",
                         "value": "value2"
                     },
                     {
-                        "label": "Reopened % | value3",
+                        "label": "value3",
                         "value": "value3"
                     }
                 ]
@@ -260,18 +260,18 @@ class ITSMViewSet(viewsets.ModelViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "ORG | Select"
+                        "label": "First response Time | Select"
                     },
                     {
-                        "label": "First response Time | All",
+                        "label": "All",
                         "value": "All"
                     },
                     {
-                        "label": "First response Time | value2",
+                        "label": "value2",
                         "value": "value2"
                     },
                     {
-                        "label": "First response Time | value3",
+                        "label": "value3",
                         "value": "value3"
                     }
                 ]
@@ -289,15 +289,15 @@ class ITSMViewSet(viewsets.ModelViewSet):
                         "label": "Service | Select"
                     },
                     {
-                        "label": "Service | SOC",
+                        "label": "SOC",
                         "value": "SOC"
                     },
                     {
-                        "label": "Service | value2",
+                        "label": "value2",
                         "value": "value2"
                     },
                     {
-                        "label": "Service | value3",
+                        "label": "value3",
                         "value": "value3"
                     }
                 ]
