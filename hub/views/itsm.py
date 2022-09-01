@@ -158,7 +158,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                     "dropdownoption": [
                         {
                             "value": "Select",
-                            "label": "Category | Select"
+                            "label": "Category"
                         },
                         {
                             "value": "Within SLA",
@@ -179,7 +179,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                     "dropdownoption": [
                         {
                             "value": "Select",
-                            "label": "Priority | Select"
+                            "label": "Priority"
                         },
                         {
                             "value": "All",
@@ -200,7 +200,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                     "dropdownoption": [
                         {
                             "value": "Select",
-                            "label": "Status | Select"
+                            "label": "Status"
                         },
                         {
                             "label": "All",
@@ -220,7 +220,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "Service | Select"
+                        "label": "Service"
                     },
                     {
                         "label": "SOC",
@@ -240,7 +240,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "Reopened % | Select"
+                        "label": "Reopened"
                     },
                     {
                         "label": "All",
@@ -260,7 +260,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "First response Time | Select"
+                        "label": "First response Time"
                     },
                     {
                         "label": "All",
@@ -286,7 +286,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "Service | Select"
+                        "label": "Service"
                     },
                     {
                         "label": "SOC",
