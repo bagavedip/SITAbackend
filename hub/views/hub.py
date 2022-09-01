@@ -177,15 +177,15 @@ class InsightHub(viewsets.GenericViewSet):
                     },
                     {
                         "value": "Email",
-                        "label": "Asset Type | Email"
+                        "label": "Email"
                     },
                     {
                         "value": "value2",
-                        "label": "Asset Type | value2"
+                        "label": "value2"
                     },
                     {
                         "value": "value3",
-                        "label": "Asset Type | value3"
+                        "label": "value3"
                     }
                 ]
             },
@@ -197,15 +197,15 @@ class InsightHub(viewsets.GenericViewSet):
                         "label": "Geography | Select"
                     },
                     {
-                        "label": "Geography | USA Central",
+                        "label": "USA Central",
                         "value": "USA Central"
                     },
                     {
-                        "label": " Geography | value2",
+                        "label": "value2",
                         "value": "value2"
                     },
                     {
-                        "label": "Geography | value3",
+                        "label": "value3",
                         "value": "value3"
                     }
                 ]
@@ -218,15 +218,15 @@ class InsightHub(viewsets.GenericViewSet):
                         "label": "ORG | Select"
                     },
                     {
-                        "label": "ORG | SUV22",
+                        "label": "SUV22",
                         "value": "SUV22"
                     },
                     {
-                        "label": "ORG | value2",
+                        "label": "value2",
                         "value": "value2"
                     },
                     {
-                        "label": "ORG | value3",
+                        "label": "value3",
                         "value": "value3"
                     }
                 ]
