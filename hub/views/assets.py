@@ -56,14 +56,13 @@ class AssetViewSet(viewsets.ModelViewSet):
                 if not AssetService.get_queryset().filter(AssetName__iexact=request.data["AssetName"]).exists():
                     function_query = Function.objects.get(function_name=request.data["function_name"])
                     category_query = Category.objects.get(category=request.data["category_name"])
-                    # asset = Serializer.save()
                     asset_list = Assets(
                         AssetName=request.data["AssetName"],
                         category=category_query,
                         function_id=function_query,
                         criticality=request.data["criticality"],
                     )
-                    # asset_list.save()
+                    asset_list.save()
                     data['Asset_Name'] = asset_list.AssetName
                     data['Category'] = asset_list.category_id
                     data['Criticality'] = asset_list.criticality

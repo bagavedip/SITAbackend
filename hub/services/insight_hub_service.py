@@ -148,61 +148,72 @@ class HubService:
 
     @staticmethod
     def hub_timeline(response: HubTimeline):
-        start_time = datetime.strptime(response.start_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
-            ZoneInfo('America/New_York'))
-        end_time = datetime.strptime(response.end_date, '%Y-%m-%dT%H:%M:%S.%f%z').astimezone(
-            ZoneInfo('America/New_York'))
+        for filter_data in response.request_filters:
+            request_filter = filter_data
+        for filter_data in response.header_filters:
+            header_filter = filter_data
+        filters = (request_filter + "-" + header_filter)
+        start_time = datetime.strptime(response.start_date, '%Y-%m-%d')
+        end_time = datetime.strptime(response.end_date, '%Y-%m-%d')
         total_days = int((end_time - start_time).days)
         delta = relativedelta.relativedelta(end_time, start_time)
         start_date = start_time
         incidents = []
         time = []
         data = {}
-        dataset = []
-        returndata = {}
+        dataset =[]
+        returndata={}
         if total_days <= 31:
-            for x in range(1, delta.days + 1):
-                query = Hub.objects.filter(starttime__gte=start_date,
-                                           starttime__lte=start_date + timedelta(days=1)).count()
+            title1 = "Day"+str(start_date.day)
+            title2 = "Day"+str(end_time.day)
+            for x in range(0, delta.days+1):
+                query = Hub.objects.filter(starttime__gte=start_date,starttime__lte=start_date + timedelta(days=1)).count()
                 incidents.append(query)
-                time.append("day" + str(start_date.day))
+                time.append("day"+str(start_date.day))
                 start_date = start_date + timedelta(days=1)
         if total_days <= 365 and total_days > 31:
             if (delta.days):
-                delta.months += 1
+                delta.months +=1
+            title1 = calendar.month_name[start_date.month]+str(start_date.year)
+            title2 = calendar.month_name[end_time.month]+str(end_time.year)
             for x in range(0, delta.months):
-                query = Hub.objects.filter(starttime__gte=start_date,
-                                           starttime__lte=(start_date + relativedelta.relativedelta(months=1))).count()
+                query = Hub.objects.filter(starttime__gte=start_date, starttime__lte=(start_date+relativedelta.relativedelta(months=1))).count()
                 incidents.append(query)
                 time.append(calendar.month_name[start_date.month])
                 start_date = start_date + relativedelta.relativedelta(months=1)
-        if total_days > 365:
+        if total_days >365:
             if delta.months:
                 delta.years += 1
             if delta.days:
                 delta.years += 1
-            for x in range(1, delta.years + 1):
-                query = Hub.objects.filter(starttime__gte=start_date,
-                                           starttime__lte=start_date + relativedelta.relativedelta(years=1)).count()
+            title1 = start_date.year
+            title2= end_time.year
+            for x in range(1, delta.years):
+                query = Hub.objects.filter(starttime__gte=start_date, starttime__lte=start_date + relativedelta.relativedelta(years=1)).count()
                 time.append(start_date.year)
                 incidents.append(query)
                 start_date = start_date + relativedelta.relativedelta(years=1)
+        title = str(title1)+"-"+str(title2)
         newdata = {
-            "data": incidents,
+            "data":incidents,
             "backgroundColor": "#16293A"
-        }
+        } 
         dataset.append(newdata)
         data = {
-            "labels": time,
-            "datasets": dataset
+            "labels":time,
+            "datasets":dataset
         }
         returndata = {
+            "barChartHeading":{
+                "title":filters,
+                "subTitle":title
+            },
             "chartOptions": {
                 "stacked": "false",
                 "stepSize": 250,
-                "showLendend": "false",
+                "showLendend":"false",
                 "legendPosition": "bottom",
-                "categoryPercentage": 0.7,
+                "categoryPercentage": 0.4,
                 "scaleLabelofYaxis": {
                     "display": "true",
                     "labelString": "Incidents",
@@ -216,7 +227,7 @@ class HubService:
                     "fontSize": 14
                 }
             },
-            "data": data
+            "data" : data
         }
         return returndata
 
@@ -233,7 +244,7 @@ class HubService:
 
     @staticmethod
     def incident_comment(selectedIncidents, comment):
-        queryset = Hub.objects.filter(events=selectedIncidents)
+        queryset = Hub.objects.filter(entity_id=selectedIncidents)
         comments = {
             "comments": comment
         }
