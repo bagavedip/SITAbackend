@@ -79,7 +79,6 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         if login_action == serializer.EMAIL_LOGIN:
             response_data = self.email_login(login_payload)
-
         logger.info("Log in Successful.")
         return Response(response_data)
 
@@ -95,6 +94,3 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
             except IntegrityError as exc:
                 return Response("Email Id Already used.")
-
-
-

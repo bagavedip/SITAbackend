@@ -54,6 +54,7 @@ class AddUserSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=False, max_length=200)
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
+    is_staff = serializers.BooleanField(default=False)
 
     class Meta:
         fields = (
@@ -70,5 +71,6 @@ class AddUserSerializer(serializers.Serializer):
             email=validated_data['email'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
+            is_staff=validated_data['is_staff'],
         )
         return user
