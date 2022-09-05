@@ -24,11 +24,6 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         # function which return user service
         return self.service_class()
 
-    def get_serializer(self, *args, **kwargs):
-        query_param_fields = self.request.query_params.get("fields")
-        fields = None
-        return super().get_serializer(*args, fields=fields, **kwargs)
-
     def get_auth_tokens(self, user):
         """
         Function to create access and refresh token for a user
@@ -57,11 +52,6 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             logger.error("Password verification failed.")
             raise AuthenticationFailed
         data = self.get_auth_tokens(user)
-        profile = {
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name
-        }
         data.update({"user": UserSerializer(user).data})
         return data
 
@@ -91,6 +81,16 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             try:
                 if serializer.is_valid():
                     user = serializer.save(password=password)
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-            except IntegrityError as exc:
-                return Response("Email Id Already used.")
+                    return Response(
+                        {
+                            "Data": serializer.data,
+                            "Status": status.HTTP_201_CREATED,
+                            "Message": "User Added Successfully!!"
+                        }
+                    )
+            except IntegrityError:
+                return Response({
+                    "Data": serializer.data,
+                    "Status": status.HTTP_208_ALREADY_REPORTED,
+                    "Message": "Email Allready Added!!"
+                })

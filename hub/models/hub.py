@@ -4,6 +4,9 @@ from colorfield.fields import ColorField
 
 
 class Hub(models.Model):
+    """
+    Model to hold Hub data of insights
+    """
 
     class Criticality(models.TextChoices):
         HIGH = "HIGH", _("High"),
