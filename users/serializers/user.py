@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from SITAbackend.custom_serializer import DynamicFieldSerializerMixin
+from users.models import User
 
 
 class UserSerializer(serializers.Serializer):
@@ -43,3 +44,31 @@ class LoginSerializer(serializers.Serializer):
             self.fields["payload"] = EmailLoginSerializer(data=value.get("payload"))
 
         return super().to_internal_value(value)
+
+
+class AddUserSerializer(serializers.Serializer):
+    """
+    Serializer for user email login
+    """
+    first_name = serializers.CharField(required=False, max_length=200)
+    last_name = serializers.CharField(required=False, max_length=200)
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True)
+
+    class Meta:
+        fields = (
+            "first_name",
+            "last_name",
+            "email",
+            "password",
+        )
+
+    def create(self, validated_data):
+        # create user
+        user = User.objects.create(
+            password=validated_data['password'],
+            email=validated_data['email'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+        )
+        return user

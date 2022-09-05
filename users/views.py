@@ -1,9 +1,13 @@
 import logging
-from django.utils import timezone
 
-from rest_framework import mixins, viewsets
+from django.db import transaction, IntegrityError
+from django.utils import timezone
+from django.contrib.auth.hashers import make_password
+
+from rest_framework import mixins, viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from users.serializers.user import LoginSerializer, UserSerializer
+from users.serializers.user import LoginSerializer, UserSerializer, AddUserSerializer
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -19,6 +23,11 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def get_service(self):
         # function which return user service
         return self.service_class()
+
+    def get_serializer(self, *args, **kwargs):
+        query_param_fields = self.request.query_params.get("fields")
+        fields = None
+        return super().get_serializer(*args, fields=fields, **kwargs)
 
     def get_auth_tokens(self, user):
         """
@@ -56,6 +65,7 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         data.update({"user": UserSerializer(user).data})
         return data
 
+    @action(detail=False, methods=["post"])
     def login(self, request, **kwargs):
         logger.info("Validating data for Log In.")
         serializer = LoginSerializer(data=request.data)
@@ -72,3 +82,19 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         logger.info("Log in Successful.")
         return Response(response_data)
+
+    def add_user(self, request):
+        serializer = AddUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        with transaction.atomic():
+            password = make_password(validated_data["password"])
+            try:
+                if serializer.is_valid():
+                    user = serializer.save(password=password)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except IntegrityError as exc:
+                return Response("Email Id Already used.")
+
+
+
