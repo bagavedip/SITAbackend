@@ -2,6 +2,9 @@ from customers.models import Customer
 
 
 class CustomerService:
+    """
+        Services for Customer Models
+    """
     @staticmethod
     def get_queryset():
         return Customer.object.all()
