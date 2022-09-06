@@ -80,7 +80,7 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             password = make_password(validated_data["password"])
             try:
                 if serializer.is_valid():
-                    user = serializer.save(password=password)
+                    serializer.save(password=password)
                     return Response(
                         {
                             "Data": serializer.data,
@@ -92,5 +92,5 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 return Response({
                     "Data": serializer.data,
                     "Status": status.HTTP_208_ALREADY_REPORTED,
-                    "Message": "Email Allready Added!!"
+                    "Message": "Email Already Added!!"
                 })
