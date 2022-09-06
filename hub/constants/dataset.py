@@ -1,4 +1,8 @@
 class Dataset:
+    """
+     Dataset class is used to show response
+     of insights chart_data in listed format.
+    """
 
     def init_response_dataset(self):
         dataset = {

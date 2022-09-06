@@ -12,6 +12,11 @@ filter_map = {
 
 
 class Map:
+
+    """
+     map class is used to map column in models
+     according to request in serializer.
+    """
     @staticmethod
     def get_filter(name):
         return filter_map.get(name)

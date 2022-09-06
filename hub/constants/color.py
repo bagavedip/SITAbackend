@@ -2,9 +2,14 @@ import random
 
 
 class ColorMap:
+    """
+     ColorMap function is used to map
+     color in donut chart of
+     insights all layers.
+    """
 
     @staticmethod
-    def get_color(filter, id):
+    def get_color(layer_filter, key):
         Entity = {
             "1": "#808080",
             "10": "#373737",
@@ -84,15 +89,15 @@ class ColorMap:
             "Low": "#25ba3c"
         }
 
-        if filter == 'Entity':
+        if layer_filter == 'Entity':
             return random.choice(list(Entity.values()))
-        elif filter == 'Location':
+        elif layer_filter == 'Location':
             return random.choice(list(Location.values()))
-        elif filter == 'Assets':
+        elif layer_filter == 'Assets':
             return random.choice(list(Assets.values()))
-        elif filter == 'UseCase':
+        elif layer_filter == 'UseCase':
             return random.choice(list(UseCase.values()))
-        elif filter == 'Function':
+        elif layer_filter == 'Function':
             return random.choice(list(Function.values()))
-        elif filter == 'Criticality' or filter == 'Severity':
-            return Criticality.get(id)
+        elif layer_filter == 'Criticality' or layer_filter == 'Severity':
+            return Criticality.get(key)

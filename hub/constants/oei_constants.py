@@ -1,3 +1,7 @@
+"""
+this Dictionary used to pick column name
+ for grid view in OEI.
+"""
 id_del = 'IDDEL'
 hire_del = 'HIREDEL'
 INSIGHT_TABLE_HEADER = {

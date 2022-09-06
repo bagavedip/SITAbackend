@@ -1,5 +1,11 @@
+"""
+ this Dictionary used to pick column name
+ for grid view in insights
+"""
+
 id_del = 'IDDEL'
 hire_del = 'HIREDEL'
+
 INSIGHT_TABLE_HEADER = {
     'INCIDENT': 'soar_id',
     'USE CASE': 'use_case',

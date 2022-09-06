@@ -1,9 +1,15 @@
 import random
 
+
 class ColorMap:
+    """
+    ColorMap function is used to map
+    color in donut chart of
+    OEI all layers.
+    """
 
     @staticmethod
-    def get_color(filter, id):
+    def get_color(layer_filter, key):
         SLA = {
             "Alta": "#165B65",
             "Baja": "#16293A",
@@ -142,31 +148,31 @@ class ColorMap:
             "1": "#1DBC36",
         }
 
-        if filter == 'SLA':
-            return SLA.get(id)
-        elif filter == 'value0':
-            return value0.get(id)
-        elif filter == 'value1':
-            return value1.get(id)
-        elif filter == 'value2':
-            return value2.get(id)
-        elif filter == 'value3':
-            return value3.get(id)
-        elif filter == 'Status':
-            return Status.get(id)
-        elif filter == 'Priority':
-            return Priority.get(id)
-        elif filter == 'Category':
+        if layer_filter == 'SLA':
+            return SLA.get(key)
+        elif layer_filter == 'value0':
+            return value0.get(key)
+        elif layer_filter == 'value1':
+            return value1.get(key)
+        elif layer_filter == 'value2':
+            return value2.get(key)
+        elif layer_filter == 'value3':
+            return value3.get(key)
+        elif layer_filter == 'Status':
+            return Status.get(key)
+        elif layer_filter == 'Priority':
+            return Priority.get(key)
+        elif layer_filter == 'Category':
             return random.choice(list(Category.values()))
-        elif filter == 'Tickets':
+        elif layer_filter == 'Tickets':
             return random.choice(list(Tickets.values()))
-        elif filter == 'False_Positives':
+        elif layer_filter == 'False_Positives':
             return random.choice(list(False_Positives.values()))
-        elif filter == 'First_Response_Time':
+        elif layer_filter == 'First_Response_Time':
             return random.choice(list(First_Response_Time.values()))
-        elif filter == 'Resolution_time':
+        elif layer_filter == 'Resolution_time':
             return random.choice(list(Response_Time.values()))
-        elif filter == 'Reopened':
+        elif layer_filter == 'Reopened':
             return random.choice(list(Reopened.values()))
 
 

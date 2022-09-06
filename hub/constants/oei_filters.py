@@ -1,4 +1,3 @@
-
 filter_map = {
     "SLA": "sla_name",
     "Priority": "Priority",
@@ -17,6 +16,10 @@ filter_map = {
 
 
 class Map:
+    """
+     map class is used to map column in models
+     according to request in serializer of OEI.
+    """
     @staticmethod
     def get_filter(name):
         return filter_map.get(name)
