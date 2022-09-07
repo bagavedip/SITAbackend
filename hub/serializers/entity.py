@@ -4,7 +4,7 @@ from hub.models.entity import Entity
 
 class EntitySerializer(serializers.ModelSerializer):
     """
-    Model serializer for ITSM information
+    Model serializer for Entity information
     """
 
     class Meta:
@@ -12,5 +12,3 @@ class EntitySerializer(serializers.ModelSerializer):
         fields = (
             "entityname",
         )
-        
-

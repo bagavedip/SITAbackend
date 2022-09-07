@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class ProcessService:
+    """
+     Services for process models
+    """
     
     @staticmethod
     def get_queryset():

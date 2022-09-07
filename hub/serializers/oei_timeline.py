@@ -2,8 +2,10 @@ from hub.constants.oei_filters import Map
 
 
 class OeiTimeline:
+    """
+     Serializer is used for OEI(ITSM) timeline view
+    """
     def __init__(self, request) -> None:
-        print(request.data)
         self.header_filters = []
         self.request_filters = []
         self.model_group_map = []

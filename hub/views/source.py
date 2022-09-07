@@ -29,7 +29,7 @@ class SourceViewSet(viewsets.GenericViewSet):
     queryset = SourceService.get_queryset()
     serializer_class = SourceSerializer
     
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         """Function which create source record.
         """
         logger.debug(f"Receieved request body {request.data}")
@@ -40,8 +40,6 @@ class SourceViewSet(viewsets.GenericViewSet):
         with transaction.atomic():
             source = SourceService.create_from_validated_data(request.user, validated_data)
             file_path = os.path.join(source.credentials[0]['path'], source.credentials[0]['filename'])
-            print(file_path)
-            print(source.type)
             if source.type == 'EXCEL':
                 df = pd.read_excel(file_path)
                 if source.name == 'SIEM':

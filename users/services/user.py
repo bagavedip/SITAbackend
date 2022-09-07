@@ -20,6 +20,9 @@ class UserService:
 
     @staticmethod
     def active():
+        """
+        function fetch active users only
+        """
         queryset = UserService.get_queryset().filter(is_active=True)
         return queryset
 

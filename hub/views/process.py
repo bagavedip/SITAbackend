@@ -1,5 +1,7 @@
 import csv
 import codecs
+import logging
+
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,19 +11,20 @@ from hub.models.process import Process
 from hub.serializers.process import ProcessSerializer
 from hub.services.process import ProcessService
 
+logger = logging.getLogger(__name__)
+
 
 class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     permission_classes = [IsAuthenticated]
     serializer_class = ProcessSerializer
 
-    # queryset = ProcessService.get_queryset()
-
     @action(detail=False, methods=["put"])
     def update_process(self, request, process_id):
         """
-            Function to update asset queryset
+         function to update details of process
         """
+        logger.info(f"request data is {request.data}")
         serializer = ProcessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
@@ -36,6 +39,10 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         return Response(data)
 
     def process_delete(self, request, process_id):
+        """
+         function to delete details of process
+        """
+        logger.info(f"request data is {request.data}")
         queryset = ProcessService.get_queryset().filter(id=process_id)
         if queryset:
             queryset.delete()
@@ -51,7 +58,11 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             })
 
     @action(detail=False, methods=["post"])
-    def addprocess(self, request, **kwargs):
+    def addprocess(self, request):
+        """
+         function to add details of process
+        """
+        logger.info(f"request data is {request.data}")
         if request.method == 'POST':
             Serializer = ProcessSerializer(data=request.data)
             data = {}
@@ -71,7 +82,7 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     return Response(
                         {
                             "Status": status.HTTP_400_BAD_REQUEST,
-                            "Message": "Process allready Exist",
+                            "Message": "Process already Exist",
                         }
                     )
             else:
@@ -86,17 +97,18 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     @action(detail=False, methods=['POST'])
     def validate_process(self, request):
-        # """Upload data from CSV, with validation."""
+        """
+         function to validate csv file of process
+        """
+        logger.info(f"request data is {request.data}")
+        # Upload data from CSV, with validation.
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
-        cate_data = {}
+
         serializer = ProcessSerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
-            # print(data)
             return Response({
                 "Status": status.HTTP_200_OK,
                 "Message": "Validation Successful",
@@ -104,7 +116,6 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             }
             )
         else:
-            # print("failed")
             process_err = serializer.errors
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
@@ -115,14 +126,15 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     @action(detail=False, methods=['POST'])
     def upload_process(self, request):
-        """Upload data from CSV, with validation."""
+        """
+         function to upload csv file of process
+        """
+        logger.info(f"request data is {request.data}")
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
         serializer = ProcessSerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
             process_list = []
             for row in serializer.data:
@@ -131,7 +143,6 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                         process=row["process"],
                     )
                 )
-            # print(asset_list)
             Process.objects.bulk_create(process_list)
 
             return Response({
@@ -142,7 +153,6 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             )
         else:
             process_err = serializer.errors
-            # print(asset_err)
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
                 "Message": serializer.errors,
@@ -150,7 +160,11 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             }
             )
 
-    def process_details(self, request, **kwargs):
+    def process_details(self, request):
+        """
+         function to get details of process
+        """
+        logger.info(f"request data is {request.data}")
         queryset = ProcessService.get_queryset()
         queryset_details = []
         for data in queryset:
@@ -168,6 +182,10 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         )
 
     def single_process_details(self, request, process_id):
+        """
+         function to get details of single record of process
+        """
+        logger.info(f"request data is {request.data}")
         queryset = ProcessService.get_queryset().filter(id=process_id)
         if queryset:
             queryset_details = []

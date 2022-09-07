@@ -4,6 +4,9 @@ from hub.serializers.ticket_details import TicketDetailsSerializer
 
 
 class TicketsService:
+    """
+     Service for Ticket Details of hub(insights) models
+    """
 
     @staticmethod
     def get_tickets(response_obj: TicketDetailsSerializer):

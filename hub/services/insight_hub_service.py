@@ -1,17 +1,20 @@
 import calendar
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
-
 from dateutil import relativedelta
 
+from hub.models.add_comment import AddComment
+from hub.models.assign_task import AssignTask
 from hub.models.hub import Hub
-from django.db.models import Count, Sum
+from django.db.models import Sum
 
 from hub.serializers.hub import InsightsSerializer
 from hub.serializers.hub_timeline import HubTimeline
 
 
 class HubService:
+    """
+     Services for Hub models
+    """
 
     @staticmethod
     def get_queryset():
@@ -19,20 +22,26 @@ class HubService:
         return queryset
 
     @staticmethod
-    def get_insights(reesponse_obj: InsightsSerializer):
-        query_data = Hub.objects.filter(starttime__gte=reesponse_obj.start_date, endtime__lte=reesponse_obj.end_date).values(*reesponse_obj.model_group_map).order_by().annotate(events=Sum('events'))
-        reesponse_obj.set_requst_queryset(query_data)
-        incidents = Hub.objects.filter(starttime__gte=reesponse_obj.start_date, endtime__lte=reesponse_obj.end_date).values('criticality').order_by().annotate(events=Sum('events'))
+    def get_insights(response_obj: InsightsSerializer):
+        query_data = (
+            Hub.objects.filter(starttime__gte=response_obj.start_date, endtime__lte=response_obj.end_date).
+            values(*response_obj.model_group_map).order_by().annotate(events=Sum('events')))
+        response_obj.set_requst_queryset(query_data)
+        incidents = (
+            Hub.objects.filter(starttime__gte=response_obj.start_date, endtime__lte=response_obj.end_date)
+            .values('criticality').order_by().annotate(events=Sum('events')))
         for row in incidents:
-            reesponse_obj.donut_center[row.get('criticality')] = row.get('events')
+            response_obj.donut_center[row.get('criticality')] = row.get('events')
         return query_data
     
     @staticmethod
-    def get_legends(reesponse_obj: InsightsSerializer):
-        query_data = Hub.objects.filter(starttime__gte=reesponse_obj.start_date, endtime__lte=reesponse_obj.end_date).values(reesponse_obj.legend_filter).distinct(reesponse_obj.legend_filter)
+    def get_legends(response_obj: InsightsSerializer):
+        query_data = (
+            Hub.objects.filter(starttime__gte=response_obj.start_date, endtime__lte=response_obj.end_date).
+            values(response_obj.legend_filter).distinct(response_obj.legend_filter))
         legends = []
         for row in query_data:
-            legends.append(row.get(reesponse_obj.legend_filter))
+            legends.append(row.get(response_obj.legend_filter))
         return legends
 
     @staticmethod
@@ -43,9 +52,9 @@ class HubService:
         mobile = 0
         entityes = 0
         assets = str(data.count())
-        for type in data:
-            asset_type = type.asset_type
-            entity = type.entity_name
+        for types in data:
+            asset_type = types.asset_type
+            entity = types.entity_name
             if entity:
                 entityes = entityes + 1
             if asset_type == "Desktop":
@@ -54,7 +63,9 @@ class HubService:
                 laptop = laptop + 1
             if asset_type == "Mobile":
                 mobile = mobile + 1
-        asset_types = "MOBILE" + "~" + str(mobile) + "*" + "DESKTOP" + "~" + str(desktop) + "*" + "LAPTOP" + "~" + str(laptop)
+        asset_types = (
+                "MOBILE" + "~" + str(mobile) + "*" + "DESKTOP" + "~" + str(desktop) + "*" + "LAPTOP" + "~" + str(laptop)
+        )
         entity_count = str(entityes)
         for query in data:
             incident_status = {"text": query.status, "color": "#ffc107"}
@@ -160,58 +171,62 @@ class HubService:
         start_date = start_time
         incidents = []
         time = []
-        data = {}
-        dataset =[]
-        returndata={}
+        dataset = []
         if total_days <= 31:
             title1 = "Day"+str(start_date.day)
             title2 = "Day"+str(end_time.day)
             for x in range(0, delta.days+1):
-                query = Hub.objects.filter(starttime__gte=start_date,starttime__lte=start_date + timedelta(days=1)).count()
+                query = (
+                    Hub.objects.filter(starttime__gte=start_date, starttime__lte=start_date + timedelta(days=1)).count()
+                )
                 incidents.append(query)
                 time.append("day"+str(start_date.day))
                 start_date = start_date + timedelta(days=1)
-        if total_days <= 365 and total_days > 31:
-            if (delta.days):
-                delta.months +=1
+        if 365 >= total_days > 31:
+            if delta.days:
+                delta.months += 1
             title1 = calendar.month_name[start_date.month]+str(start_date.year)
             title2 = calendar.month_name[end_time.month]+str(end_time.year)
             for x in range(0, delta.months):
-                query = Hub.objects.filter(starttime__gte=start_date, starttime__lte=(start_date+relativedelta.relativedelta(months=1))).count()
+                query = (
+                    Hub.objects.filter(starttime__gte=start_date,
+                                       starttime__lte=(start_date+relativedelta.relativedelta(months=1))).count())
                 incidents.append(query)
                 time.append(calendar.month_name[start_date.month])
                 start_date = start_date + relativedelta.relativedelta(months=1)
-        if total_days >365:
+        if total_days > 365:
             if delta.months:
                 delta.years += 1
             if delta.days:
                 delta.years += 1
             title1 = start_date.year
-            title2= end_time.year
+            title2 = end_time.year
             for x in range(1, delta.years):
-                query = Hub.objects.filter(starttime__gte=start_date, starttime__lte=start_date + relativedelta.relativedelta(years=1)).count()
+                query = (
+                    Hub.objects.filter(starttime__gte=start_date,
+                                       starttime__lte=start_date + relativedelta.relativedelta(years=1)).count())
                 time.append(start_date.year)
                 incidents.append(query)
                 start_date = start_date + relativedelta.relativedelta(years=1)
         title = str(title1)+"-"+str(title2)
         newdata = {
-            "data":incidents,
+            "data": incidents,
             "backgroundColor": "#16293A"
         } 
         dataset.append(newdata)
         data = {
-            "labels":time,
-            "datasets":dataset
+            "labels": time,
+            "datasets": dataset
         }
         returndata = {
-            "barChartHeading":{
-                "title":filters,
-                "subTitle":title
+            "barChartHeading": {
+                "title": filters,
+                "subTitle": title
             },
             "chartOptions": {
                 "stacked": "false",
                 "stepSize": 250,
-                "showLendend":"false",
+                "showLendend": "false",
                 "legendPosition": "bottom",
                 "categoryPercentage": 0.4,
                 "scaleLabelofYaxis": {
@@ -227,7 +242,7 @@ class HubService:
                     "fontSize": 14
                 }
             },
-            "data" : data
+            "data": data
         }
         return returndata
 
@@ -244,12 +259,25 @@ class HubService:
 
     @staticmethod
     def incident_comment(selectedIncidents, comment):
-        queryset = Hub.objects.filter(entity_id=selectedIncidents)
-        comments = {
-            "comments": comment
-        }
-        for query in queryset:
-            sla_comment = HubService.update(query, **comments)
-        return sla_comment
+        comment = AddComment(
+            incident_id=selectedIncidents,
+            comment=comment
+        )
+        comment.save()
+        return "Comment Added Successfully !!"
 
-
+    @staticmethod
+    def assign_user(selectedIncidents, user):
+        assign_list = []
+        for incidents in selectedIncidents:
+            queryset = AssignTask.objects.filter(incident_id=incidents)
+            if queryset:
+                return "already Assigned"
+            else:
+                assign_list.append(
+                    AssignTask(
+                        incident_id=incidents,
+                        assigned_user=user
+                    ))
+        AssignTask.objects.bulk_create(assign_list)
+        return "Task successfully Assigned !!"

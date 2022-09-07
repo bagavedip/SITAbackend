@@ -1,5 +1,7 @@
 import csv
 import codecs
+import logging
+
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -15,6 +17,8 @@ from hub.serializers.entity import EntitySerializer
 from hub.models.entity import Entity
 from hub.services.entity import EntityService
 
+logger = logging.getLogger(__name__)
+
 
 class EntityViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -23,6 +27,10 @@ class EntityViewSet(viewsets.ModelViewSet):
     # queryset = EntityService.get_queryset()
 
     def entities(self, request):
+        """
+         Function to get details of entity.
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset()
         dataset = []
         for entity in queryset:
@@ -39,6 +47,10 @@ class EntityViewSet(viewsets.ModelViewSet):
         )
 
     def single_entities(self, request, entity_id):
+        """
+         Function to get details of single entity.
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset().filter(id=entity_id)
         if queryset:
             dataset = []
@@ -55,7 +67,11 @@ class EntityViewSet(viewsets.ModelViewSet):
             }
         )
 
-    def offence_entity(self, requset):
+    def offence_entity(self, request):
+        """
+         Function to get combine details of ofence and entity.
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset()
         entity_offences = dict()
         for entity in queryset.values():
@@ -86,6 +102,10 @@ class EntityViewSet(viewsets.ModelViewSet):
         )
 
     def offence_entity_asset_types(self, request):
+        """
+         Function is used to get combine details of offence entity and asset types
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset()
         entities = dict()
         for entity in queryset.values():
@@ -115,6 +135,10 @@ class EntityViewSet(viewsets.ModelViewSet):
         )
 
     def offence_entity_location(self, request):
+        """
+         Function is used to get combine details of offence, entity, location
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset()
         entities = dict()
         for entity in queryset.values():
@@ -143,6 +167,10 @@ class EntityViewSet(viewsets.ModelViewSet):
         )
 
     def offence_entity_function(self, request):
+        """
+         Function is used to get combine details of offence, entity, functions
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset()
         entities = dict()
         for entity in queryset.values():
@@ -172,6 +200,10 @@ class EntityViewSet(viewsets.ModelViewSet):
         )
 
     def offence_entity_geo_asset_types(self, request):
+        """
+         Function is used to get combine details of offence, entity, Geo and asset_types
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset()
         entities = dict()
         for entity in queryset.values():
@@ -203,6 +235,10 @@ class EntityViewSet(viewsets.ModelViewSet):
         )
 
     def offence_entity_geo_function(self, request):
+        """
+         Function to get combine details of offence, entity, Geo and function
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset()
         entities = dict()
         for entity in queryset.values():
@@ -234,7 +270,11 @@ class EntityViewSet(viewsets.ModelViewSet):
         )
 
     @action(detail=False, methods=["post"])
-    def addentity(self, request, **kwargs):
+    def addentity(self, request):
+        """
+        Function to add entity details
+        """
+        logger.info(f"request data is {request.data}")
         if request.method == 'POST':
             Serializer = EntitySerializer(data=request.data)
             data = {}
@@ -269,16 +309,16 @@ class EntityViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def validate_entity(self, request):
+        """
+         Function to validate csv file of entity
+        """
+        logger.info(f"request data is {request.data}")
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
-        cate_data = {}
         serializer = EntitySerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
-            # print(data)
             return Response({
                 "Status": status.HTTP_200_OK,
                 "Message": "Validation Successful",
@@ -286,7 +326,6 @@ class EntityViewSet(viewsets.ModelViewSet):
             }
             )
         else:
-            # print("failed")
             entity_err = serializer.errors
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
@@ -297,14 +336,15 @@ class EntityViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def upload_entity(self, request):
-        """Upload data from CSV, with validation."""
+        """
+        Upload data from CSV, with validation.
+        """
+        logger.info(f"request data is {request.data}")
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
         serializer = EntitySerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
             entity_list = []
             for row in serializer.data:
@@ -313,7 +353,6 @@ class EntityViewSet(viewsets.ModelViewSet):
                         entityname=row["entityname"],
                     )
                 )
-            # print(asset_list)
             Entity.objects.bulk_create(entity_list)
 
             return Response({
@@ -324,7 +363,6 @@ class EntityViewSet(viewsets.ModelViewSet):
             )
         else:
             entity_err = serializer.errors
-            # print(asset_err)
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
                 "Message": serializer.errors,
@@ -335,8 +373,9 @@ class EntityViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["put"])
     def update_entity(self, request, entity_id):
         """
-            Function to update asset queryset
+            Function to update entity queryset
         """
+        logger.info(f"request data is {request.data}")
         serializer = EntitySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
@@ -351,6 +390,10 @@ class EntityViewSet(viewsets.ModelViewSet):
         return Response(data)
 
     def entity_delete(self, request, entity_id):
+        """
+         Function to delete entity
+        """
+        logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset().filter(id=entity_id)
         if queryset:
             queryset.delete()

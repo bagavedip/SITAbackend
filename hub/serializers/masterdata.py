@@ -1,4 +1,7 @@
 class MasterDataSerialiser:
+    """
+    Serializer for Dropdown Data of Insights.
+    """
 
     def __init__(self):
         self.drop_down_ids = ["Asset Type", "Geography", "ORG"]
@@ -22,6 +25,9 @@ class MasterDataSerialiser:
 
 
 class OeiMasterDataSerialiser:
+    """
+    Serializer for Dropdown Data of OEI.
+    """
 
     def __init__(self):
         self.drop_down_ids = ["Priority", "Category", "Reopened %", "Service", "First response Time", "Status"]

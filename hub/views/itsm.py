@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from hub.constants.dataset import Dataset
 from hub.models import ITSM
+from hub.models.add_oei_comment import AddOeiComment
 from hub.serializers.oei_timeline import OeiTimeline
 from hub.serializers.itsm import ITSMSerializer
 from hub.serializers.oei_serializers import OeiSerializer
@@ -26,7 +27,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
 
     def convert_data(self, dataset):
         if len(dataset) == 0:
-            print("Empty Result set")
+            return "Empty Result set"
         else:
             keys = dataset[0].keys()
             key_var = ""
@@ -51,7 +52,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
 
     def build(self, dictionary, depth, datasets):
         keys = dictionary.keys()
-        print("tyring to add", str(keys), " at depth ", depth)
+        # ("tyring to add", str(keys), " at depth ", depth)
         datasets[depth]['labels'].extend(list(keys))
         depth += 1
         for key in keys:
@@ -318,6 +319,9 @@ class ITSMViewSet(viewsets.ModelViewSet):
         return Response(queryset, status=status.HTTP_201_CREATED)
 
     def oei_chart_data(self, request, **kwargs):
+        """
+         Function to get OEi donut chart Data.
+        """
         logger.info("Validating data for Log In.")
         serializser = OeiSerializer(request)
         result = ITSMService.get_oei(serializser)
@@ -371,22 +375,19 @@ class ITSMViewSet(viewsets.ModelViewSet):
         Function which update comment information.
         """
         logger.debug(f"Parsed request body {request.data}")
-
         # Validating incoming request body
         serializer = request.data
-
         # update comment in sla and ticket information
         logger.debug("Database transaction started")
         try:
             with transaction.atomic():
-                selectedIncidents = serializer.get("selectedIncidents")
+                selected_incidents = serializer.get("selectedIncidents")
                 comment = serializer.get("Comment")
-                comment = ITSMService.oei_sla_comment(selectedIncidents, comment)
+                comment = ITSMService.oei_sla_comment(selected_incidents, comment)
             logger.debug("Database transaction finished")
-
             # response formatting
             response_data = {
-                "msg": "Comment added successfully !!",
+                "msg": comment,
                 "status": True
             }
             return Response(response_data)
@@ -402,4 +403,13 @@ class ITSMViewSet(viewsets.ModelViewSet):
         serializser = OeiTimeline(request)
         result = ITSMService.oei_ticket_timeline(serializser)
         return Response(result, status=status.HTTP_200_OK)
+
+    @staticmethod
+    def oei_sla_comment(sla, comment):
+        comments = AddOeiComment(
+            ticket_id=sla,
+            comment=comment
+        )
+        comments.save()
+        return "Comment Added Successfully"
     

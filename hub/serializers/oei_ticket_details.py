@@ -2,12 +2,14 @@ from hub.constants import oei_constants
 
 
 class TicketDetailsSerializer:
+    """
+     Serializer for Ticket details OEI(ITSM)
+    """
 
     def __init__(self, request) -> None:
 
         request_data = request.data
 
-        print('Request Data is', request_data)
         self.start_date = request_data.get('fromDate')
         self.end_date = request_data.get('toDate')
         region = request_data.get('region')
@@ -19,7 +21,6 @@ class TicketDetailsSerializer:
             filter = filter_str.split("*")[0].split("~")[0]
             filter_key_val = filter.split("=")
             self.filters[filter_key_val[0]] = filter_key_val[1].split('-')[0]
-            print(self.filters[filter_key_val[0]], "self.filters[filter_key_val[0]]")
 
         self.columns_headers = []
         self.select_cols = []

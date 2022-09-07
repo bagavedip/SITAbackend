@@ -25,7 +25,7 @@ class InsightHub(viewsets.GenericViewSet):
 
     def convert_data(self, dataset):
         if len(dataset) == 0:
-            print("Empty Result set")
+            return "Empty Result set"
         else:
             keys = dataset[0].keys()
             key_var = ""
@@ -33,8 +33,8 @@ class InsightHub(viewsets.GenericViewSet):
 
             key_index = 0
             for key in keys:
-                if key_index < len(keys) -1:
-                    if key_index < len(keys) -2:
+                if key_index < len(keys) - 1:
+                    if key_index < len(keys) - 2:
                         nested_dict_str = "dd(lambda: " + nested_dict_str + ")"
                     key_var = key_var + "[data.get('" + key + "')]"
                     key_index += 1
@@ -49,7 +49,7 @@ class InsightHub(viewsets.GenericViewSet):
 
     def build(self, dictionary, depth, datasets):
         keys = dictionary.keys()
-        print("tyring to add", str(keys), " at depth ", depth)
+        # ("tyring to add", str(keys), " at depth ", depth)
         datasets[depth]['labels'].extend(list(keys))
         depth += 1
         for key in keys:
@@ -242,17 +242,34 @@ class InsightHub(viewsets.GenericViewSet):
         return Response(queryset, status=status.HTTP_201_CREATED)
 
     def assign_task(self, request):
-        assign_task = request.data
-        print(assign_task)
-        request_param = request.data.get("selectedIncidents", None)
-        print(request_param)
-        data = {
-            "msg": "Resolution Request Recieved",
-            "status": True
-        }
-        return Response(data, status=status.HTTP_201_CREATED)
+        """
+        Function which used for assign task
+        to user.
+        """
+        logger.debug(f"Parsed request body {request.data}")
+        # Validating incoming request body
+        serializer = request.data
+        # update comment in sla and ticket information
+        logger.debug("Database transaction started")
+        try:
+            with transaction.atomic():
+                selected_incidents = serializer.get("selectedIncidents")
+                user = serializer.get("userName")
+                comment = HubService.assign_user(selected_incidents, user)
+            logger.debug("Database transaction finished")
+            # response formatting
+            response_data = {
+                "msg": comment,
+                "status": True
+            }
+            return Response(response_data)
+        except UnboundLocalError:
+            return Response({"error": "there is no such selectedIncidents."})
 
     def hub_timeline(self, request):
+        """
+         Timeline view for insights
+        """
         serializser = HubTimeline(request)
         result = HubService.hub_timeline(serializser)
         return Response(result, status=status.HTTP_200_OK)
@@ -262,25 +279,21 @@ class InsightHub(viewsets.GenericViewSet):
         Function which update comment information.
         """
         logger.debug(f"Parsed request body {request.data}")
-
         # Validating incoming request body
         serializer = request.data
-
         # update comment in sla and ticket information
         logger.debug("Database transaction started")
         try:
             with transaction.atomic():
-                selectedIncidents = serializer.get("selectedIncidents")
+                selected_incidents = serializer.get("selectedIncidents")
                 comment = serializer.get("Comment")
-                comment = HubService.incident_comment(selectedIncidents, comment)
+                comment = HubService.incident_comment(selected_incidents, comment)
             logger.debug("Database transaction finished")
-
             # response formatting
             response_data = {
-                "msg": "Comment added successfully !!",
+                "msg": comment,
                 "status": True
             }
             return Response(response_data)
         except UnboundLocalError:
             return Response({"error": "there is no such selectedIncidents."})
-

@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class CategoryService:
+    """
+     Services for Category models
+    """
     
     @staticmethod
     def get_queryset():

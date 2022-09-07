@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class GeoLocationService:
+    """
+     Services for Geolocation models
+    """
     
     @staticmethod
     def get_queryset():
@@ -21,11 +24,11 @@ class GeoLocationService:
         return get_object_or_404(GeoLocationService.get_queryset(), pk=start_datetime)
 
     @staticmethod
-    def location_filter(id):
+    def location_filter(entity_id):
         """
         Function which extract data of location with filteration of id
         """
-        filtered_data = GeoLocationService.get_queryset().filter(entity_id=id)
+        filtered_data = GeoLocationService.get_queryset().filter(entity_id=entity_id)
         return filtered_data
 
     @staticmethod

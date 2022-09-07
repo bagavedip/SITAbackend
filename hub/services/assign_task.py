@@ -1,8 +1,10 @@
 from hub.models.assign_task import AssignTask
-from hub.services.insight_hub_service import HubService
 
 
 class AssignTaskService:
+    """
+     Services for AssignTask models
+    """
 
     @staticmethod
     def update(name, **kwargs):
@@ -27,12 +29,3 @@ class AssignTaskService:
             )
         user = AssignTask.objects.bulk_create(incident_list)
         return user
-    #     user = []
-    #     for incident in selectedIncidents:
-    #         user.append(
-    #             AssignTask(
-    #                 selectedIncidents=incident,
-    #                 userName=userName,
-    #             )
-    #         )
-    #         return AssignTask.objects.bulk_create(user)

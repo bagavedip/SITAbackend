@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
 
-class credentialSerializer(serializers.Serializer):
-    """Serializer class for credential seializer json field.
+class CredentialSerializer(serializers.Serializer):
+    """
+     Serializer class for credential serializer json field.
     """
 
     filename = serializers.CharField(max_length=100)

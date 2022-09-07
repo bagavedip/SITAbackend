@@ -10,10 +10,10 @@ class SOARSerializer(serializers.ModelSerializer):
     class Meta:
         model = SOAR
         fields = (
-            "SOAR_ID","AssignedUser","Title","Time",
-            "Tags","Products","Incident",
-            "Suspicious","Important","Ports",
-            "Outcomes","Status","Environment","Priority",
-            "Stage","TicketIDs","ClosingTime",
-            "Sources","Reason","RootCause",
+            "SOAR_ID", "AssignedUser", "Title", "Time",
+            "Tags", "Products", "Incident",
+            "Suspicious", "Important", "Ports",
+            "Outcomes", "Status", "Environment", "Priority",
+            "Stage", "TicketIDs", "ClosingTime",
+            "Sources", "Reason", "RootCause",
         )

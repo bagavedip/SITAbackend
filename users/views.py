@@ -57,6 +57,9 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     @action(detail=False, methods=["post"])
     def login(self, request, **kwargs):
+        """
+         Function for login user
+        """
         logger.info("Validating data for Log In.")
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -73,6 +76,9 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         return Response(response_data)
 
     def add_user(self, request):
+        """
+         Function for add user at admin side
+        """
         serializer = AddUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data

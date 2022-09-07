@@ -4,6 +4,9 @@ from hub.constants.color import ColorMap
 
 
 class InsightsSerializer:
+    """
+     Serializer for Insights(Hub) models
+    """
     def __init__(self, request) -> None:
         self.request_filters = []
         self.model_group_map = []

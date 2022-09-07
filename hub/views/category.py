@@ -1,5 +1,7 @@
 import csv
 import codecs
+import logging
+
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,21 +11,24 @@ from hub.models.category import Category
 from hub.serializers.category import CategorySerializer
 from hub.services.category import CategoryService
 
+logger = logging.getLogger(__name__)
+
 
 class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = CategorySerializer
 
-    # queryset = CategoryService.get_queryset()
-
     @action(detail=False, methods=["post"])
     def addcategory(self, request):
+        """
+         Function is used to add category in admin
+        """
         if request.method == 'POST':
-            Serializer = CategorySerializer(data=request.data)
+            serializer = CategorySerializer(data=request.data)
             data = {}
-            if Serializer.is_valid():
+            if serializer.is_valid():
                 if not CategoryService.get_queryset().filter(category__iexact=request.data["category"]).exists():
-                    category = Serializer.save()
+                    category = serializer.save()
                     data['Id'] = category.id
                     data['Category'] = category.category
                     return Response(
@@ -37,11 +42,11 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     return Response(
                         {
                             "Status": status.HTTP_400_BAD_REQUEST,
-                            "Message": "Category allready Exists",
+                            "Message": "Category already Exists",
                         }
                     )
             else:
-                data = Serializer.errors
+                data = serializer.errors
                 return Response(
                     {
                         "Status": status.HTTP_204_NO_CONTENT,
@@ -52,13 +57,14 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     @action(detail=False, methods=['POST'])
     def validate_category(self, request):
+        """
+            function to used validate csv file of category.
+        """
         file = request.FILES.get("File")
-
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
         serializer = CategorySerializer(data=data, many=True)
         if serializer.is_valid():
-            # print(data)
             return Response({
                 "Status": status.HTTP_200_OK,
                 "Message": "Validation Successful",
@@ -66,7 +72,6 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             }
             )
         else:
-            # print("failed")
             asset_err = serializer.errors
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
@@ -77,14 +82,14 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     @action(detail=False, methods=['POST'])
     def upload_category(self, request):
-        """Upload data from CSV, with validation."""
+        """
+         Upload data from CSV, with validation.
+        """
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
         serializer = CategorySerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
             category_list = []
             for row in serializer.data:
@@ -93,7 +98,6 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                         category=row["category"],
                     )
                 )
-            # print(asset_list)
             Category.objects.bulk_create(category_list)
 
             return Response({
@@ -104,7 +108,6 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             )
         else:
             category_err = serializer.errors
-            # print(asset_err)
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
                 "Message": serializer.errors,
@@ -115,7 +118,7 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     @action(detail=False, methods=["put"])
     def update_category(self, request, category_id):
         """
-            Function to update asset queryset
+            Function to update category
         """
         serializer = CategorySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -131,6 +134,10 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         return Response(data)
 
     def category_delete(self, request, category_id):
+        """
+         Function is used to delete category
+        """
+        logger.info(f"requested data is{request.data}")
         queryset = CategoryService.get_queryset().filter(id=category_id)
         if queryset:
             queryset.delete()
@@ -145,7 +152,11 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 "Message": message
             })
 
-    def category_details(self, request, **kwargs):
+    def category_details(self, request):
+        """
+         Function used to get details of category
+        """
+        logger.info(f"requested data is{request.data}")
         queryset = CategoryService.get_queryset()
         queryset_details = []
         for data in queryset:
@@ -163,6 +174,10 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         )
 
     def single_category_details(self, request, category_id):
+        """
+         Function used to get details of single category.
+        """
+        logger.info(f"request data is {request.data}")
         queryset = CategoryService.get_queryset().filter(id=category_id)
         if queryset:
             queryset_details = []

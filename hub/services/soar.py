@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class SOARService:
+    """
+     Services for Soar Models
+    """
     
     @staticmethod
     def get_queryset():

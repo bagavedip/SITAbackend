@@ -4,7 +4,7 @@ from hub.models.category import Category
 
 class CategorySerializer(serializers.ModelSerializer):
     """
-    Model serializer for ITSM information
+    Model serializer for Category information
     """
 
     class Meta:

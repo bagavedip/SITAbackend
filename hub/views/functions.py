@@ -1,5 +1,7 @@
 import csv
 import codecs
+import logging
+
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -10,11 +12,13 @@ from ..models.geolocations import GeoLocation
 from ..models.functions import Function
 from hub.serializers.functions import FunctionSerializer
 from hub.services.functions import FunctionService
-from hub.services.geolocations import GeoLocationService
 from hub.services.assets import AssetService
 from hub.services.itsm import ITSMService
 from hub.services.soar import SOARService
 from hub.services.siem import SIEMService
+
+
+logger = logging.getLogger(__name__)
 
 
 class FunctionViewSet(viewsets.ModelViewSet):
@@ -22,9 +26,11 @@ class FunctionViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = FunctionSerializer
 
-    # queryset = FunctionService.get_queryset()
-
-    def function(self, request, *args, **kwargs):
+    def function(self, request):
+        """
+         function to get details of function
+        """
+        logger.info(f"request data is {request.data}")
         queryset = FunctionService.get_queryset()
         dataset = []
         for functions in queryset:
@@ -43,6 +49,10 @@ class FunctionViewSet(viewsets.ModelViewSet):
         )
 
     def single_function_details(self, request, function_id):
+        """
+         function to get single record of function
+        """
+        logger.info(f"request data is {request.data}")
         queryset = FunctionService.get_queryset().filter(id=function_id)
         if queryset:
             queryset_details = []
@@ -70,20 +80,16 @@ class FunctionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def validate_function_csv(self, request):
-        # """Upload data from CSV, with validation."""
+        """
+         function to validate csv file of function
+        """
+        logger.info(f"request data is {request.data}")
+        # Upload data from CSV, with validation.
         file = request.FILES.get("File")
-        # df = pd.read_csv(file)
-        # new_df = df.isnull()
-        # print(new_df)
-
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
-        cate_data = {}
         serializer = FunctionSerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
-            # print(data)
             return Response({
                 "Status": status.HTTP_200_OK,
                 "Message": "Validation Successful",
@@ -91,7 +97,6 @@ class FunctionViewSet(viewsets.ModelViewSet):
             }
             )
         else:
-            # print("failed")
             cate_data = serializer.errors
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
@@ -102,27 +107,25 @@ class FunctionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def upload_function(self, request):
-        """Upload data from CSV, with validation."""
+        """
+        Upload data from CSV, with validation.
+        """
+        logger.info(f"request data is {request.data}")
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
-        cate_data = {}
         serializer = FunctionSerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
             function_list = []
             for row in serializer.data:
                 location_queryset = GeoLocation.objects.get(location=row["location_name"])
-                # print(location_queryset)
                 function_list.append(
                     Function(
                         function_name=row["function_name"],
                         location_id=location_queryset,
                     )
                 )
-            # print(function_list)
             Function.objects.bulk_create(function_list)
 
             return Response({
@@ -133,7 +136,6 @@ class FunctionViewSet(viewsets.ModelViewSet):
             )
         else:
             cate_data = serializer.errors
-            print(cate_data)
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
                 "Message": serializer.errors,
@@ -142,6 +144,10 @@ class FunctionViewSet(viewsets.ModelViewSet):
             )
 
     def functionlocationentity(self, request):
+        """
+         function to get combine details of function, location and entity
+        """
+        logger.info(f"request data is {request.data}")
         try:
             id = request.query_params["id"]
             if id != None:
@@ -192,8 +198,11 @@ class FunctionViewSet(viewsets.ModelViewSet):
             )
 
     def function_asset(self, request):
+        """
+         function to get combine details of function and asset
+        """
+        logger.info(f"request data is {request.data}")
         function_data = FunctionService.get_queryset()
-        all_records = []
         function_asset = dict()
         for function in function_data.values():
             asset_data = AssetService.asset_filter(function.get('id'))
@@ -210,6 +219,10 @@ class FunctionViewSet(viewsets.ModelViewSet):
         )
 
     def offence_function(self, request):
+        """
+         function to get combine details of offence and functions
+        """
+        logger.info(f"request data is {request.data}")
         queryset = FunctionService.get_queryset()
         function_offences = dict()
         for functions in queryset.values():
@@ -235,16 +248,13 @@ class FunctionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["put"])
     def update_function(self, request, function_id):
         """
-            Function to update asset queryset
+            Function to update function queryset
         """
+        logger.info(f"request data is {request.data}")
         serializer = FunctionSerializer(data=request.data)
-        # print(request.data)
         serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        # print(validated_data)
         with transaction.atomic():
             location_queryset = GeoLocation.objects.get(location=request.data["location_name"])
-            # print(category_queryset)
             valid_data = {
                 "function_name": request.data["function_name"],
                 "location_id": location_queryset,
@@ -252,8 +262,6 @@ class FunctionViewSet(viewsets.ModelViewSet):
 
             Function_queryset = FunctionService.get_queryset().filter(id=function_id)
             for data in Function_queryset:
-                # location_query = GeoLocation.objects.get(location = request.data["location_name"])
-
                 function = FunctionService.update(data, **valid_data)
                 data = {
                     "id": function.pk,
@@ -262,6 +270,10 @@ class FunctionViewSet(viewsets.ModelViewSet):
         return Response(data)
 
     def function_delete(self, request, function_id):
+        """
+         function to delete function
+        """
+        logger.info(f"request data is {request.data}")
         queryset = FunctionService.get_queryset().filter(id=function_id)
         if queryset:
             queryset.delete()
@@ -277,7 +289,11 @@ class FunctionViewSet(viewsets.ModelViewSet):
             })
 
     @action(detail=False, methods=["post"])
-    def addfunction(self, request, **kwargs):
+    def addfunction(self, request):
+        """
+         function to add details of function
+        """
+        logger.info(f"request data is {request.data}")
         if request.method == 'POST':
             Serializer = self.serializer_class(data=request.data)
             data = {}
@@ -303,7 +319,7 @@ class FunctionViewSet(viewsets.ModelViewSet):
                     return Response(
                         {
                             "Status": status.HTTP_400_BAD_REQUEST,
-                            "Message": "Function allready Exist",
+                            "Message": "Function already Exist",
                         }
                     )
             else:

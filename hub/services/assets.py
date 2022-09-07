@@ -6,7 +6,8 @@ logger = logging.getLogger(__name__)
 
 
 class AssetService:
-    """Service class for Source model.
+    """
+    Service class for Assets model.
     """
 
     @staticmethod
@@ -22,11 +23,11 @@ class AssetService:
         return get_object_or_404(AssetService.get_queryset(), pk=start_datetime)
 
     @staticmethod
-    def asset_filter(id):
+    def asset_filter(asset_id):
         """
         function which extract asset data on location id 
         """
-        filtered_data = AssetService.get_queryset().filter(function_id=id)
+        filtered_data = AssetService.get_queryset().filter(function_id=asset_id)
         return filtered_data
 
     @staticmethod

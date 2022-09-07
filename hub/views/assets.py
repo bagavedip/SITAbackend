@@ -1,7 +1,7 @@
 import csv
 import codecs
-from unicodedata import category
-from django.db import transaction
+import logging
+
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -21,6 +21,8 @@ from django.db import transaction
 from django.core.files.storage import FileSystemStorage
 
 fs = FileSystemStorage(location="tmp/")
+
+logger = logging.getLogger(__name__)
 
 
 class AssetViewSet(viewsets.ModelViewSet):
@@ -47,9 +49,11 @@ class AssetViewSet(viewsets.ModelViewSet):
         return serializer.validated_data
 
     @action(detail=False, methods=["post"])
-    def addasset(self, request, **kwargs):
+    def addasset(self, request):
+        """
+         Function to add assets in admin
+        """
         if request.method == 'POST':
-            print(request.data)
             Serializer = AssetSerializer(data=request.data)
             data = {}
             if Serializer.is_valid():
@@ -93,21 +97,14 @@ class AssetViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def validate_asset_csv(self, request):
-        # """Upload data from CSV, with validation."""
+        """
+        Function to validate asset csv file.
+        """
         file = request.FILES.get("File")
-        print(request)
-        # df = pd.read_csv(file)
-        # new_df = df.isnull()
-        # print(new_df)
-
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
-        cate_data = {}
         serializer = AssetSerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
-            print(data)
             return Response({
                 "Status": status.HTTP_200_OK,
                 "Message": "Validation Successful",
@@ -115,7 +112,6 @@ class AssetViewSet(viewsets.ModelViewSet):
             }
             )
         else:
-            print("failed")
             asset_err = serializer.errors
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
@@ -126,21 +122,19 @@ class AssetViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def upload_asset(self, request):
-        """Upload data from CSV, with validation."""
+        """
+        Upload data from CSV, with validation.
+        """
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        print(data)
-        cate_data = {}
         serializer = AssetSerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
             asset_list = []
             for row in serializer.data:
                 category_queryset = Category.objects.get(category=row["category_name"])
                 function_queryset = Function.objects.get(function_name=row["function_name"])
-                # print(category_queryset)
                 asset_list.append(
                     Assets(
                         AssetName=row["AssetName"],
@@ -159,7 +153,6 @@ class AssetViewSet(viewsets.ModelViewSet):
             )
         else:
             asset_err = serializer.errors
-            # print(asset_err)
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
                 "Message": serializer.errors,
@@ -167,10 +160,14 @@ class AssetViewSet(viewsets.ModelViewSet):
             }
             )
 
-    def asset(self, requset):
+    def asset(self, request):
+        """
+         Function returns asset record.
+        """
+        logger.info(f"request data is{request.data}")
         queryset = AssetService.get_queryset().select_related('function_id', 'function_id__location_id',
                                                               'function_id__location_id__entity_id')
-        Total_assets = []
+        total_assets = []
         for asset in queryset:
             data = ({
                 "id": asset.id,
@@ -183,15 +180,19 @@ class AssetViewSet(viewsets.ModelViewSet):
                 "Created_date": asset.created,
             })
 
-            Total_assets.append(data)
+            total_assets.append(data)
         return Response(
             {
                 "Status": "Success",
-                "Data": Total_assets,
+                "Data": total_assets,
             }
         )
 
-    def single_asset(self, requset, asset_id):
+    def single_asset(self, request, asset_id):
+        """
+         Function used for details of single asset
+        """
+        logger.info(f"request data is{request.data}")
         queryset = AssetService.get_queryset().filter(id=asset_id).select_related('category', 'function_id',
                                                                                   'function_id__location_id',
                                                                                   'function_id__location_id__entity_id')
@@ -223,11 +224,9 @@ class AssetViewSet(viewsets.ModelViewSet):
         """
         serializer = AssetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
         with transaction.atomic():
             category_queryset = Category.objects.get(category=request.data["category_name"])
             function_queryset = Function.objects.get(function_name=request.data["function_name"])
-            # print(category_queryset)
             valid_data = {
                 "AssetName": request.data["AssetName"],
                 "category": category_queryset,
@@ -245,6 +244,10 @@ class AssetViewSet(viewsets.ModelViewSet):
         return Response(data)
 
     def asset_delete(self, request, asset_id):
+        """
+         Function used to delete an asset record.
+        """
+        logger.info(f"request data is {request.data}")
         queryset = AssetService.get_queryset().filter(id=asset_id)
         if queryset:
             queryset.delete()
@@ -260,7 +263,11 @@ class AssetViewSet(viewsets.ModelViewSet):
             })
 
     @action(detail=False, methods=["get"])
-    def asset_types(self, requset):
+    def asset_types(self, request):
+        """
+         Function used to get details of asset types.
+        """
+        logger.info(f"request data is {request.data}")
         queryset = AssetService.get_queryset()
 
         Total_assets = []
@@ -278,7 +285,11 @@ class AssetViewSet(viewsets.ModelViewSet):
             }
         )
 
-    def offence_asset_types(self, requset):
+    def offence_asset_types(self, request):
+        """
+         Function to get details of offence and asset type.
+        """
+        logger.info(f"request data is {request.data}")
         queryset = AssetService.get_queryset()
 
         asset_types = dict()

@@ -4,6 +4,9 @@ from hub.constants.oei_filters import Map
 
 
 class OeiSerializer:
+    """
+     Serializer for OEI(ITSM) models
+    """
     def __init__(self, request) -> None:
         self.request_filters = []
         self.model_group_map = []

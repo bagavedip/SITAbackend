@@ -2,12 +2,14 @@ from hub.constants import constants
 
 
 class TicketDetailsSerializer:
+    """
+     Serializer for Ticket Details for Insights(Hub)
+    """
 
     def __init__(self, request) -> None:
         
         request_data = request.data
-        
-        print('Request Data is', request_data)
+
         self.start_date = request_data.get('fromDate')
         self.end_date = request_data.get('toDate')
         region = request_data.get('region')
@@ -25,7 +27,6 @@ class TicketDetailsSerializer:
         for key in constants.INSIGHT_TABLE_HEADER.keys():
             self.select_cols.append(constants.INSIGHT_TABLE_HEADER.get(key))
             self.columns_headers.append(key)
-        
 
     def get_response(self, data):
         col_headers = []
@@ -49,7 +50,7 @@ class TicketDetailsSerializer:
             "gridSelectedFilter": {
                 "startDate": self.start_date,
                 "endDate": self.end_date,
-                "selectedDropdownFiters":[]
+                "selectedDropdownFiters": []
             },
             "gridAddOn": {
                 "showFirstColumnAsCheckbox": True,

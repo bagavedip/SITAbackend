@@ -1,5 +1,7 @@
 import csv
 import codecs
+import logging
+
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -16,7 +18,8 @@ from hub.services.geolocations import GeoLocationService
 from hub.services.itsm import ITSMService
 from hub.services.siem import SIEMService
 from hub.services.soar import SOARService
-from hub.services.entity import EntityService
+
+logger = logging.getLogger(__name__)
 
 
 class GeoLocationViewSet(viewsets.ModelViewSet):
@@ -24,9 +27,11 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
 
     serializer_class = GeoLocationSerializer
 
-    # queryset = GeoLocationService.get_queryset()
-
     def geo_locations(self, request):
+        """
+         function to get details of geo_location
+        """
+        logger.info(f"request data is {request.data}")
         queryset = GeoLocationService.get_queryset().select_related('entity_id')
         dataset = []
         for location in queryset:
@@ -44,6 +49,10 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
         )
 
     def single_geo_locations(self, request, location_id):
+        """
+         function to get details single record of geo_location
+        """
+        logger.info(f"request data is {request.data}")
         queryset = GeoLocationService.get_queryset().filter(id=location_id).select_related('entity_id')
         if queryset:
             dataset = []
@@ -67,6 +76,10 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
             })
 
     def offence_location(self, request):
+        """
+         function to get combine details of offence and location
+        """
+        logger.info(f"request data is {request.data}")
         queryset = GeoLocationService.get_queryset()
         location_offences = dict()
         for location in queryset.values():
@@ -91,7 +104,11 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
         )
 
     @action(detail=False, methods=["post"])
-    def addlocation(self, request, **kwargs):
+    def addlocation(self, request):
+        """
+         function to add location details
+        """
+        logger.info(f"request data is {request.data}")
         if request.method == 'POST':
             Serializer = self.serializer_class(data=request.data)
             data = {}
@@ -132,16 +149,16 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def validate_location(self, request):
+        """
+         function to validate csv file of location
+        """
+        logger.info(f"request data is {request.data}")
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
-        cate_data = {}
         serializer = GeoLocationSerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
-            # print(data)
             return Response({
                 "Status": status.HTTP_200_OK,
                 "Message": "Validation Successful",
@@ -149,7 +166,6 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
             }
             )
         else:
-            # print("failed")
             cate_data = serializer.errors
             return Response({
                 "Status": status.HTTP_406_NOT_ACCEPTABLE,
@@ -160,28 +176,25 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def upload_location(self, request):
-        """Upload data from CSV, with validation."""
+        """
+         function to upload csv file of location
+        """
+        logger.info(f"request data is {request.data}")
         file = request.FILES.get("File")
 
         reader = csv.DictReader(codecs.iterdecode(file, "utf-8"), delimiter=",")
         data = list(reader)
-        # print(data)
-        cate_data = {}
         serializer = GeoLocationSerializer(data=data, many=True)
-        # print(serializer)
         if serializer.is_valid():
             location_list = []
             for row in serializer.data:
-                print(row)
                 entity_queryset = Entity.objects.get(entityname=row["entity_name"])
-                # print(location_queryset)
                 location_list.append(
                     GeoLocation(
                         location=row["location"],
                         entity_id=entity_queryset,
                     )
                 )
-            # print(function_list)
             GeoLocation.objects.bulk_create(location_list)
 
             return Response({
@@ -202,12 +215,11 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["put"])
     def update_location(self, request, location_id):
         """
-            Function to update asset queryset
+         function to update details of location
         """
+        logger.info(f"request data is {request.data}")
         serializer = GeoLocationSerializer(data=request.data)
-        # print(request.data)
         serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
         with transaction.atomic():
             entity_query = Entity.objects.get(entityname=request.data["entity_name"])
             valid_data = {
@@ -234,6 +246,10 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
                 })
 
     def location_delete(self, request, location_id):
+        """
+         function to delete details of location
+        """
+        logger.info(f"request data is {request.data}")
         queryset = GeoLocationService.get_queryset().filter(id=location_id)
         if queryset:
             queryset.delete()

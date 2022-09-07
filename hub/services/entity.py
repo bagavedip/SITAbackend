@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class EntityService:
+    """
+     Services for Entity models
+    """
     
     @staticmethod
     def get_queryset():
@@ -30,4 +33,3 @@ class EntityService:
         entity.save()
 
         return entity
-

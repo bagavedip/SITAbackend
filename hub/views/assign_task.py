@@ -13,15 +13,18 @@ logger = logging.getLogger(__name__)
 class AssignTaskViewset(viewsets.GenericViewSet):
 
     def assign_user(self, request):
+        """
+         Function for assign user for selected incident
+         in grid views.
+        """
         try:
             serializer = AssignUserSerializer(data=request.data)
-            print(serializer, "serializer")
             serializer.is_valid(raise_exception=True)
-            validateddata = serializer.data
+            validated_data = serializer.data
             with transaction.atomic():
-                selectedIncidents = validateddata["selectedIncidents"]
-                userName = validateddata["userName"]
-                assign_user = AssignTaskService.assign_user(selectedIncidents, userName)
+                selected_incidents = validated_data["selectedIncidents"]
+                user_name = validated_data["userName"]
+                assign_user = AssignTaskService.assign_user(selected_incidents, user_name)
             logger.debug("Database transaction finished")
             # response formatting
             response_data = {
@@ -31,4 +34,3 @@ class AssignTaskViewset(viewsets.GenericViewSet):
             return Response(response_data, status=status.HTTP_201_CREATED)
         except IntegrityError:
             return Response("user already assign.")
-

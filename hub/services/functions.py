@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class FunctionService:
+    """
+     Services for Function models
+    """
     
     @staticmethod
     def get_queryset():
@@ -21,8 +24,8 @@ class FunctionService:
         return get_object_or_404(FunctionService.get_queryset(), pk=start_datetime)
 
     @staticmethod
-    def function_filter(id):
-        filtered_data = FunctionService.get_queryset().filter(location_id=id)
+    def function_filter(Location_id):
+        filtered_data = FunctionService.get_queryset().filter(location_id=Location_id)
         return filtered_data
 
     @staticmethod

@@ -5,6 +5,9 @@ from users.models import User
 
 
 class UserSerializer(serializers.Serializer):
+    """
+     Serializer for User Models
+    """
     email = serializers.EmailField(required=True)
     first_name = serializers.CharField(max_length=256, required=False)
     last_name = serializers.CharField(max_length=256, required=False)
@@ -49,7 +52,7 @@ class LoginSerializer(serializers.Serializer):
 
 class AddUserSerializer(serializers.Serializer):
     """
-    Serializer for user email login
+    Serializer for add user
     """
     first_name = serializers.CharField(required=False, max_length=200)
     last_name = serializers.CharField(required=False, max_length=200)
@@ -66,7 +69,7 @@ class AddUserSerializer(serializers.Serializer):
         )
 
     def create(self, validated_data):
-        # create user
+        #  function creates user object
         user = User.objects.create(
             password=validated_data['password'],
             email=validated_data['email'],

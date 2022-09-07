@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class SIEMService:
+    """
+     Services for SIEM models
+    """
     
     @staticmethod
     def get_queryset():
