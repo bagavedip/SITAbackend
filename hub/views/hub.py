@@ -94,62 +94,62 @@ class InsightHub(viewsets.GenericViewSet):
         logger.debug(f"Received request body {request.data}")
 
         serializser = InsightsSerializer(request)
+        try:
+            result = HubService.get_insights(serializser)
+            hirarchial_data = self.convert_data(result)
+            self.update_events(hirarchial_data)
+            incidents_high = serializser.donut_center['High'] if "High" in serializser.donut_center.keys() else 0
+            incidents_medium = serializser.donut_center['Medium'] if "Medium" in serializser.donut_center.keys() else 0
+            incidents_low = serializser.donut_center['Low'] if "Low" in serializser.donut_center.keys() else 0
+            total_incidents = incidents_high + incidents_medium + incidents_low
+            legends = []
+            if total_incidents == 0:
+                return Response(None, status=status.HTTP_201_CREATED)
+            else:
+                final_response = {
+                    "legends": {
+                        "header": request.data.get('filterOptions').get('headerOption'),
+                        "items": legends
+                    },
+                    "doughnutlabel": {
+                        "labels": [
+                            {
+                                "text": "Incidents {total_incidents}".format(total_incidents=total_incidents),
+                                "font": {
+                                    "size": "25"
+                                },
+                                "color": "black"
+                            },
+                            {
+                                "text": "High {high}".format(high=incidents_high),
+                                "font": {
+                                    "size": "25"
+                                },
+                                "color": "red"
+                            },
+                            {
+                                "text": "Medium {Medium}".format(Medium=incidents_medium),
+                                "font": {
+                                    "size": "25"
+                                },
+                                "color": "yellow"
+                            },
+                            {
+                                "text": "Low {Low}".format(Low=incidents_low),
+                                "font": {
+                                    "size": "25"
+                                },
+                                "color": "green"
+                            }
+                        ]
+                    },
+                    "datasets": serializser.datasets
 
-        result = HubService.get_insights(serializser)
+                }
 
-        hirarchial_data = self.convert_data(result)
-
-        self.update_events(hirarchial_data)
-        incidents_high = serializser.donut_center['High'] if "High" in serializser.donut_center.keys() else 0
-        incidents_medium = serializser.donut_center['Medium'] if "Medium" in serializser.donut_center.keys() else 0
-        incidents_low = serializser.donut_center['Low'] if "Low" in serializser.donut_center.keys() else 0
-        total_incidents = incidents_high + incidents_medium + incidents_low
-        legends = []
-        if total_incidents == 0:
+            return Response(final_response, status=status.HTTP_201_CREATED)
+        except AttributeError:
             return Response(None, status=status.HTTP_201_CREATED)
-        else:
-            final_response = {
-                "legends": {
-                    "header": request.data.get('filterOptions').get('headerOption'),
-                    "items": legends
-                },
-                "doughnutlabel": {
-                    "labels": [
-                        {
-                            "text": "Incidents {total_incidents}".format(total_incidents=total_incidents),
-                            "font": {
-                                "size": "25"
-                            },
-                            "color": "black"
-                        },
-                        {
-                            "text": "High {high}".format(high=incidents_high),
-                            "font": {
-                                "size": "25"
-                            },
-                            "color": "red"
-                        },
-                        {
-                            "text": "Medium {Medium}".format(Medium=incidents_medium),
-                            "font": {
-                                "size": "25"
-                            },
-                            "color": "yellow"
-                        },
-                        {
-                            "text": "Low {Low}".format(Low=incidents_low),
-                            "font": {
-                                "size": "25"
-                            },
-                            "color": "green"
-                        }
-                    ]
-                },
-                "datasets": serializser.datasets
-
-            }
-
-        return Response(final_response, status=status.HTTP_201_CREATED)
 
     def insight_tickets(self, request):
         logger.debug(f"Received request body {request.data}")
