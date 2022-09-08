@@ -91,6 +91,9 @@ class InsightHub(viewsets.GenericViewSet):
                 data[key]['events'] = events
 
     def insights_hub(self, request):
+        """
+         Function for Insights(Hub) Donut Chart
+        """
         logger.debug(f"Received request body {request.data}")
 
         serializser = InsightsSerializer(request)
@@ -149,6 +152,9 @@ class InsightHub(viewsets.GenericViewSet):
         return Response(final_response, status=status.HTTP_201_CREATED)
 
     def insight_tickets(self, request):
+        """
+         Function for Insights grid view.
+        """
         logger.debug(f"Received request body {request.data}")
 
         response_obj = TicketDetailsSerializer(request)
@@ -158,6 +164,9 @@ class InsightHub(viewsets.GenericViewSet):
         return Response(response_obj.get_response(data), status=status.HTTP_201_CREATED)
 
     def master_data(self, request):
+        """
+         Dropdown data of Insights grid view
+        """
         logger.debug(f"Received request body {request.data}")
 
         response_obj = MasterDataSerialiser()
@@ -233,6 +242,9 @@ class InsightHub(viewsets.GenericViewSet):
         return Response(response, status=status.HTTP_201_CREATED)
 
     def asset_details(self, request):
+        """
+         Function to get ticket details at Insights.
+        """
         request_data = request.data
         incident = request_data.get("incidentId", None)
         queryset = HubService.asset_details(incident)

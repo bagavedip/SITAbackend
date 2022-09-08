@@ -144,6 +144,9 @@ class ITSMViewSet(viewsets.ModelViewSet):
             )
 
     def get_ticket_id(self, request):
+        """
+         Ticket details of OEI data
+        """
         query_params = request.query_params
         ticket = query_params.get("ticket_id", None)
         data = ITSMService.get_queryset().filter(SIEM_id=ticket)
@@ -152,6 +155,10 @@ class ITSMViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def ticket_dropdown_data(self, request):
+        """
+         Ticket dropdown data for grid view.
+        """
+
         logger.debug(f"Received request body {request.data}")
         response = [
                 {
@@ -282,6 +289,10 @@ class ITSMViewSet(viewsets.ModelViewSet):
         return Response(response, status=status.HTTP_201_CREATED)
 
     def sla_dropdown_data(self, request):
+        """
+         SLA dropdown data for grid view.
+        """
+        logger.info(f"request is {request.data}")
         data = [{
                 "id": "Service",
                 "dropdownoption": [
@@ -307,12 +318,18 @@ class ITSMViewSet(viewsets.ModelViewSet):
         return Response(data, status=status.HTTP_201_CREATED)
 
     def oei_tickets(self, request):
+        """
+         OEI ticket details view.
+        """
         logger.debug(f"Received request body {request.data}")
         response_obj = TicketDetailsSerializer(request)
         data = ITSMService.get_tickets(response_obj)
         return Response(response_obj.get_response(data), status=status.HTTP_201_CREATED)
 
     def ticket_details(self, request):
+        """
+          Functions for details page of OEI tickets
+        """
         request_data = request.data
         ticket = request_data.get("requestId", None)
         queryset = ITSMService.asset_details(ticket)
@@ -364,6 +381,9 @@ class ITSMViewSet(viewsets.ModelViewSet):
             return Response(final_response, status=status.HTTP_201_CREATED)
 
     def incident_close(self, request):
+        """
+         Function to incident close at ticket details page
+        """
         incidentId = request.data.get("incidentId", None)
         data = {
             "status": True
@@ -395,17 +415,27 @@ class ITSMViewSet(viewsets.ModelViewSet):
             return Response({"error": "there is no such selectedIncidents."})
 
     def sla_timeline(self, request):
+        """
+         SLA dropdown data for grid view.
+        """
+        logger.info(f"request is {request.data}")
         serializser = OeiTimeline(request)
         result = ITSMService.oei_sla_timeline(serializser)
         return Response(result, status=status.HTTP_200_OK)
 
     def ticket_timeline(self, request):
+        """
+         Function for time timeline view in OEI(ITSM)
+        """
         serializser = OeiTimeline(request)
         result = ITSMService.oei_ticket_timeline(serializser)
         return Response(result, status=status.HTTP_200_OK)
 
     @staticmethod
     def oei_sla_comment(sla, comment):
+        """
+         Function for OEi sla comment at grid view
+        """
         comments = AddOeiComment(
             ticket_id=sla,
             comment=comment
