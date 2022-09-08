@@ -27,7 +27,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
 
     def convert_data(self, dataset):
         if len(dataset) == 0:
-            return "Empty Result set"
+            pass
         else:
             keys = dataset[0].keys()
             key_var = ""
@@ -35,8 +35,8 @@ class ITSMViewSet(viewsets.ModelViewSet):
 
             key_index = 0
             for key in keys:
-                if key_index < len(keys) -1:
-                    if key_index < len(keys) -2:
+                if key_index < len(keys) - 1:
+                    if key_index < len(keys) - 2:
                         nested_dict_str = "dd(lambda: " + nested_dict_str + ")"
                     key_var = key_var + "[data.get('" + key + "')]"
                     key_index += 1
@@ -324,47 +324,44 @@ class ITSMViewSet(viewsets.ModelViewSet):
         """
         logger.info("Validating data for Log In.")
         serializser = OeiSerializer(request)
-        try:
-            result = ITSMService.get_oei(serializser)
-            hirarchial_data = self.convert_data(result)
-            self.update_events(hirarchial_data)
-            query_data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
-                                             Ending_time__lte=serializser.end_date).count()
-            data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
-                                       Ending_time__lte=serializser.end_date, is_overdue='1').count()
-            total_ticket = query_data
-            legends = []
-            if total_ticket == 0:
-                return Response(None, status=status.HTTP_201_CREATED)
-            else:
-                percentage = round((data * 100) / query_data)
-                Compliance = percentage
-                final_response = {
-                    "charFooter": {
-                        "label": "SLA  Compliance",
-                        "value": str((Compliance)) + "%",
-                        "valueFontColor": "green"
-                    },
-                    "legends": {
-                        "header": request.data.get('filterOptions').get('headerOption'),
-                        "items": legends
-                    },
-                    "doughnutlabel": {
-                        "labels": [
-                            {
-                                "text": "Tickets {total_ticket}".format(total_ticket=total_ticket),
-                                "font": {
-                                    "size": "25"
-                                },
-                                "color": "black"
-                            },
-                        ]
-                    },
-                    "datasets": serializser.datasets
-                }
-                return Response(final_response, status=status.HTTP_201_CREATED)
-        except AttributeError:
+        result = ITSMService.get_oei(serializser)
+        hirarchial_data = self.convert_data(result)
+        self.update_events(hirarchial_data)
+        query_data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
+                                         Ending_time__lte=serializser.end_date).count()
+        data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
+                                   Ending_time__lte=serializser.end_date, is_overdue='1').count()
+        total_ticket = query_data
+        legends = []
+        if total_ticket == 0:
             return Response(None, status=status.HTTP_201_CREATED)
+        else:
+            percentage = round((data * 100) / query_data)
+            Compliance = percentage
+            final_response = {
+                "charFooter": {
+                    "label": "SLA  Compliance",
+                    "value": str((Compliance)) + "%",
+                    "valueFontColor": "green"
+                },
+                "legends": {
+                    "header": request.data.get('filterOptions').get('headerOption'),
+                    "items": legends
+                },
+                "doughnutlabel": {
+                    "labels": [
+                        {
+                            "text": "Tickets {total_ticket}".format(total_ticket=total_ticket),
+                            "font": {
+                                "size": "25"
+                            },
+                            "color": "black"
+                        },
+                    ]
+                },
+                "datasets": serializser.datasets
+            }
+            return Response(final_response, status=status.HTTP_201_CREATED)
 
     def incident_close(self, request):
         incidentId = request.data.get("incidentId", None)
