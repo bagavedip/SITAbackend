@@ -38,6 +38,7 @@ false_positives = ITSMViewSet.as_view({"get": "false_positives"})
 # asset urls
 asset_types = AssetViewSet.as_view({"get": "asset_types"})
 asset = AssetViewSet.as_view({"get": "asset"})
+single_asset = AssetViewSet.as_view({"get": "single_asset"})
 add_asset = AssetViewSet.as_view({"post": "addasset"})
 validate_asset = AssetViewSet.as_view({"post": "validate_asset_csv"})
 upload_asset = AssetViewSet.as_view({"post": "upload_asset"})
@@ -52,6 +53,7 @@ upload_function = FunctionViewSet.as_view({"post": "upload_function"})
 delete_function = FunctionViewSet.as_view({"delete": "function_delete"})
 update_function = FunctionViewSet.as_view({"put": "update_function"})
 functions = FunctionViewSet.as_view({"get": "function"})
+single_function = FunctionViewSet.as_view({"get": "single_function_details"})
 functiondetails = FunctionViewSet.as_view({"get": "functionlocationentity"})
 asset_function = FunctionViewSet.as_view({"get": "function_asset"})
 functions_offence = FunctionViewSet.as_view({"get": "offence_function"})
@@ -63,10 +65,12 @@ upload_location = GeoLocationViewSet.as_view({"post": "upload_location"})
 delete_location = GeoLocationViewSet.as_view({"delete": "location_delete"})
 update_location = GeoLocationViewSet.as_view({"put": "update_location"})
 geo_location = GeoLocationViewSet.as_view({"get": "geo_locations"})
+single_geo_location = GeoLocationViewSet.as_view({"get": "single_geo_locations"})
 offence_location = GeoLocationViewSet.as_view({"get": "offence_location"})
 
 # entity
 entities = EntityViewSet.as_view({"get": "entities"})
+single_entity = EntityViewSet.as_view({"get": "single_entities"})
 add_entity = EntityViewSet.as_view({"post": "addentity"})
 validate_entity = EntityViewSet.as_view({"post": "validate_entity"})
 upload_entity = EntityViewSet.as_view({"post": "upload_entity"})
@@ -85,6 +89,7 @@ add_category = CategoryViewSet.as_view({"post": "addcategory"})
 validate_category = CategoryViewSet.as_view({"post": "validate_category"})
 upload_category = CategoryViewSet.as_view({"post": "upload_category"})
 category_details = CategoryViewSet.as_view({"get": "category_details"})
+single_category = CategoryViewSet.as_view({"get": "single_category_details"})
 delete_category = CategoryViewSet.as_view({"delete": "category_delete"})
 update_category = CategoryViewSet.as_view({"put": "update_category"})
 
@@ -93,6 +98,7 @@ add_process = ProcessViewSet.as_view({"post": "addprocess"})
 validate_process = ProcessViewSet.as_view({"post": "validate_process"})
 upload_process = ProcessViewSet.as_view({"post": "upload_process"})
 process_details = ProcessViewSet.as_view({"get": "process_details"})
+single_process = ProcessViewSet.as_view({"get": "single_process_details"})
 delete_process = ProcessViewSet.as_view({"delete": "process_delete"})
 update_process = ProcessViewSet.as_view({"put": "update_process"})
 
@@ -123,6 +129,7 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/add_asset/", add_asset, name="Add Asset Details"),
     path(r"api/v1/asset_types/", asset_types, name="Asset_Types"),
     path(r"api/v1/asset/", asset, name="Asset_Details"),
+    path(r"api/v1/asset/<int:asset_id>", single_asset, name="Single_Asset_Details"),
     path(r"api/v1/validate_asset/", validate_asset, name="validate Asset Details"),
     path(r"api/v1/upload_asset/", upload_asset, name="Upload Asset File"),
 
@@ -132,11 +139,13 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/delete_category/<int:category_id>", delete_category, name="Delete Category"),
     path(r"api/v1/update_category/<int:category_id>", update_category, name="Update Category"),
     path(r"api/v1/categories/", category_details, name="Category Details"),
+    path(r"api/v1/categories/<int:category_id>", single_category, name="Single Category Details"),
 
     path(r"api/v1/add_process/", add_process, name="Add Process Details"),
     path(r"api/v1/validate_process/", validate_process, name="validate Process Details"),
     path(r"api/v1/upload_process/", upload_process, name="Upload Process Details"),
     path(r"api/v1/process_details/", process_details, name="Process Details"),
+    path(r"api/v1/process_details/<int:process_id>", single_process, name="Single Process Details"),
     path(r"api/v1/delete_process/<int:process_id>", delete_process, name="Delete Process Details"),
     path(r"api/v1/update_process/<int:process_id>", update_process, name="Update Process"),
 
@@ -144,6 +153,7 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/validate_function/", validate_function, name="validate Function Details"),
     path(r"api/v1/upload_function/", upload_function, name="Upload Function Details"),
     path(r"api/v1/function/", functions, name="All Function"),
+    path(r"api/v1/function/<int:function_id>", single_function, name="Single Function"),
     path(r"api/v1/delete_function/<int:function_id>", delete_function, name="Delete Function"),
     path(r"api/v1/update_function/<int:function_id>", update_function, name="Update Function"),
     path(r"api/v1/function_details/", functiondetails, name="All Function Details"),
@@ -155,6 +165,7 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/validate_location/", validate_location, name="validate location Details"),
     path(r"api/v1/upload_location/", upload_location, name="Upload location Details"),
     path(r"api/v1/geo_locations/", geo_location, name="Geo Location"),
+    path(r"api/v1/geo_locations/<int:location_id>", single_geo_location, name="Single Geo Location"),
     path(r"api/v1/delete_location/<int:location_id>", delete_location, name="Delete Geo Location"),
     path(r"api/v1/update_location/<int:location_id>", update_location, name="Update Location"),
 
@@ -164,6 +175,7 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/validate_entity/", validate_entity, name="validate Entity Details"),
     path(r"api/v1/upload_entity/", upload_entity, name="Upload Entity Details"),
     path(r"api/v1/entities/", entities, name="Entities_Data"),
+    path(r"api/v1/entities/<int:entity_id>", single_entity, name="Single Entities_Data"),
     path(r"api/v1/delete_entity/<int:entity_id>", delete_entity, name="Delete Entities Data"),
     path(r"api/v1/update_entity/<int:entity_id>", update_entity, name="Update Entity"),
 
