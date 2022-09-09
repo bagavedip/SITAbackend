@@ -52,8 +52,8 @@ class EntityViewSet(viewsets.ModelViewSet):
         """
         logger.info(f"request data is {request.data}")
         queryset = EntityService.get_queryset().filter(id=entity_id)
+        dataset = []
         if queryset:
-            dataset = []
             for entity in queryset:
                 data = ({
                     "id": entity.id,
