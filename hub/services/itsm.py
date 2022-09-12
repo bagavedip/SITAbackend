@@ -80,11 +80,11 @@ class ITSMService:
             elif query.Priority == "Low":
                 priority = "Green"
                 color = "#00FF00"
-                card_icon = "LimeCaution"
+                card_icon = "OrangeChartLineUp"
             else:
                 priority = "yellow"
                 color = "#FFFF00"
-                card_icon = "yellowCaution"
+                card_icon = "OrangeWait"
             tread_level = {"cardTitle": priority, "textColor": color, "cardSubTitle": "Threat Level",
                            "cardIcon": card_icon}
             card = [tread_level, time_to_close, expected_closure]
