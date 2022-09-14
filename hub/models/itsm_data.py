@@ -26,15 +26,15 @@ class ITSM(models.Model):
     Category = models.CharField(_("Category"), max_length=200, null=True, help_text=_("Category"))
     Subcategory = models.CharField(_("Subcategory"), max_length=200, null=True, help_text=_("Sub Category"))
     Article = models.CharField(_("Article"), max_length=200, null=True, help_text=_("Article"))
-    Affair = models.CharField(_("Affair"), max_length=200, help_text=_("Affair"))
+    Affair = models.CharField(_("Affair"), max_length=200, null=True, help_text=_("Affair"))
     Created_by = models.CharField(_("Created_by"), max_length=200, null=True, help_text=_("Created By"))
     Urgency = models.CharField(_("Urgency"), max_length=200, choices=PriorityValue.choices, null=True,
                                help_text=_("Urgency"))
     Impact = models.CharField(_("Impact"), max_length=200, choices=PriorityValue.choices, null=True,
                               help_text=_("Impact"))
     RequestType = models.CharField(_("RequestType"), max_length=200, null=True, help_text=_("Request Type"))
-    Technician = models.CharField(_("Technician"), max_length=200, null=True, help_text=_("Technician"))
-    Description = models.CharField(_("Description"), max_length=2000, null=True, help_text=_("Description"))
+    Technician = models.CharField(_("Technician"), max_length=2000, null=True, help_text=_("Technician"))
+    Description = models.CharField(_("Description"), max_length=15000, null=True, help_text=_("Description"))
     Site = models.CharField(_("Site"), max_length=200, null=True, help_text=_("Site"))
     Region = models.CharField(_("Region"), max_length=200, null=True, help_text=_("Region"))
     Approval_Status = models.CharField(_("Approval_Status"), max_length=200, null=True, help_text=_("Approval Status"))
@@ -58,20 +58,20 @@ class ITSM(models.Model):
                                            help_text=_("Expiration Time"))
     Ending_time = models.DateTimeField(_("Ending_time"), max_length=200, null=True,
                                        help_text=_("Ending Time"))
-    Time_elapsed = models.DateTimeField(_("Time_elapsed"), max_length=200, null=True,
+    Time_elapsed = models.CharField(_("Time_elapsed"), max_length=200, null=True,
                                         help_text=_("Time Elapsed"))
     Expired_status = models.BooleanField(_("Expired_status"), null=True, help_text=_("Expire Status"))
     Itsm_id = models.CharField(_("Itsm_id"), max_length=200, null=True, help_text=_("ITSM Id"))
     Subject = models.CharField(_("Subject"), max_length=200, null=True, help_text=_("Subject"))
     RequestStatus = models.CharField(_("RequestStatus"), max_length=200, null=True, help_text="Request Status")
     Account = models.CharField(_("Account"), max_length=200, null=True, help_text="Account")
-    Resolution = models.CharField(_("Resolution"), max_length=200, null=True, help_text="Resolution")
-    reopened = models.CharField(_("Reopened"), null=True, max_length=200, help_text="Reopened")
-    RCF = models.BooleanField(_("RCF"), null=True, help_text="RCF")
+    Resolution = models.CharField(_("Resolution"), max_length=10000, null=True, help_text="Resolution")
+    reopened = models.CharField(_("Reopened"), null=True, max_length=2000, help_text="Reopened")
+    RCF = models.CharField(_("RCF"), max_length=200, null=True, help_text="RCF")
     User_On_Behalf_Of_OBO = models.CharField(_("User_On_Behalf_Of_OBO"), max_length=200, null=True,
                                              help_text=_("User_On_Behalf_Of_OBO"))
     total_cost = models.CharField(_("Total_cost"), max_length=200, null=True, help_text=_("Total_cost"))
-    Exchanged_Service = models.CharField(_("Exchanged_Service"), max_length=200, null=True,
+    Exchanged_Service = models.CharField(_("Exchanged_Service"), max_length=2000, null=True,
                                          help_text=_("Exchanged_Service"))
     Sale_order = models.CharField(_("Sale_order"), max_length=200, null=True, help_text=_("Sale_order"))
     number_of_services = models.CharField(_("Number_of_Services"), null=True, max_length=200,
