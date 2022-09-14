@@ -34,7 +34,7 @@ class ITSM(models.Model):
                               help_text=_("Impact"))
     RequestType = models.CharField(_("RequestType"), max_length=200, null=True, help_text=_("Request Type"))
     Technician = models.CharField(_("Technician"), max_length=200, null=True, help_text=_("Technician"))
-    Description = models.CharField(_("Description"), max_length=200, null=True, help_text=_("Description"))
+    Description = models.CharField(_("Description"), max_length=2000, null=True, help_text=_("Description"))
     Site = models.CharField(_("Site"), max_length=200, null=True, help_text=_("Site"))
     Region = models.CharField(_("Region"), max_length=200, null=True, help_text=_("Region"))
     Approval_Status = models.CharField(_("Approval_Status"), max_length=200, null=True, help_text=_("Approval Status"))
