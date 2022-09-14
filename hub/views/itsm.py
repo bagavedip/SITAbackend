@@ -120,6 +120,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
             )
         
     def false_positives(self, request):
+        logger.info(f"request data is {request.data}")
         false_positive = 0
         ITSM_data = ITSMService.get_queryset()
         if ITSM_data:
@@ -430,16 +431,3 @@ class ITSMViewSet(viewsets.ModelViewSet):
         serializser = OeiTimeline(request)
         result = ITSMService.oei_ticket_timeline(serializser)
         return Response(result, status=status.HTTP_200_OK)
-
-    @staticmethod
-    def oei_sla_comment(sla, comment):
-        """
-         Function for OEi sla comment at grid view
-        """
-        comments = AddOeiComment(
-            ticket_id=sla,
-            comment=comment
-        )
-        comments.save()
-        return "Comment Added Successfully"
-    

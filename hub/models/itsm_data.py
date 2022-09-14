@@ -164,4 +164,9 @@ class ITSM(models.Model):
     reopened_id = models.CharField(_("reopened_id"), null=True, max_length=200, help_text=_("reopened_id"))
     false_positives = models.CharField(_("false_positives"), null=True, max_length=200,
                                        help_text=_("false_positives"))
-    comments = models.CharField(_("comments"), null=True, max_length=200, help_text=_("comment for tickets"))
+    SOAR_ID = models.CharField(_("Soar_id"), null=True, max_length=200, help_text=_("soar_id"))
+    due_by_time = models.CharField(_("Due_by_Time"), null=True, max_length=200, help_text=_("Due_by_Time"))
+    is_first_response_overdue = models.CharField(_("Is_First_Respose_Overdue"), null=True, max_length=200,
+                                                 help_text=_("Is_First_Response_Overdue"))
+    target = models.CharField(_("target"), null=True, max_length=200, help_text=_("Target"))
+    group = models.CharField(_("group"), null=True, max_length=200, help_text=_("group"))

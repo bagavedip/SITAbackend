@@ -1,6 +1,5 @@
 import logging
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated

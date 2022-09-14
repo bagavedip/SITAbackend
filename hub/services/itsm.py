@@ -4,6 +4,8 @@ from datetime import timedelta, datetime
 
 from dateutil import relativedelta
 from django.db.models import Count, Q
+
+from hub.models.add_oei_comment import AddOeiComment
 from hub.models.itsm_data import ITSM
 from hub.serializers.oei_timeline import OeiTimeline
 from hub.serializers.oei_serializers import OeiSerializer
@@ -163,17 +165,16 @@ class ITSMService:
         return name
 
     @staticmethod
-    def oei_sla_comment(selectedIncidents, comment):
+    def oei_sla_comment(sla, comment):
         """
-         Functions for OEI sla comments.
+         Function for OEi sla comment at grid view
         """
-        queryset = ITSM.objects.filter(SIEM_id=selectedIncidents)
-        comments = {
-            "comments": comment
-        }
-        for query in queryset:
-            sla_comment = ITSMService.update(query, **comments)
-        return sla_comment
+        comments = AddOeiComment(
+            ticket_id=sla,
+            comment=comment
+        )
+        comments.save()
+        return "Comment Added Successfully"
 
     @staticmethod
     def oei_sla_timeline(response: OeiTimeline):
