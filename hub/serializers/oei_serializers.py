@@ -275,7 +275,7 @@ class OeiSerializer:
             for filter in self.request_filters:
                 col_data = ""
                 for col_name in Map.get_filter(filter).split(','):
-                    col_data = col_data + "-" + row.get(col_name)
+                    col_data = col_data + "-" + row.get(col_name) if row.get(col_name) else ""
                 col_data = col_data[1:]
                 temp_label = col_data
                 filter_vals.append(temp_label)
