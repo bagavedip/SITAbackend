@@ -10,7 +10,7 @@ class SIEM(models.Model):
     offense_source = models.CharField(_("offense_source"), max_length=200, null=True, help_text=_("Offense Source"))
     rule_name = models.CharField(_("rule_name"), max_length=200, null=True, help_text=_("Rule Name"))
     seim_id = models.IntegerField(_("seim_id"), help_text="SIEM Id")
-    description = models.CharField(_("description"), max_length=200, null=True, help_text=_("Description"))
+    description = models.CharField(_("description"), max_length=2000, null=True, help_text=_("Description"))
     last_updated_datetime = models.DateTimeField(_("last_updated_datetime"), max_length=200, null=True,
                                                  help_text=_("Last Updated Date Time"))
     start_datetime = models.DateTimeField(_("start_datetime"), max_length=200, null=True,
@@ -48,8 +48,9 @@ class SIEM(models.Model):
                                                   help_text=_("Local Destination Count"))
     log_sources = models.CharField(_("log_sources"), max_length=200, null=True, help_text=_("Log Sources"))
     magnitude = models.IntegerField(_("magnitude"), null=True, help_text=_("Magnitude"))
-    closing_user = models.IntegerField(_("closing_user"), null=True, help_text=_("Closing User"))
+    closing_user = models.CharField(max_length=200,null= True, help_text="Closing User")
     source_address_ids = models.CharField(_("source_address_ids"), max_length=200, null=True,
                                           help_text=_("Source address ids"))
     local_destination_address_ids = models.CharField(_("local_destination_address_ids"), max_length=200, null=True,
                                                      help_text=_("Local destination address ids"))
+    target = models.CharField(max_length=200, null=True, help_text="target")
