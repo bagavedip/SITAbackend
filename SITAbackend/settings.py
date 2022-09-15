@@ -32,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['devsita.etek.com', 'localhost']
+ALLOWED_HOSTS = ['devsita.etek.com', 'localhost', '20.127.195.117']
 
 
 # Application definition
@@ -66,6 +66,7 @@ TENANT_APPS = (
     "fcm_django",
     # project specific applications
     "users",
+    "extracter",
     "hub",
 )
 
