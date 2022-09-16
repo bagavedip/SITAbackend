@@ -20,8 +20,11 @@ class TicketDetailsSerializer:
         for filter_str in filter_arr:
             filter = filter_str.split("*")[0].split("~")[0]
             filter_key_val = filter.split("=")
-            self.filters[filter_key_val[0]] = filter_key_val[1].split('-')[0]
-
+            if request_data.get("selectedOption") =='Tickets':
+                self.filters[filter_key_val[0]] = filter_key_val[1].split('-')[0]
+            else:
+                self.filters[filter_key_val[0]] = filter_key_val[1]
+                
         self.columns_headers = []
         self.select_cols = []
         for key in oei_constants.INSIGHT_TABLE_HEADER.keys():
