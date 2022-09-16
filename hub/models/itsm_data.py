@@ -56,7 +56,7 @@ class ITSM(models.Model):
     Answer_date = models.DateTimeField(_("Answer_date"), max_length=200, null=True, help_text=_("Answer Date"))
     Expiration_time = models.DateTimeField(_("Expiration_time"), max_length=200, null=True,
                                            help_text=_("Expiration Time"))
-    Ending_time = models.DateTimeField(_("Ending_time"), max_length=200, null=True,
+    ending_time = models.DateTimeField(_("Ending_time"), max_length=200, null=True,
                                        help_text=_("Ending Time"))
     Time_elapsed = models.CharField(_("Time_elapsed"), max_length=200, null=True,
                                         help_text=_("Time Elapsed"))
