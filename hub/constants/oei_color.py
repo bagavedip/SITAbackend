@@ -56,8 +56,8 @@ class ColorMap:
         }
 
         Status = {
-            "open": "#9DBD6F",
-            "backlog": "#6E9537",
+            "Open": "#9DBD6F",
+            "Closed": "#6E9537",
         }
 
         Priority = {
