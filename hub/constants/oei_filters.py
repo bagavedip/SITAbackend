@@ -4,7 +4,7 @@ filter_map = {
     "Category": "category_id,service_category",
     "First_Response_Time": "first_response_time_id,first_response_time",
     "Response_Time": "response_time_id,Resolution",
-    "False_Positives": "false_positives_id,false_positives",
+    "False_Positives": "false_positives_id,RequestType",
     "Reopened": "reopened_id,reopened",
     "Status": "RequestStatus",
     "value0": "is_overdue",
