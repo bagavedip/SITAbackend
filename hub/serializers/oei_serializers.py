@@ -152,13 +152,13 @@ class OeiSerializer:
                     originalData.append(child_item['events'])
                     lable_name = self.datasets[1]['label']
                     columns = Map.get_filter(lable_name)
-                    id_col = columns.split(",")[1]
+                    id_col = columns.split(",")[0]
                     hierarchy.append(
                         parent_hierarchy + "*" + id_col + "=" + child_item['name'] + "~" + str(child_item['events']))
                     labels.append(child_item['name'])
                     id = child_item['name']
                     if '-' in child_item['name']:
-                        id = child_item['name'].split("-")[0]
+                        id = child_item['name'].split("-")[1]
                     backgroundColor.append(ColorMap.get_color(self.datasets[1]['label'], id))
         self.datasets[1]['data'] = data
         self.datasets[1]['originalData'] = originalData
