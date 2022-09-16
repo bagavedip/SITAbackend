@@ -70,6 +70,10 @@ class ITSMService:
                              "cardIcon": "OrangeWait"}
             a = query.CreatedTime
             b = query.sla_completion_time
+            if b:
+                c = a + timedelta(days=int(b))
+            else:
+                c = a
             c = a + timedelta(days=int(b))
             expected_closure = (c - query.CreatedTime)
             time = int(abs(expected_closure).total_seconds() / 3600)
