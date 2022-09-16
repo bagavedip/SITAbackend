@@ -152,7 +152,7 @@ class OeiSerializer:
                     originalData.append(child_item['events'])
                     lable_name = self.datasets[1]['label']
                     columns = Map.get_filter(lable_name)
-                    id_col = columns.split(",")[0]
+                    id_col = columns.split(",")[1]
                     hierarchy.append(
                         parent_hierarchy + "*" + id_col + "=" + child_item['name'] + "~" + str(child_item['events']))
                     labels.append(child_item['name'])
