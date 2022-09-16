@@ -11,14 +11,14 @@ class ColorMap:
     @staticmethod
     def get_color(layer_filter, key):
         SLA = {
-            "Alta": "#165B65",
-            "Baja": "#16293A",
-            "Media": "#437DB1",
+            " Alta": "#165B65",
+            " Baja": "#16293A",
+            " Media": "#437DB1",
         }
 
         value0 = {
-            "0": "#B72A35",
-            "1": "#1DBC36",
+            "false": "#B72A35",
+            "true": "#1DBC36",
         }
 
         Category = {
@@ -61,9 +61,9 @@ class ColorMap:
         }
 
         Priority = {
-            "High": "#B72A35",
-            "Low": "#1DBC36",
-            "Medium": "#F0AE0c"
+            "2. Alta": "#B72A35",
+            "4. Baja": "#1DBC36",
+            "3. Media": "#F0AE0c"
         }
         First_Response_Time = {
             "1": "#ffeee6",
