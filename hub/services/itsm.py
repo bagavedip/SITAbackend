@@ -74,7 +74,7 @@ class ITSMService:
                 c = a + timedelta(days=int(b))
             else:
                 c = a
-            c = a + timedelta(days=int(b))
+                
             expected_closure = (c - query.CreatedTime)
             time = int(abs(expected_closure).total_seconds() / 3600)
             expected_closure = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107",
