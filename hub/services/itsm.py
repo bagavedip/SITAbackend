@@ -79,16 +79,16 @@ class ITSMService:
             time = int(abs(expected_closure).total_seconds() / 3600)
             expected_closure = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107",
                                 "cardSubTitle": "Time to close", "cardIcon": "BlueChartLineUp"}
-            if query.Priority == "4. Alta":
+            if query.Priority == "2. Alta":
                 priority = "RED"
                 color = "#ff0000"
                 card_icon = "RedCaution"
-            elif query.Priority == "2. Baja":
+            elif query.Priority == "4. Baja":
                 priority = "Green"
                 color = "#00FF00"
                 card_icon = "GreenCaution"
             else:
-                priority = "yellow"
+                priority = "Yellow"
                 color = "#FFFF00"
                 card_icon = "OrangeCaution"
             tread_level = {"cardTitle": priority, "textColor": color, "cardSubTitle": "Threat Level",
