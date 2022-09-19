@@ -75,16 +75,16 @@ class HubService:
                              "cardIcon": "OrangeWait"}
             suspicious = {"cardTitle": query.Suspicious, "textColor": "#ffc107", "cardSubTitle": "Risk profile impact",
                           "cardIcon": "OrangeChartLineUp"}
-            if query.priority == "High":
+            if query.priority == "2. Alta":
                 priority = "RED"
                 color = "#ff0000"
                 card_icon = "RedCaution"
-            elif query.priority == "Low":
+            elif query.priority == "4. Baja":
                 priority = "Green"
                 color = "#00FF00"
                 card_icon = "GreenCaution"
             else:
-                priority = "yellow"
+                priority = "Yellow"
                 color = "#FFFF00"
                 card_icon = "OrangeCaution"
             tread_level = {"cardTitle": priority, "textColor": color, "cardSubTitle": "Threat Level",
