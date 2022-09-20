@@ -78,7 +78,7 @@ class ITSMService:
             expected_closure = (c - query.CreatedTime)
             time = int(abs(expected_closure).total_seconds() / 3600)
             expected_closure = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107",
-                                "cardSubTitle": "Time to close", "cardIcon": "BlueChartLineUp"}
+                                "cardSubTitle": "Expected closure", "cardIcon": "BlueChartLineUp"}
             if query.Priority == "2. Alta":
                 priority = "RED"
                 color = "#ff0000"
