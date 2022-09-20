@@ -73,7 +73,7 @@ class HubService:
             time = int(abs(time_to_close).total_seconds()/3600)
             time_to_close = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107", "cardSubTitle": "Time to close",
                              "cardIcon": "OrangeWait"}
-            suspicious = {"cardTitle": query.Suspicious, "textColor": "#ffc107", "cardSubTitle": "Risk profile impact",
+            suspicious = {"cardTitle": query.Suspicious, "textColor": "#ffc107", "cardSubTitle": "Expected closure",
                           "cardIcon": "OrangeChartLineUp"}
             if query.priority == "2. Alta":
                 priority = "RED"
