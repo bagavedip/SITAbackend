@@ -11,7 +11,7 @@ class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     first_name = serializers.CharField(max_length=256, required=False)
     last_name = serializers.CharField(max_length=256, required=False)
-    is_superuser = serializers.BooleanField(default=False, required=False)
+    is_admin = serializers.BooleanField(required=True)
 
     class Meta:
         fields = "__all__"
