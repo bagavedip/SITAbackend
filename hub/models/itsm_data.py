@@ -142,7 +142,7 @@ class ITSM(models.Model):
     Last_update_time = models.DateTimeField(_("Last_update_time"), null=True, help_text=_("Last_update_time"))
     Resolution_time = models.DateTimeField(_("Resolution_time"), null=True, help_text=_("Resolution_time"))
     VIP_user = models.BooleanField(_("VIP_user"), null=True, help_text=_("VIP_user"))
-    SIEM_id = models.CharField(_("SIEM_id"), null=True, max_length=200, help_text=_("SIEM Id"))
+    siem_id = models.CharField(_("SIEM_id"), null=True, max_length=200, help_text=_("SIEM Id"))
     sla_name = models.CharField(_("sla_name"), null=True, max_length=200, help_text=_("sla_name"))
     is_overdue = models.CharField(_("is_overdue"), max_length=200, help_text=_("Overdue Status"), null=True)
     category_id = models.CharField(_("sla_id"), null=True, max_length=200, help_text=_("sla_id"))
