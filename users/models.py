@@ -14,9 +14,10 @@ class User(AbstractUser):
     email = models.EmailField(_("email"), help_text="User email", unique=True, max_length=255)
     first_name = models.CharField(_("first_name"), max_length=50, help_text="first name")
     last_name = models.CharField(_("last_name"), max_length=50, help_text="last_name")
+    is_admin = models.Booleanfield(_("is_admin"), help_text="is_admin")
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []  # Email & Password are required by default.
+    REQUIRED_FIELDS = ['is_admin']  # Email & Password are required by default.
 
     objects = CustomUserManager()
 
