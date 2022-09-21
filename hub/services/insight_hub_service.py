@@ -29,7 +29,7 @@ class HubService:
         response_obj.set_requst_queryset(query_data)
         incidents = (
             Hub.objects.filter(starttime__gte=response_obj.start_date, endtime__lte=response_obj.end_date)
-            .values('criticality').order_by().annotate(events=Sum('events')))
+            .values('priority').order_by().annotate(events=Sum('events')))
         for row in incidents:
             response_obj.donut_center[row.get('priority')] = row.get('events')
         return query_data
