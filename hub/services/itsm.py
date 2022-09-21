@@ -206,12 +206,12 @@ class ITSMService:
                 within_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
                                         CreatedTime__lte=start_date + timedelta(days=1),
-                                        service_category="within sla").count())
+                                        is_overdue= "false").count())
                 within_tickets.append(within_query)
                 outside_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
                                         CreatedTime__lte=start_date + timedelta(days=1),
-                                        service_category="outside sla").count())
+                                        is_overdue= "true").count())
                 outside_tickets.append(outside_query)
 
                 time.append("day"+str(start_date.day))
@@ -225,12 +225,12 @@ class ITSMService:
                 within_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
                                         CreatedTime__lte=(start_date+relativedelta.relativedelta(months=1)),
-                                        service_category="within sla").count())
+                                        is_overdue= "false").count())
                 within_tickets.append(within_query)
                 outside_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
                                         CreatedTime__lte=(start_date+relativedelta.relativedelta(months=1)),
-                                        service_category="outside sla").count())
+                                        is_overdue= "true").count())
                 outside_tickets.append(outside_query)
                 time.append(calendar.month_name[start_date.month])
                 start_date = start_date + relativedelta.relativedelta(months=1)
@@ -245,12 +245,12 @@ class ITSMService:
                 within_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
                                         CreatedTime__lte=(start_date + relativedelta.relativedelta(years=1)),
-                                        service_category="within sla").count())
+                                        is_overdue= "false").count())
                 within_tickets.append(within_query)
                 outside_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
                                         CreatedTime__lte=(start_date + relativedelta.relativedelta(years=1)),
-                                        service_category="outside sla").count())
+                                        is_overdue= "true").count())
                 outside_tickets.append(outside_query)
                 time.append(start_date.year)
                 start_date = start_date + relativedelta.relativedelta(years=1)
