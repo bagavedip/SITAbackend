@@ -84,9 +84,9 @@ class ColorMap:
         }
 
         Criticality = {
-            "High": "#b72a35",
-            "Medium": "#f0ae0c",
-            "Low": "#25ba3c"
+            "2. Alta": "#b72a35",
+            "3. Media": "#f0ae0c",
+            "4. Baja": "#25ba3c"
         }
 
         if layer_filter == 'Entity':
