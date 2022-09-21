@@ -99,9 +99,9 @@ class InsightHub(viewsets.GenericViewSet):
         result = HubService.get_insights(serializser)
         hirarchial_data = self.convert_data(result)
         self.update_events(hirarchial_data)
-        incidents_high = serializser.donut_center['High'] if "High" in serializser.donut_center.keys() else 0
-        incidents_medium = serializser.donut_center['Medium'] if "Medium" in serializser.donut_center.keys() else 0
-        incidents_low = serializser.donut_center['Low'] if "Low" in serializser.donut_center.keys() else 0
+        incidents_high = serializser.donut_center['2. Alta'] if "2. Alta" in serializser.donut_center.keys() else 0
+        incidents_medium = serializser.donut_center['3. Media'] if "3. Media" in serializser.donut_center.keys() else 0
+        incidents_low = serializser.donut_center['4. Baja'] if "4. Baja" in serializser.donut_center.keys() else 0
         total_incidents = incidents_high + incidents_medium + incidents_low
         legends = []
         if total_incidents == 0:
