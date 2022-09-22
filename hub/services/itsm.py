@@ -94,7 +94,7 @@ class ITSMService:
             tread_level = {"cardTitle": priority, "textColor": color, "cardSubTitle": "Threat Level",
                            "cardIcon": card_icon}
             card = [tread_level, time_to_close, expected_closure]
-            incident_details = {"title": "INCIDENT DETAILS",
+            incident_details = {"title": "TICKET DETAILS",
                                 "description": query.Description}
             resolution_status = {
                 "title": "RESOLUTION STATUS",
