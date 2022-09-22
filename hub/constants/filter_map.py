@@ -7,7 +7,7 @@ filter_map = {
     "Function": "function_id,function_name",
     "UseCase": "usecase_id,use_case",
     "Severity": "severity",
-    "Criticality": "criticality"
+    "Criticality": "priority"
 }
 
 
