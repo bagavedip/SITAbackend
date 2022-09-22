@@ -170,7 +170,7 @@ class ColorMap:
             return random.choice(list(False_Positives.values()))
         elif layer_filter == 'First_Response_Time':
             return random.choice(list(First_Response_Time.values()))
-        elif layer_filter == 'Resolution_time':
+        elif layer_filter == 'Response_Time':
             return random.choice(list(Response_Time.values()))
         elif layer_filter == 'Reopened':
             return random.choice(list(Reopened.values()))
