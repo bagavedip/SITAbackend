@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from .functions import Function
 
 class Process(models.Model):
     """
@@ -8,6 +8,8 @@ class Process(models.Model):
     """
     id = models.BigAutoField(_("id"), primary_key=True)
     process = models.CharField(_("process"), max_length=50, null=True, help_text="Process Name")
+    function_id = models.ForeignKey(Function, verbose_name=_("function_id"), on_delete=models.CASCADE,
+                                    help_text=_("Function Name"))
     
     def __str__(self):
         return self.process
