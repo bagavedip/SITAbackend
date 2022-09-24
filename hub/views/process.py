@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from hub.models.process import Process
+from hub.models.functions import Function
 from hub.serializers.process import ProcessSerializer
 from hub.services.process import ProcessService
 
@@ -27,11 +28,15 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         logger.info(f"request data is {request.data}")
         serializer = ProcessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
         with transaction.atomic():
+            function_queryset = Function.objects.get(function_name = request.data["function_name"])
+            valid_data = {
+                "process":request.data["process"],
+                "function_id":function_queryset
+            }
             process_queryset = ProcessService.get_queryset().filter(id=process_id)
             for data in process_queryset:
-                process = ProcessService.update(data, **validated_data)
+                process = ProcessService.update(data, **valid_data)
                 data = {
                     "id": process.pk,
                     "Process Name": process.process,
@@ -68,9 +73,15 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             data = {}
             if Serializer.is_valid():
                 if not ProcessService.get_queryset().filter(process__iexact=request.data["process"]).exists():
-                    process = Serializer.save()
-                    data["Id"] = process.id
-                    data['Process'] = process.process
+                    function_queryset = Function.objects.get(function_name=request.data["function_name"])
+                    process_list = Process(
+                        process = request.data["process"],
+                        function_id = function_queryset
+                    )
+                    process_list.save()
+                    data["Id"] = process_list.id
+                    data['Process'] = process_list.process
+                    data['Function'] = process_list.function_id_id
                     return Response(
                         {
                             "Status": status.HTTP_200_OK,
@@ -138,9 +149,11 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         if serializer.is_valid():
             process_list = []
             for row in serializer.data:
+                function_queryset = Function.objects.get(function_name=row["function_name"])
                 process_list.append(
                     Process(
                         process=row["process"],
+                        function_id = function_queryset
                     )
                 )
             Process.objects.bulk_create(process_list)
@@ -170,7 +183,13 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         for data in queryset:
             query_data = ({
                 "Id": data.id,
-                "Process": data.process
+                "Process": data.process,
+                "Function_id": data.function_id.id,
+                "Function_name":data.function_id.function_name,
+                "Location_id": data.function_id.location_id.id,
+                "Location": data.function_id.location_id.location,
+                "Entity_id": data.function_id.location_id.entity_id.id,
+                "Entity": data.function_id.location_id.entity_id.entityname,
             })
             queryset_details.append(query_data)
 
@@ -192,7 +211,9 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             for data in queryset:
                 query_data = ({
                     "Id": data.id,
-                    "Process": data.process
+                    "Process": data.process,
+                    "Function_id":data.function_id.id,
+                    "Function_name":data.function_id.function_name
                 })
                 queryset_details.append(query_data)
 
