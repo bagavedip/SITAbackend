@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from hub.models.category import Category
-from .functions import Function
+from .process import Process
 
 
 class Assets(models.Model):
