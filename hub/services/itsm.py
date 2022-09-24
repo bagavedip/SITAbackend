@@ -189,7 +189,7 @@ class ITSMService:
             request_filter = filter_data
         for filter_data in response.header_filters:
             header_filter = filter_data
-        filters = (request_filter + "-" + header_filter)
+        filters = ("Time-line view of "+request_filter+" - "+header_filter)
         start_time = datetime.strptime(response.start_date, '%Y-%m-%d')
         end_time = datetime.strptime(response.end_date, '%Y-%m-%d')
         total_days = int((end_time - start_time).days)
@@ -200,9 +200,9 @@ class ITSMService:
         outside_tickets = []
         dataset = []
         if total_days <= 31:
-            title1 = "Day"+str(start_date.day)
-            title2 = "Day"+str(end_time.day)
-            for x in range(0, delta.days+1):
+            title1 = calendar.month_name[start_date.month]+str(start_date.day)
+            title2 = calendar.month_name[end_time.month]+str(end_time.day)
+            for x in range(0, total_days+1):
                 within_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
                                         CreatedTime__lte=start_date + timedelta(days=1),
@@ -214,7 +214,7 @@ class ITSMService:
                                         is_overdue= "true").count())
                 outside_tickets.append(outside_query)
 
-                time.append("day"+str(start_date.day))
+                time.append(calendar.month_name[start_date.month]+str(start_date.day))
                 start_date = start_date + timedelta(days=1)
         if 365 >= total_days > 31:
             if delta.days:
@@ -285,13 +285,13 @@ class ITSMService:
                 "categoryPercentage": 0.4,
                 "scaleLabelofYaxis": {
                     "display": "true",
-                    "labelString": "Incidents",
+                    "labelString": "Tickets",
                     "fontStyle": "bold",
                     "fontSize": 14
                 },
                 "scaleLabelofXaxis": {
                     "display": "true",
-                    "labelString": "Time",
+                    "labelString": "Time-Period",
                     "fontStyle": "bold",
                     "fontSize": 14
                 }
@@ -309,7 +309,7 @@ class ITSMService:
             request_filter = filter_data
         for filter_data in response.header_filters:
             header_filter = filter_data
-        filters = (request_filter + "-" + header_filter)
+        filters = ("Time-line view of "+request_filter+" - "+header_filter)
         start_time = datetime.strptime(response.start_date, '%Y-%m-%d')
         end_time = datetime.strptime(response.end_date, '%Y-%m-%d')
         total_days = int((end_time - start_time).days)
@@ -319,15 +319,15 @@ class ITSMService:
         time = []
         dataset = []
         if total_days <= 31:
-            title1 = "Day"+str(start_date.day)
-            title2 = "Day"+str(end_time.day)
-            for x in range(0, delta.days+1):
+            title1 = calendar.month_name[start_date.month]+str(start_date.day)
+            title2 = calendar.month_name[end_time.month]+str(end_time.day)
+            for x in range(0, total_days+1):
                 query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
                                         CreatedTime__lte=start_date + timedelta(days=1)).count()
                 )
                 tickets.append(query)
-                time.append("day"+str(start_date.day))
+                time.append(calendar.month_name[start_date.month]+str(start_date.day))
                 start_date = start_date + timedelta(days=1)
         if 365 >= total_days > 31:
             if delta.days:
@@ -379,13 +379,13 @@ class ITSMService:
                 "categoryPercentage": 0.4,
                 "scaleLabelofYaxis": {
                     "display": "true",
-                    "labelString": "Incidents",
+                    "labelString": "Tickets",
                     "fontStyle": "bold",
                     "fontSize": 14
                 },
                 "scaleLabelofXaxis": {
                     "display": "true",
-                    "labelString": "Time",
+                    "labelString": "Time-Period",
                     "fontStyle": "bold",
                     "fontSize": 14
                 }
