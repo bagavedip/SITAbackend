@@ -20,8 +20,8 @@ class Assets(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, help_text="Asset Category")
     criticality = models.CharField(_("criticality"), max_length=100, choices=Criticalities.choices,
                                    default="Low", help_text=_("Criticality"))
-    function_id = models.ForeignKey(Function, verbose_name=_("function_id"), on_delete=models.CASCADE,
-                                    help_text=_("Function Name"))
+    process_id = models.ForeignKey(Process, verbose_name=_("process_id"), on_delete=models.CASCADE,
+                                    help_text=_("Process Name"))
     created = models.DateField(_("created"), null=True, auto_now_add=True, help_text=_("created"))
 
     def __str__(self):
