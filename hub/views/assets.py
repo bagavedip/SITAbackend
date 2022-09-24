@@ -7,6 +7,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+
+from hub.models.process import Process
 from ..models.functions import Function
 from ..models.category import Category
 
@@ -58,19 +60,19 @@ class AssetViewSet(viewsets.ModelViewSet):
             data = {}
             if Serializer.is_valid():
                 if not AssetService.get_queryset().filter(AssetName__iexact=request.data["AssetName"]).exists():
-                    function_query = Function.objects.get(function_name=request.data["function_name"])
+                    process_query = Process.objects.get(process=request.data["process"])
                     category_query = Category.objects.get(category=request.data["category_name"])
                     asset_list = Assets(
                         AssetName=request.data["AssetName"],
                         category=category_query,
-                        function_id=function_query,
+                        process_id=process_query,
                         criticality=request.data["criticality"],
                     )
                     asset_list.save()
                     data['Asset_Name'] = asset_list.AssetName
                     data['Category'] = asset_list.category_id
                     data['Criticality'] = asset_list.criticality
-                    data['Function_Id'] = asset_list.function_id_id
+                    data['Process_Id'] = asset_list.process_id_id
                     return Response(
                         {
                             "Status": status.HTTP_200_OK,
@@ -134,13 +136,13 @@ class AssetViewSet(viewsets.ModelViewSet):
             asset_list = []
             for row in serializer.data:
                 category_queryset = Category.objects.get(category=row["category_name"])
-                function_queryset = Function.objects.get(function_name=row["function_name"])
+                process_queryset = Process.objects.get(process=row["process"])
                 asset_list.append(
                     Assets(
                         AssetName=row["AssetName"],
                         category=category_queryset,
                         criticality=row["criticality"],
-                        function_id=function_queryset,
+                        process_id=process_queryset,
                     )
                 )
             Assets.objects.bulk_create(asset_list)
@@ -165,8 +167,8 @@ class AssetViewSet(viewsets.ModelViewSet):
          Function returns asset record.
         """
         logger.info(f"request data is{request.data}")
-        queryset = AssetService.get_queryset().select_related('function_id', 'function_id__location_id',
-                                                              'function_id__location_id__entity_id')
+        queryset = AssetService.get_queryset().select_related('process_id', 'process_id__function_id','process_id__function_id__location_id',
+                                                              'process_id__function_id__location_id__entity_id')
         total_assets = []
         for asset in queryset:
             data = ({
@@ -174,9 +176,10 @@ class AssetViewSet(viewsets.ModelViewSet):
                 "Asset_Name": asset.AssetName,
                 "Category": asset.category.category,
                 "Criticality": asset.criticality,
-                "Function_Name": asset.function_id.function_name,
-                "Location": asset.function_id.location_id.location,
-                "Entity": asset.function_id.location_id.entity_id.entityname,
+                "Process_Name": asset.process_id.process,
+                "Function_Name": asset.process_id.function_id.function_name,
+                "Location": asset.process_id.function_id.location_id.location,
+                "Entity": asset.process_id.function_id.location_id.entity_id.entityname,
                 "Created_date": asset.created,
             })
 
@@ -193,9 +196,9 @@ class AssetViewSet(viewsets.ModelViewSet):
          Function used for details of single asset
         """
         logger.info(f"request data is{request.data}")
-        queryset = AssetService.get_queryset().filter(id=asset_id).select_related('category', 'function_id',
-                                                                                  'function_id__location_id',
-                                                                                  'function_id__location_id__entity_id')
+        queryset = AssetService.get_queryset().filter(id=asset_id).select_related('category', "process_id",'process_id__function_id',
+                                                                                  'process_id__function_id__location_id',
+                                                                                  'process_id__function_id__location_id__entity_id')
         Total_assets = []
         for asset in queryset:
             data = ({
@@ -203,9 +206,10 @@ class AssetViewSet(viewsets.ModelViewSet):
                 "Asset_Name": asset.AssetName,
                 "Category": asset.category.category,
                 "Criticality": asset.criticality,
-                "Function_Name": asset.function_id.function_name,
-                "Location": asset.function_id.location_id.location,
-                "Entity": asset.function_id.location_id.entity_id.entityname,
+                "Process_Name": asset.process_id.process,
+                "Function_Name": asset.process_id.function_id.function_name,
+                "Location": asset.process_id.function_id.location_id.location,
+                "Entity": asset.process_id.function_id.location_id.entity_id.entityname,
                 "Created_date": asset.created,
             })
 
@@ -226,11 +230,11 @@ class AssetViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():
             category_queryset = Category.objects.get(category=request.data["category_name"])
-            function_queryset = Function.objects.get(function_name=request.data["function_name"])
+            process_queryset = Process.objects.get(process=request.data["process"])
             valid_data = {
                 "AssetName": request.data["AssetName"],
                 "category": category_queryset,
-                "function_id": function_queryset,
+                "process_id": process_queryset,
                 "criticality": request.data["criticality"]
             }
 
