@@ -7,7 +7,7 @@ class AssetSerializer(serializers.ModelSerializer):
     Model serializer for Asset information
     """
     category_name = serializers.CharField(source='category.category')
-    function_name = serializers.CharField(source='function_id.function_name')
+    process = serializers.CharField(source='process_id.process')
 
     class Meta:
         model = Assets
@@ -15,5 +15,5 @@ class AssetSerializer(serializers.ModelSerializer):
             "AssetName",
             "category_name",
             "criticality",
-            "function_name",
+            "process",
         )
