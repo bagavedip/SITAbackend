@@ -1,6 +1,7 @@
 import csv
 import codecs
 import logging
+from datetime import datetime
 
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
@@ -8,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from hub.models.category import Category
+from hub.services.assets import AssetService
 from hub.serializers.category import CategorySerializer
 from hub.services.category import CategoryService
 
@@ -138,14 +140,20 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
          Function is used to delete category
         """
         logger.info(f"requested data is{request.data}")
-        queryset = CategoryService.get_queryset().filter(id=category_id)
-        if queryset:
-            queryset.delete()
-            message = f"Record deleted for id {category_id}"
-            Status = status.HTTP_200_OK
+        asset_queryset = AssetService.get_queryset.filter(category = category_id)
+        if asset_queryset:
+            message = f"Asset is connected to this Category {category_id}"
+            Status = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
-            message = f"Record not found for id {category_id}"
-            Status = status.HTTP_404_NOT_FOUND
+            queryset = Category.objects.get(id=category_id)
+            if queryset:
+                queryset.end_date = datetime.now()
+                queryset.save()
+                message = f"Record deleted for id {category_id}"
+                Status = status.HTTP_200_OK
+            else:
+                message = f"Record not found for id {category_id}"
+                Status = status.HTTP_404_NOT_FOUND
         return Response(
             {
                 "Status": Status,
@@ -157,7 +165,7 @@ class CategoryViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
          Function used to get details of category
         """
         logger.info(f"requested data is{request.data}")
-        queryset = CategoryService.get_queryset()
+        queryset = CategoryService.get_queryset().filter(end_date__isnull = True)
         queryset_details = []
         for data in queryset:
             query_data = ({
