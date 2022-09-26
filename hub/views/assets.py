@@ -167,7 +167,7 @@ class AssetViewSet(viewsets.ModelViewSet):
          Function returns asset record.
         """
         logger.info(f"request data is{request.data}")
-        queryset = AssetService.get_queryset().select_related('process_id', 'process_id__function_id','process_id__function_id__location_id',
+        queryset = AssetService.get_queryset().filter(end_date__isnull = True).select_related('process_id', 'process_id__function_id','process_id__function_id__location_id',
                                                               'process_id__function_id__location_id__entity_id')
         total_assets = []
         for asset in queryset:
@@ -252,9 +252,10 @@ class AssetViewSet(viewsets.ModelViewSet):
          Function used to delete an asset record.
         """
         logger.info(f"request data is {request.data}")
-        queryset = AssetService.get_queryset().filter(id=asset_id)
+        queryset = Assets.objects.get(id=asset_id)
         if queryset:
-            queryset.delete()
+            queryset.end_date = datetime.now()
+            queryset.save()
             message = f"Record deleted for id {asset_id}"
             Status = status.HTTP_200_OK
         else:
