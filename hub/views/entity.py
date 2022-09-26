@@ -1,6 +1,7 @@
 import csv
 import codecs
 import logging
+from datetime import datetime
 
 from django.db import transaction
 from rest_framework import status, viewsets
@@ -31,7 +32,7 @@ class EntityViewSet(viewsets.ModelViewSet):
          Function to get details of entity.
         """
         logger.info(f"request data is {request.data}")
-        queryset = EntityService.get_queryset()
+        queryset = EntityService.get_queryset().filter(end_date__isnull = True)
         dataset = []
         for entity in queryset:
             data = ({
@@ -394,14 +395,20 @@ class EntityViewSet(viewsets.ModelViewSet):
          Function to delete entity
         """
         logger.info(f"request data is {request.data}")
-        queryset = EntityService.get_queryset().filter(id=entity_id)
-        if queryset:
-            queryset.delete()
-            message = f"Record deleted for id {entity_id}"
-            Status = status.HTTP_200_OK
+        location_queryset = GeoLocationService.get_queryset.filetr(entity_id = entity_id)
+        if location_queryset:
+            Status = status.HTTP_405_METHOD_NOT_ALLOWED
+            message = f"Location is connected to this Entity {entity_id}"
         else:
-            message = f"Record not found for id {entity_id}"
-            Status = status.HTTP_404_NOT_FOUND
+            queryset = Entity.objects.get(id=entity_id)
+            if queryset:
+                queryset.end_date = datetime.now()
+                queryset.save()
+                message = f"Record deleted for id {entity_id}"
+                Status = status.HTTP_200_OK
+            else:
+                message = f"Record not found for id {entity_id}"
+                Status = status.HTTP_404_NOT_FOUND
         return Response(
             {
                 "Status": Status,
