@@ -5,7 +5,7 @@ from dateutil import relativedelta
 from hub.models.add_comment import AddComment
 from hub.models.assign_task import AssignTask
 from hub.models.hub import Hub
-from django.db.models import Sum
+from django.db.models import Sum, Count
 
 from hub.serializers.hub import InsightsSerializer
 from hub.serializers.hub_timeline import HubTimeline
@@ -25,11 +25,11 @@ class HubService:
     def get_insights(response_obj: InsightsSerializer):
         query_data = (
             Hub.objects.filter(starttime__gte=response_obj.start_date, endtime__lte=response_obj.end_date).
-            values(*response_obj.model_group_map).order_by().annotate(events=Sum('events')))
+            values(*response_obj.model_group_map).order_by().annotate(events=Count('itsm_id')))
         response_obj.set_requst_queryset(query_data)
         incidents = (
             Hub.objects.filter(starttime__gte=response_obj.start_date, endtime__lte=response_obj.end_date)
-            .values('priority').order_by().annotate(events=Sum('events')))
+            .values('priority').order_by().annotate(events=Count('itsm_id')))
         for row in incidents:
             response_obj.donut_center[row.get('priority')] = row.get('events')
         return query_data
