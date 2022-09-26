@@ -1,6 +1,7 @@
 import csv
 import codecs
 import logging
+from datetime import datetime
 
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +12,7 @@ from hub.models.process import Process
 from hub.models.functions import Function
 from hub.serializers.process import ProcessSerializer
 from hub.services.process import ProcessService
+from hub.services.assets import AssetService
 
 logger = logging.getLogger(__name__)
 
@@ -48,14 +50,20 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
          function to delete details of process
         """
         logger.info(f"request data is {request.data}")
-        queryset = ProcessService.get_queryset().filter(id=process_id)
-        if queryset:
-            queryset.delete()
-            message = f"Record deleted for id {process_id}"
-            Status = status.HTTP_200_OK
+        asset_queryset = AssetService.get_queryset().filter(process_id = process_id)
+        if asset_queryset:
+            message = f"Asset is connected to this Procees {process_id}"
+            Status = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
-            message = f"Record not found for id {process_id}"
-            Status = status.HTTP_404_NOT_FOUND
+            queryset = Process.objects.get(id=process_id)
+            if queryset:
+                queryset.end_date = datetime.now()
+                queryset.save()
+                message = f"Record deleted for id {process_id}"
+                Status = status.HTTP_200_OK
+            else:
+                message = f"Record not found for id {process_id}"
+                Status = status.HTTP_404_NOT_FOUND
         return Response(
             {
                 "Status": Status,
@@ -178,7 +186,7 @@ class ProcessViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
          function to get details of process
         """
         logger.info(f"request data is {request.data}")
-        queryset = ProcessService.get_queryset()
+        queryset = ProcessService.get_queryset().filter(end_date__isnull = True)
         queryset_details = []
         for data in queryset:
             query_data = ({
