@@ -23,6 +23,7 @@ class Assets(models.Model):
     process_id = models.ForeignKey(Process, verbose_name=_("process_id"), on_delete=models.CASCADE,
                                     help_text=_("Process Name"))
     created = models.DateField(_("created"), null=True, auto_now_add=True, help_text=_("created"))
+    end_date = models.DateField(_("end_date"), null=True, help_text=_("Delete Date"))
 
     def __str__(self):
         return self.AssetName
