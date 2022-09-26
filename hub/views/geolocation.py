@@ -1,6 +1,7 @@
 import csv
 import codecs
 import logging
+from datetime import datetime
 
 from django.db import transaction
 from rest_framework import status, viewsets
@@ -32,7 +33,7 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
          function to get details of geo_location
         """
         logger.info(f"request data is {request.data}")
-        queryset = GeoLocationService.get_queryset().select_related('entity_id')
+        queryset = GeoLocationService.get_queryset().filter(end_date__is_null = True).select_related('entity_id')
         dataset = []
         for location in queryset:
             data = {
@@ -250,14 +251,20 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
          function to delete details of location
         """
         logger.info(f"request data is {request.data}")
-        queryset = GeoLocationService.get_queryset().filter(id=location_id)
-        if queryset:
-            queryset.delete()
-            message = f"Record deleted for id {location_id}"
-            Status = status.HTTP_200_OK
+        function_queryset = FunctionService.get_queryset().filter(location_id = location_id)
+        if function_queryset:
+            message = f"Function is connected to this Location {location_id}"
+            Status = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
-            message = f"Record not found for id {location_id}"
-            Status = status.HTTP_404_NOT_FOUND
+            queryset = GeoLocation.objects.get(id=location_id)
+            if queryset:
+                queryset.end_date = datetime.now()
+                queryset.save()
+                message = f"Record deleted for id {location_id}"
+                Status = status.HTTP_200_OK
+            else:
+                message = f"Record not found for id {location_id}"
+                Status = status.HTTP_404_NOT_FOUND
         return Response(
             {
                 "Status": Status,
