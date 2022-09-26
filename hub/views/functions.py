@@ -1,6 +1,7 @@
 import csv
 import codecs
 import logging
+from datetime import datetime
 
 from django.db import transaction
 from rest_framework import status, viewsets
@@ -12,6 +13,7 @@ from ..models.geolocations import GeoLocation
 from ..models.functions import Function
 from hub.serializers.functions import FunctionSerializer
 from hub.services.functions import FunctionService
+from hub.services.process import ProcessService
 from hub.services.assets import AssetService
 from hub.services.itsm import ITSMService
 from hub.services.soar import SOARService
@@ -151,7 +153,7 @@ class FunctionViewSet(viewsets.ModelViewSet):
         try:
             id = request.query_params["id"]
             if id != None:
-                queryset = FunctionService.get_queryset().select_related('location_id',
+                queryset = FunctionService.get_queryset().filter(end_date__isnull = True).select_related('location_id',
                                                                          'location_id__entity_id').filter(id=id)
                 dataset = []
                 for functions in queryset:
@@ -274,14 +276,20 @@ class FunctionViewSet(viewsets.ModelViewSet):
          function to delete function
         """
         logger.info(f"request data is {request.data}")
-        queryset = FunctionService.get_queryset().filter(id=function_id)
-        if queryset:
-            queryset.delete()
-            message = f"Record deleted for id {function_id}"
-            Status = status.HTTP_200_OK
+        process_queryset = ProcessService.get_queryset.filter(function_id = function_id)
+        if process_queryset:
+            message = f"Process is connected to this Function {function_id}"
+            Status = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
-            message = f"Record not found for id {function_id}"
-            Status = status.HTTP_404_NOT_FOUND
+            queryset = Function.objects.get(id=function_id)
+            if queryset:
+                queryset.end_date = datetime.now()
+                queryset.save()
+                message = f"Record deleted for id {function_id}"
+                Status = status.HTTP_200_OK
+            else:
+                message = f"Record not found for id {function_id}"
+                Status = status.HTTP_404_NOT_FOUND
         return Response(
             {
                 "Status": Status,
