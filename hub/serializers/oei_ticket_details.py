@@ -21,7 +21,13 @@ class TicketDetailsSerializer:
             filter = filter_str.split("*")[0].split("~")[0]
             filter_key_val = filter.split("=")
             if request_data.get("selectedOption") =='Tickets':
-                self.filters[filter_key_val[0]] = filter_key_val[1].split('-')[0]
+                for childfilters in request_data.get("selectedFilter"):
+                    if childfilters == 'First_Response_Time':
+                        self.filters[filter_key_val[0]] = filter_key_val[1]
+                    elif childfilters == "Response_Time":
+                        self.filters[filter_key_val[0]] = filter_key_val[1]
+                    else:
+                        self.filters[filter_key_val[0]] = filter_key_val[1].split('-')[0]
             else:
                 self.filters[filter_key_val[0]] = filter_key_val[1]
                 
