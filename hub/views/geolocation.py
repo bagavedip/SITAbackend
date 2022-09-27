@@ -33,7 +33,7 @@ class GeoLocationViewSet(viewsets.ModelViewSet):
          function to get details of geo_location
         """
         logger.info(f"request data is {request.data}")
-        queryset = GeoLocationService.get_queryset().filter(end_date__is_null = True).select_related('entity_id')
+        queryset = GeoLocationService.get_queryset().filter(end_date__isnull = True).select_related('entity_id')
         dataset = []
         for location in queryset:
             data = {
