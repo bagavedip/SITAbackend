@@ -161,131 +161,84 @@ class ITSMViewSet(viewsets.ModelViewSet):
         """
 
         logger.debug(f"Received request body {request.data}")
+        categories = ITSM.objects.values_list('is_overdue').distinct()
+        category_dropdown = [{
+                        "value": "Select",
+                        "label": "Category"
+                    }]
+        priorities = ITSM.objects.values_list('Priority').distinct()
+        priority_dropdown = [{
+                        "value": "Select",
+                        "label": "Priority"
+                    }]
+        statuses = ITSM.objects.values_list('RequestStatus').distinct()
+        status_dropdown = [{
+                        "value": "Select",
+                        "label": "Status"
+                    }]
+        reopened = ITSM.objects.values_list('reopened').distinct()
+        reopened_dropdown = [{
+                        "value": "Select",
+                        "label": "Reopened"
+                    }]
+        for category in categories:
+            new_category = {"value":category,
+                        "label":category}
+            category_dropdown.append(new_category)
+        for priority in priorities:
+            new_priority = {"value":priority,
+                        "label":priority}
+            priority_dropdown.append(new_priority)
+        for s in statuses:
+            new_status = {"value":s,
+                        "label":s}
+            status_dropdown.append(new_status)
+        for reopen in reopened:
+            new_reopened = {"value":reopen,
+                        "label":reopen}
+            reopened_dropdown.append(new_reopened)
+        
         response = [
                 {
                     "id": "Category ",
-                    "dropdownoption": [
-                        {
-                            "value": "Select",
-                            "label": "Category"
-                        },
-                        {
-                            "value": "Within SLA",
-                            "label": "Within SLA"
-                        },
-                        {
-                            "value": "value2",
-                            "label": "value2"
-                        },
-                        {
-                            "value": "value3",
-                            "label": "value3"
-                        }
-                    ]
+                    "dropdownoption": category_dropdown
                 },
                 {
                     "id": "Priority",
-                    "dropdownoption": [
-                        {
-                            "value": "Select",
-                            "label": "Priority"
-                        },
-                        {
-                            "value": "All",
-                            "label": "All"
-                        },
-                        {
-                            "label": "value2",
-                            "value": "value2"
-                        },
-                        {
-                            "label": "value3",
-                            "value": "value3"
-                        }
-                    ]
+                    "dropdownoption": priority_dropdown
                 },
                 {
                     "id": "Status",
-                    "dropdownoption": [
-                        {
-                            "value": "Select",
-                            "label": "Status"
-                        },
-                        {
-                            "label": "All",
-                            "value": "All"
-                        },
-                        {
-                            "label": "value2",
-                            "value": "value2"
-                        },
-                        {
-                            "label": "value3",
-                            "value": "value3"
-                        }
-                    ]
+                    "dropdownoption": status_dropdown
                 }, {
                 "id": "Service",
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "Service"
+                        "label": "Service | Select"
                     },
                     {
                         "label": "SOC",
                         "value": "SOC"
-                    },
-                    {
-                        "label": "value2",
-                        "value": "value2"
-                    },
-                    {
-                        "label": "value3",
-                        "value": "value3"
                     }
                 ]
             }, {
                 "id": "Reopened %",
-                "dropdownoption": [
-                    {
-                        "value": "Select",
-                        "label": "Reopened"
-                    },
-                    {
-                        "label": "All",
-                        "value": "All"
-                    },
-                    {
-                        "label": "value2",
-                        "value": "value2"
-                    },
-                    {
-                        "label": "value3",
-                        "value": "value3"
-                    }
-                ]
+                "dropdownoption": reopened_dropdown
             }, {
                 "id": "First response Time",
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "First response Time"
+                        "label": "First response Time | Select"
                     },
                     {
                         "label": "All",
                         "value": "All"
-                    },
-                    {
-                        "label": "value2",
-                        "value": "value2"
-                    },
-                    {
-                        "label": "value3",
-                        "value": "value3"
                     }
                 ]
             }
-            ]
+        ]
 
         return Response(response, status=status.HTTP_201_CREATED)
 
@@ -304,14 +257,6 @@ class ITSMViewSet(viewsets.ModelViewSet):
                     {
                         "label": "SOC",
                         "value": "SOC"
-                    },
-                    {
-                        "label": "value2",
-                        "value": "value2"
-                    },
-                    {
-                        "label": "value3",
-                        "value": "value3"
                     }
                 ]
                 }
