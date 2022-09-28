@@ -7,6 +7,7 @@ from rest_framework.response import Response
 import json
 from collections import defaultdict as dd
 
+from hub.models.hub import Hub
 from hub.serializers.hub_timeline import HubTimeline
 from hub.services.insight_hub_service import HubService
 from hub.constants.dataset import Dataset
