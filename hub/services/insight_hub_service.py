@@ -52,7 +52,9 @@ class HubService:
         mobile = 0
         entityes = 0
         assets = str(data.count())
+        asset_names =[]
         for types in data:
+            asset_names.append(type.asset_name)
             asset_type = types.asset_type
             entity = types.entity_name
             if entity:
@@ -67,6 +69,7 @@ class HubService:
                 "MOBILE" + "~" + str(mobile) + "*" + "DESKTOP" + "~" + str(desktop) + "*" + "LAPTOP" + "~" + str(laptop)
         )
         entity_count = str(entityes)
+        assets = assets +" :"+ str(asset_names)
         for query in data:
             incident_status = {"text": query.status, "color": "#ffc107"}
             time_to_close = (query.assigned_time - query.starttime)
@@ -91,11 +94,8 @@ class HubService:
                            "cardIcon": card_icon}
             card = [tread_level, time_to_close, suspicious]
             incident_details = {"title": "INCIDENT DETAILS",
-                                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                                               " Id odiosed tempor netus purus nec pharetra amet iaculis. Sit eros, "
-                                               "semper adipiscing risus lacus, in non. Id odio sed tempor netus "
-                                               "purusSiteros, semper adipiscing risus lacus, in non. Id odio sed View "
-                                               "More"}
+                                "description": query.description,
+                               }
             resolution_status = {
                 "title": "RESOLUTION STATUS",
                 "resolutionDetails": {
@@ -121,12 +121,12 @@ class HubService:
                     "valueColor": "#333333"
                 },
                 {
-                    "subTitle": "Geographies",
+                    "subTitle": "Geo",
                     "value": query.location_name,
                     "valueColor": "#03AAC9"
                 },
                 {
-                    "subTitle": "Org's",
+                    "subTitle": "Entities",
                     "value": entity_count,
                     "valueColor": "03AAC9"
                 },
