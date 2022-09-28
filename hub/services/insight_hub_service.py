@@ -54,7 +54,7 @@ class HubService:
         assets = str(data.count())
         asset_names =[]
         for types in data:
-            asset_names.append(type.asset_name)
+            asset_names.append(types.asset_name)
             asset_type = types.asset_type
             entity = types.entity_name
             if entity:
