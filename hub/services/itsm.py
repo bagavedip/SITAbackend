@@ -62,7 +62,9 @@ class ITSMService:
         """
         data = ITSMService.get_queryset().filter(SIEM_id=ticket)
         assets = str(data.count())
+        asset_names =[]
         for query in data:
+            asset_names.append(query.Asset_Name)
             request_status = {"text": query.Subject + " " + query.SIEM_id, "color": "#ffc107"}
             time_to_close = (query.assigned_time - query.CreatedTime)
             time = int(abs(time_to_close).total_seconds() / 3600)
@@ -79,6 +81,7 @@ class ITSMService:
             time = int(abs(expected_closure).total_seconds() / 3600)
             expected_closure = {"cardTitle": str(time) + " Hrs", "textColor": "#ffc107",
                                 "cardSubTitle": "Expected closure", "cardIcon": "BlueChartLineUp"}
+            assets = assets +":"+ str(asset_names)
             if query.Priority == "2. Alta":
                 priority = "RED"
                 color = "#ff0000"
