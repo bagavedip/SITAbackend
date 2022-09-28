@@ -172,69 +172,52 @@ class InsightHub(viewsets.GenericViewSet):
 
         data = MasterDataService.get_master_data(response_obj)
 
+        asset_types = Hub.objects.values_list('asset_type').distinct()
+        asset_dropdown = [{
+                        "value": "Select",
+                        "label": "Asset Type | Select"
+                    }]
+        geo = Hub.objects.all().values_list('location_name').distinct()
+        geo_dropdown = [{
+                        "value": "Select",
+                        "label": "Geo | Select"
+                    }]
+        entities = Hub.objects.values_list('entity_name').distinct()
+        entity_dropdown = [{
+                        "value": "Select",
+                        "label": "Entity | Select"
+                    }]
+        for asset_type in asset_types:
+            new_asset = {
+                "value":asset_type,
+                "label":asset_type
+            }
+            
+            asset_dropdown.append(new_asset)
+        for geos in geo:
+            new_geo = {
+                "value":geos,
+                "label":geos
+            }
+            geo_dropdown.append(new_geo)
+        for entity in entities:
+            new_entity = {
+                "value":entity,
+                "label":entity
+            }
+            entity_dropdown.append(new_entity)
         response = [
             {
                 "id": "Asset Type",
-                "dropdownoption": [
-                    {
-                        "value": "Select",
-                        "label": "Asset Type"
-                    },
-                    {
-                        "value": "Email",
-                        "label": "Email"
-                    },
-                    {
-                        "value": "value2",
-                        "label": "value2"
-                    },
-                    {
-                        "value": "value3",
-                        "label": "value3"
-                    }
-                ]
+                "dropdownoption": asset_dropdown
             },
             {
-                "id": "Geography",
-                "dropdownoption": [
-                    {
-                        "value": "Select",
-                        "label": "Geography"
-                    },
-                    {
-                        "label": "USA Central",
-                        "value": "USA Central"
-                    },
-                    {
-                        "label": "value2",
-                        "value": "value2"
-                    },
-                    {
-                        "label": "value3",
-                        "value": "value3"
-                    }
-                ]
+                "id": "Geo",
+                "dropdownoption": geo_dropdown
             },
             {
-                "id": "ORG",
-                "dropdownoption": [
-                    {
-                        "value": "Select",
-                        "label": "ORG"
-                    },
-                    {
-                        "label": "SUV22",
-                        "value": "SUV22"
-                    },
-                    {
-                        "label": "value2",
-                        "value": "value2"
-                    },
-                    {
-                        "label": "value3",
-                        "value": "value3"
-                    }
-                ]
+                "id": "Entity",
+                "dropdownoption": entity_dropdown
             }
         ]
 
