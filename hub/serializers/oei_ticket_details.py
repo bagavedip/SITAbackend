@@ -51,8 +51,15 @@ class TicketDetailsSerializer:
         grid_data = []
         for row in data:
             row_data = {}
+            newstring = ''
             for index in range(len(row)):
-                row_data["column" + (str(index + 1))] = str(row.get(self.select_cols[index]))
+                if len(str(row.get(self.select_cols[index])).split()) > 10:
+                    details = list(str(row.get(self.select_cols[index])).split())
+                    for i in range(15):
+                        newstring = newstring +" "+ details[i]
+                    row_data["column" + (str(index + 1))] = newstring + "..."
+                else: 
+                    row_data["column" + (str(index + 1))] = str(row.get(self.select_cols[index]))
             grid_data.append(row_data)
 
         response_json = {
