@@ -22,7 +22,8 @@ class OeiSerializer:
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
         for filter in filterOptions:
             self.request_filters.append(filter)
-        self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
+        if header_option != "Tickets":
+            self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
         filters = Map.get_filter(header_option).split(",")
         if len(filters) > 1:
             self.legend_filter = filters[1]
@@ -253,13 +254,17 @@ class OeiSerializer:
         self.datasets[3]['weight'] = 2
 
     def build_dataset(self):
-        self.build_dataset_level1()
-        if len(self.datasets) == 2:
+        if len(self.datasets) ==1:
+            self.build_dataset_level1()
+        elif len(self.datasets) == 2:
+            self.build_dataset_level1()
             self.build_dataset_level2()
         elif len(self.datasets) == 3:
+            self.build_dataset_level1()
             self.build_dataset_level2()
             self.build_dataset_level3()
         else:
+            self.build_dataset_level1()
             self.build_dataset_level2()
             self.build_dataset_level3()
             self.build_dataset_level4()
