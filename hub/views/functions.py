@@ -14,10 +14,6 @@ from ..models.functions import Function
 from hub.serializers.functions import FunctionSerializer
 from hub.services.functions import FunctionService
 from hub.services.process import ProcessService
-from hub.services.assets import AssetService
-from hub.services.itsm import ITSMService
-from hub.services.soar import SOARService
-from hub.services.siem import SIEMService
 
 
 logger = logging.getLogger(__name__)
@@ -198,54 +194,6 @@ class FunctionViewSet(viewsets.ModelViewSet):
                     "Data": dataset,
                 }
             )
-
-    def function_asset(self, request):
-        """
-         function to get combine details of function and asset
-        """
-        logger.info(f"request data is {request.data}")
-        function_data = FunctionService.get_queryset()
-        function_asset = dict()
-        for function in function_data.values():
-            asset_data = AssetService.asset_filter(function.get('id'))
-            for data in asset_data.values():
-                function_asset[function.get('function_name')] = function_asset.get(function.get('function_name'), 0) + 1
-        function_asset['Total asset'] = sum(function_asset.values())
-        data = function_asset
-
-        return Response(
-            {
-                "Status": status.HTTP_200_OK,
-                "Data": data,
-            }
-        )
-
-    def offence_function(self, request):
-        """
-         function to get combine details of offence and functions
-        """
-        logger.info(f"request data is {request.data}")
-        queryset = FunctionService.get_queryset()
-        function_offences = dict()
-        for functions in queryset.values():
-            asset_data = AssetService.asset_filter(functions.get('id'))
-            for asset_name in asset_data.values():
-                itsm_data = ITSMService.itsm_filter(asset_name.get('AssetName'))
-                for itsm in itsm_data.values():
-                    soar_data = SOARService.soar_filter(itsm.get('Affair'))
-                    for soar in soar_data.values():
-                        siem_data = SIEMService.siem_filter(soar.get('TicketIDs'))
-                        for siem in siem_data.values():
-                            function_offences[functions.get('function_name')] = function_offences.get(
-                                functions.get('function_name'), 0) + 1
-        function_offences['Total offence'] = sum(function_offences.values())
-        data = function_offences
-        return Response(
-            {
-                "Status": status.HTTP_200_OK,
-                "Data": data,
-            }
-        )
 
     @action(detail=False, methods=["put"])
     def update_function(self, request, function_id):

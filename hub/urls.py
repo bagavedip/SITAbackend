@@ -4,9 +4,6 @@ from rest_framework import routers
 from .views.assign_task import AssignTaskViewset
 from .views.hub import InsightHub
 from .views.process import ProcessViewSet
-from .views.siem import SIEMViewSet
-from .views.source import SourceViewSet
-from .views.soar import SOARViewSet
 from .views.itsm import ITSMViewSet
 from .views.assets import AssetViewSet
 from .views.functions import FunctionViewSet
@@ -15,28 +12,8 @@ from .views.geolocation import GeoLocationViewSet
 from .views.category import CategoryViewSet
 
 simple_router = routers.SimpleRouter()
-source = SourceViewSet.as_view({"post": "create"})
-source_data = SourceViewSet.as_view({"get": "source_data"})
-
-SIEM_event_count = SIEMViewSet.as_view({"get": "event_count_data"})
-SIEM_all_data = SIEMViewSet.as_view({"get": "seim_all_data"})
-SIEM_event_count_by_usecase = SIEMViewSet.as_view({"get": "event_count_by_usecases"})
-Severity_Importance = SIEMViewSet.as_view({"get": "severity_by_offenses"})
-avg_res_time = SIEMViewSet.as_view({"get": "avg_res_time"})
-severity = SIEMViewSet.as_view({"get": "severity"})
-severity_by_usecase = SIEMViewSet.as_view({"get": "severity_by_usecase"})
-usecase_details = SIEMViewSet.as_view({"get": "usecase_details"})
-usecase_offences = SIEMViewSet.as_view({"get": "offence_by_usecases"})
-
-
-incident_priority = SOARViewSet.as_view({"get": "incident"})
-usecase_incident = SOARViewSet.as_view({"get": "usecase_incident"})
-
-request_mode = ITSMViewSet.as_view({"get": "request_modes"})
-false_positives = ITSMViewSet.as_view({"get": "false_positives"})
 
 # asset urls
-asset_types = AssetViewSet.as_view({"get": "asset_types"})
 asset = AssetViewSet.as_view({"get": "asset"})
 single_asset = AssetViewSet.as_view({"get": "single_asset"})
 add_asset = AssetViewSet.as_view({"post": "addasset"})
@@ -44,7 +21,6 @@ validate_asset = AssetViewSet.as_view({"post": "validate_asset_csv"})
 upload_asset = AssetViewSet.as_view({"post": "upload_asset"})
 delete_asset = AssetViewSet.as_view({"delete": "asset_delete"})
 update_asset = AssetViewSet.as_view({"put": "update_asset"})
-offence_asset_types = AssetViewSet.as_view({"get": "offence_asset_types"})
 
 # Function urls
 add_function = FunctionViewSet.as_view({"post": "addfunction"})
@@ -56,7 +32,6 @@ functions = FunctionViewSet.as_view({"get": "function"})
 single_function = FunctionViewSet.as_view({"get": "single_function_details"})
 functiondetails = FunctionViewSet.as_view({"get": "functionlocationentity"})
 asset_function = FunctionViewSet.as_view({"get": "function_asset"})
-functions_offence = FunctionViewSet.as_view({"get": "offence_function"})
 
 # Geolocation urls
 add_location = GeoLocationViewSet.as_view({"post": "addlocation"})
@@ -66,7 +41,6 @@ delete_location = GeoLocationViewSet.as_view({"delete": "location_delete"})
 update_location = GeoLocationViewSet.as_view({"put": "update_location"})
 geo_location = GeoLocationViewSet.as_view({"get": "geo_locations"})
 single_geo_location = GeoLocationViewSet.as_view({"get": "single_geo_locations"})
-offence_location = GeoLocationViewSet.as_view({"get": "offence_location"})
 
 # entity
 entities = EntityViewSet.as_view({"get": "entities"})
@@ -76,13 +50,6 @@ validate_entity = EntityViewSet.as_view({"post": "validate_entity"})
 upload_entity = EntityViewSet.as_view({"post": "upload_entity"})
 delete_entity = EntityViewSet.as_view({"delete": "entity_delete"})
 update_entity = EntityViewSet.as_view({"put": "update_entity"})
-offence_entity = EntityViewSet.as_view({"get": "offence_entity"})
-offence_entity_assets = EntityViewSet.as_view({"get": "offence_entity_asset_types"})
-offence_entity_location = EntityViewSet.as_view({"get": "offence_entity_location"})
-offence_entity_function = EntityViewSet.as_view({"get": "offence_entity_function"})
-offence_entity_geo_assettypes = EntityViewSet.as_view({"get": "offence_entity_geo_asset_types"})
-offence_entity_geo_function = EntityViewSet.as_view({"get": "offence_entity_geo_function"})
-get_ticket_id = ITSMViewSet.as_view({"get": "get_ticket_id"})
 
 # category
 add_category = CategoryViewSet.as_view({"post": "addcategory"})
@@ -118,7 +85,6 @@ hub_timeline = InsightHub.as_view({"post": "hub_timeline"})
 oei_ticket_comment = ITSMViewSet.as_view({"post": "oei_ticket_comment"})
 incident_comment = InsightHub.as_view({"post": "incident_comment"})
 assign_user = AssignTaskViewset.as_view({"post": "assign_user"})
-hub_timeline = InsightHub.as_view({"post": "hub_timeline"})
 sla_timeline = ITSMViewSet.as_view({"post": "sla_timeline"})
 ticket_timeline = ITSMViewSet.as_view({"post": "ticket_timeline"})
 
@@ -127,7 +93,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/update_asset/<int:asset>", update_asset, name="update_asset"),
     path(r"api/v1/delete_asset/<int:asset_id>", delete_asset, name="Asset_Delete"),
     path(r"api/v1/add_asset/", add_asset, name="Add Asset Details"),
-    path(r"api/v1/asset_types/", asset_types, name="Asset_Types"),
     path(r"api/v1/asset/", asset, name="Asset_Details"),
     path(r"api/v1/asset/<int:asset_id>", single_asset, name="Single_Asset_Details"),
     path(r"api/v1/validate_asset/", validate_asset, name="validate Asset Details"),
@@ -159,7 +124,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/function_details/", functiondetails, name="All Function Details"),
 
     path(r"api/v1/function/assets/", asset_function, name="Asset for Functions"),
-    path(r"api/v1/function/offence/", functions_offence, name="Offence for Functions"),
 
     path(r"api/v1/add_location/", add_location, name="Add Geo Location"),
     path(r"api/v1/validate_location/", validate_location, name="validate location Details"),
@@ -169,8 +133,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/delete_location/<int:location_id>", delete_location, name="Delete Geo Location"),
     path(r"api/v1/update_location/<int:location_id>", update_location, name="Update Location"),
 
-    path(r"api/v1/geo_locations/offence/", offence_location, name="Offence for Geo Location"),
-
     path(r"api/v1/add_entity/", add_entity, name="Add Entity Details"),
     path(r"api/v1/validate_entity/", validate_entity, name="validate Entity Details"),
     path(r"api/v1/upload_entity/", upload_entity, name="Upload Entity Details"),
@@ -178,34 +140,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/entities/<int:entity_id>", single_entity, name="Single Entities_Data"),
     path(r"api/v1/delete_entity/<int:entity_id>", delete_entity, name="Delete Entities Data"),
     path(r"api/v1/update_entity/<int:entity_id>", update_entity, name="Update Entity"),
-
-    path(r"api/v1/entity/offence/", offence_entity, name="Offence for Entity"),
-
-    path(r"api/v1/ticket_id/", get_ticket_id, name="get_ticket_id"),
-    path(r"api/v1/source/", source, name="Source",),
-    path(r"api/v1/source/data/", source_data, name="Source_data",),
-    path(r"api/v1/siem/", SIEM_all_data, name="SIEM_all_data",),
-    path(r"api/v1/siem-event/", SIEM_event_count, name="SIEM_event_count",),
-    path(r"api/v1/siem-event-by-usecase/", SIEM_event_count_by_usecase, name="Event_Count_by_Usecase",),
-    path(r"api/v1/severity-importance/", Severity_Importance, name="Severity_For_Offense",),
-    path(r"api/v1/average-response/", avg_res_time, name="Average_Response_Time",),
-    path(r"api/v1/severities/", severity, name="Severity_Mean_Details",),
-    path(r"api/v1/usecase_severity/", severity_by_usecase, name="UseCase_Severity",),
-    path(r"api/v1/usecase_details/", usecase_details, name="Usecase_Details",),
-    path(r"api/v1/incident_priority/", incident_priority, name="Incident_Priority",),
-    path(r"api/v1/usecase_incident/", usecase_incident, name="Usecase_Incident",),
-    path(r"api/v1/request_mode/", request_mode, name="Request_modes"),
-    path(r"api/v1/false_positives/", false_positives, name="False Positives"),
-    path(r"api/v1/offence/asset_types/", offence_asset_types, name="Offence for Asset_Types"),
-
-    path(r"api/v1/usecase/offence/", usecase_offences, name="Offence for Usecase"),
-    path(r"api/v1/usecase/asset/entity/offence/", offence_entity_assets, name="Offences for Asset & Entity"),
-    path(r"api/v1/usecase/location/entity/offence/", offence_entity_location, name="Offences for Entity & location"),
-    path(r"api/v1/usecase/function/entity/offence/", offence_entity_function, name="Offences for Entity & function"),
-    path(r"api/v1/usecase/asset/geo/entity/offence/", offence_entity_geo_assettypes,
-         name="Offences for Entity, Geo and Asset types"),
-    path(r"api/v1/usecase/function/geo/entity/offence/", offence_entity_geo_function,
-         name="Offences for Entity, Geo and Function"),
 
     path(r"api/v1/insight_tickets/", insight_tickets, name="insight_tickets"),
     path(r"api/v1/insights/", hub, name="insight_hub"),

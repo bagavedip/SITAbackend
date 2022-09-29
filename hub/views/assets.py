@@ -7,17 +7,12 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-
 from hub.models.process import Process
-from ..models.functions import Function
+
 from ..models.category import Category
 
 from hub.serializers.assets import AssetSerializer
 from hub.services.assets import AssetService
-from hub.services.itsm import ITSMService
-from hub.services.soar import SOARService
-from hub.services.siem import SIEMService
 from hub.models.assets import Assets
 
 from django.db import transaction
@@ -267,51 +262,3 @@ class AssetViewSet(viewsets.ModelViewSet):
                 "Status": Status,
                 "Message": message
             })
-
-    @action(detail=False, methods=["get"])
-    def asset_types(self, request):
-        """
-         Function used to get details of asset types.
-        """
-        logger.info(f"request data is {request.data}")
-        queryset = AssetService.get_queryset()
-
-        Total_assets = []
-        for asset in queryset.values():
-            Total_assets.append(asset.get('AssetType'))
-        asset_types = dict()
-        for types in Total_assets:
-            asset_types[types] = asset_types.get(types, 0) + 1
-        asset_types['Asset Total'] = sum(asset_types.values())
-        data = asset_types
-        return Response(
-            {
-                "Status": "Success",
-                "Data": data,
-            }
-        )
-
-    def offence_asset_types(self, request):
-        """
-         Function to get details of offence and asset type.
-        """
-        logger.info(f"request data is {request.data}")
-        queryset = AssetService.get_queryset()
-
-        asset_types = dict()
-        for asset_name in queryset.values():
-            itsm_data = ITSMService.itsm_filter(asset_name.get('AssetName'))
-            for itsm in itsm_data.values():
-                soar_data = SOARService.soar_filter(itsm.get('Affair'))
-                for soar in soar_data.values():
-                    siem_data = SIEMService.siem_filter(soar.get('TicketIDs'))
-                    for siem in siem_data.values():
-                        asset_types[asset_name.get('AssetType')] = asset_types.get(asset_name.get('AssetType'), 0) + 1
-        asset_types['Asset Total'] = sum(asset_types.values())
-        data = asset_types
-        return Response(
-            {
-                "Status": "Success",
-                "Data": data,
-            }
-        )

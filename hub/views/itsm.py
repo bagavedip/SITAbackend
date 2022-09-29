@@ -118,42 +118,6 @@ class ITSMViewSet(viewsets.ModelViewSet):
                     "Message": "You Don't have data"
                 }
             )
-        
-    def false_positives(self, request):
-        logger.info(f"request data is {request.data}")
-        false_positive = 0
-        ITSM_data = ITSMService.get_queryset()
-        if ITSM_data:
-            for data in ITSM_data:
-                if data.Application_Status == "False Positive":
-                    false_positive += 1
-            data = {
-                "False Positives": false_positive,
-            }
-            return Response(
-                {
-                    "Status": "Success",
-                    "Data": data
-                }
-            )
-        else:
-            return Response(
-                {
-                    "Status": "Failed",
-                    "Message": "You Don't have any ITSM data"
-                }
-            )
-
-    def get_ticket_id(self, request):
-        """
-         Ticket details of OEI data
-        """
-        query_params = request.query_params
-        ticket = query_params.get("ticket_id", None)
-        data = ITSMService.get_queryset().filter(SIEM_id=ticket)
-        serializer = ITSMSerializer(data, many=True)
-        logger.info("Successfully Fetch for ticket id.")
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def ticket_dropdown_data(self, request):
         """
