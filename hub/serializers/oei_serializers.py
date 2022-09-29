@@ -135,6 +135,8 @@ class OeiSerializer:
         self.datasets[0]['hierarchy'] = hierarchy
         self.datasets[0]['labels'] = labels
         self.datasets[0]['backgroundColor'] = backgroundColor
+        self.datasets[0]['spacing'] = 30
+        self.datasets[0]['weight'] = 8
 
     def build_dataset_level2(self):
         data = []
