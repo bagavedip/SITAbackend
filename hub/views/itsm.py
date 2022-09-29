@@ -253,7 +253,8 @@ class ITSMViewSet(viewsets.ModelViewSet):
         serializser = OeiSerializer(request)
         result = ITSMService.get_oei(serializser)
         hirarchial_data = self.convert_data(result)
-        self.update_events(hirarchial_data)
+        if len(serializser.datasets) !=1:
+            self.update_events(hirarchial_data)
         query_data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
                                          Ending_time__lte=serializser.end_date).count()
         data = ITSM.objects.filter(CreatedTime__gte=serializser.start_date,
