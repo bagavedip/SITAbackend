@@ -32,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['devsita.etek.com', 'localhost']
 
 
 # Application definition
@@ -64,9 +64,12 @@ TENANT_APPS = (
     "rest_framework_swagger",
     "django_filters",
     "fcm_django",
+    # other apps
+    'django_q',
     # project specific applications
     "users",
-    "hub",
+    "extracter",
+    "sita",
 )
 
 INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
@@ -171,6 +174,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 
+DJANGO_Q_SCHEMA_KEY = "tenant_schema"
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Internationalization
@@ -195,3 +199,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Auto-created primary key
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# Django_q
+Q_CLUSTER = {
+    "name": "Sita-backend background tasks",
+    "label": "Django Q",
+    "timeout": 60,
+    "retry": 70,
+    "max_attempts": 3,
+    "orm": "default",
+}

@@ -1,11 +1,14 @@
 import logging
-from django.utils import timezone
 
-from rest_framework import mixins, viewsets
-from rest_framework.response import Response
+from django.db import transaction, IntegrityError
+from django.utils import timezone
+from django.contrib.auth.hashers import make_password
+
+from rest_framework import mixins, viewsets, status
 from rest_framework.decorators import action
-from users.serializers.user import LoginSerializer, UserSerializer
-from rest_framework.exceptions import AuthenticationFailed, ValidationError
+from rest_framework.response import Response
+from users.serializers.user import LoginSerializer, UserSerializer, AddUserSerializer
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.services.user import UserService
@@ -49,15 +52,14 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             logger.error("Password verification failed.")
             raise AuthenticationFailed
         data = self.get_auth_tokens(user)
-        profile = {
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name
-        }
         data.update({"user": UserSerializer(user).data})
         return data
 
+    @action(detail=False, methods=["post"])
     def login(self, request, **kwargs):
+        """
+         Function for login user
+        """
         logger.info("Validating data for Log In.")
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -70,6 +72,31 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         if login_action == serializer.EMAIL_LOGIN:
             response_data = self.email_login(login_payload)
-
         logger.info("Log in Successful.")
         return Response(response_data)
+
+    def add_user(self, request):
+        """
+         Function for add user at admin side
+        """
+        serializer = AddUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        with transaction.atomic():
+            password = make_password(validated_data["password"])
+            try:
+                if serializer.is_valid():
+                    serializer.save(password=password)
+                    return Response(
+                        {
+                            "Data": serializer.data,
+                            "Status": status.HTTP_201_CREATED,
+                            "Message": "User Added Successfully!!"
+                        }
+                    )
+            except IntegrityError:
+                return Response({
+                    "Data": serializer.data,
+                    "Status": status.HTTP_208_ALREADY_REPORTED,
+                    "Message": "Email Already Added!!"
+                })

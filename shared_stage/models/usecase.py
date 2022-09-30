@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class UseCase(models.Model):
     """
-    Model to hold data for ITSM data
+    Model to hold data for UseCase data
     """
     usecase = models.CharField(_("use_case"), max_length=200, help_text=_("Use Case"))
     description = models.CharField(_("description"), null=True, max_length=200, help_text=_("Description"))
