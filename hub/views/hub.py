@@ -289,3 +289,29 @@ class InsightHub(viewsets.GenericViewSet):
             return Response(response_data)
         except UnboundLocalError:
             return Response({"error": "there is no such selectedIncidents."})
+        
+    #This function will add Updates on any incident
+    def add_update(self, request):
+        logger.debug(f"Parsed request body {request.data}")
+
+        # Validating incoming request body
+        serializer = request.data
+
+        # update comment in sla and ticket information
+        logger.debug("Database transaction started")
+        try:
+            with transaction.atomic():
+                soar_id = serializer.get("incident")
+                update = serializer.get("update")
+                update_by = serializer.get("update_by")
+                updates = HubService.add_update(soar_id,update,update_by)
+            logger.debug("Database transaction finished")
+
+            # response formatting
+            response_data = {
+                "message": updates,
+                "status": status.HTTP_201_CREATED
+            }
+            return Response(response_data)
+        except UnboundLocalError:
+            return Response({"error": "there is no such selectedIncidents."})
