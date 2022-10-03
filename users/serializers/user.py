@@ -78,3 +78,20 @@ class AddUserSerializer(serializers.Serializer):
             is_staff=validated_data['is_staff'],
         )
         return user
+    
+    
+class UserUpdateSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    first_name = serializers.CharField(max_length=256, required=False)
+    last_name = serializers.CharField(max_length=256, required=False)
+
+    class Meta:
+        fields = "__all__"
+
+class PasswordUpdateSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, max_length=15)
+
+    class Meta:
+        fields = "__all__"
+
