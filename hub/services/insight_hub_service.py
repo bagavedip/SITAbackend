@@ -285,3 +285,15 @@ class HubService:
                     ))
         AssignTask.objects.bulk_create(assign_list)
         return "Task successfully Assigned !!"
+    
+    
+    @staticmethod
+    def add_update(soar_id, update, update_by):
+        update = HubUpdate(
+            soar_id= soar_id,
+            updates = update,
+            updated_by = update_by
+        )
+        update.save()
+        return "Update Added Successfully !!"
+
