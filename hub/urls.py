@@ -87,6 +87,7 @@ incident_comment = InsightHub.as_view({"post": "incident_comment"})
 assign_user = AssignTaskViewset.as_view({"post": "assign_user"})
 sla_timeline = ITSMViewSet.as_view({"post": "sla_timeline"})
 ticket_timeline = ITSMViewSet.as_view({"post": "ticket_timeline"})
+add_update = InsightHub.as_view({"post": "add_update"})
 
 urlpatterns = simple_router.urls
 urlpatterns = urlpatterns + [
@@ -161,5 +162,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/assign_user/", assign_user, name="assign_user"),
     path(r"api/v1/hub_timeline/", hub_timeline, name="hub_timeline"),
     path(r"api/v1/sla_timeline/", sla_timeline, name="sla_timeline"),
-    path(r"api/v1/ticket_timeline/", ticket_timeline, name="ticket_timeline")
+    path(r"api/v1/ticket_timeline/", ticket_timeline, name="ticket_timeline"),
+    path(r"api/v1/add_update/", add_update, name="add_update")
 ]
