@@ -29,7 +29,7 @@ class PasswordUpdate(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     {
                     "Data":serializer.data, 
                     "Status":status.HTTP_201_CREATED,
-                    "Message": "User Added Successfully!!"
+                    "Message": "Password Updated Successfully!!"
                     }
                 )
             else:
@@ -37,7 +37,7 @@ class PasswordUpdate(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     {
                     "Data":serializer.data, 
                     "Status":status.HTTP_304_NOT_MODIFIED,
-                    "Message": "Oops!!"
+                    "Message": "Oops! Something went wrong."
                     }
                 )
         # updated_user.save()
