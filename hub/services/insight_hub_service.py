@@ -47,6 +47,7 @@ class HubService:
     @staticmethod
     def asset_details(incident):
         data = HubService.get_queryset().filter(soar_id=incident)
+        updates = HubUpdate.objects.all().filter(soar_id=incident).order_by('-update_date')[:6]
         desktop = 0
         laptop = 0
         mobile = 0
@@ -138,23 +139,25 @@ class HubService:
             ]
             other_details = {"title": "OTHER DETAILS",
                              "details": details}
-            updates = {
-                "title": "UPDATES",
-                "data": [
-                    {
-                        "updateDateTime": "YYYY-MM-DDTHH:mm:ss",
-                        "description": query.replys
-                    }
-                        ]
-                     }
-            data_dict = {
-                "incidentStatus": incident_status,
-                "cards": card,
-                "incidentDetails": incident_details,
-                "resolutionStatus": resolution_status,
-                "otherDetails": other_details,
-                "updates": updates
+        updated_data=[]
+        for data in updates:
+            last_updates = {
+                "updateDateTime":data.update_date,
+                "description":data.updates
             }
+            updated_data.append(last_updates)
+        updates = {
+            "title": "UPDATES",
+            "data": updated_data
+        }
+        data_dict = {
+            "incidentStatus": incident_status,
+            "cards": card,
+            "incidentDetails": incident_details,
+            "resolutionStatus": resolution_status,
+            "otherDetails": other_details,
+            "updates": updates
+        }
         return data_dict
 
     @staticmethod
