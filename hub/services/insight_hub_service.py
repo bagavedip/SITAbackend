@@ -5,6 +5,7 @@ from dateutil import relativedelta
 from hub.models.add_comment import AddComment
 from hub.models.assign_task import AssignTask
 from hub.models.hub import Hub
+from hub.models.insights_update import HubUpdate
 from django.db.models import Sum, Count
 
 from hub.serializers.hub import InsightsSerializer
