@@ -10,6 +10,7 @@ from .views.functions import FunctionViewSet
 from .views.entity import EntityViewSet
 from .views.geolocation import GeoLocationViewSet
 from .views.category import CategoryViewSet
+from .views.cy_feeds import CyFeeds
 
 simple_router = routers.SimpleRouter()
 
@@ -89,6 +90,8 @@ sla_timeline = ITSMViewSet.as_view({"post": "sla_timeline"})
 ticket_timeline = ITSMViewSet.as_view({"post": "ticket_timeline"})
 add_update = InsightHub.as_view({"post": "add_update"})
 
+feed_data = CyFeeds.as_view({"post":"all_feeds"})
+
 urlpatterns = simple_router.urls
 urlpatterns = urlpatterns + [
     path(r"api/v1/update_asset/<int:asset>", update_asset, name="update_asset"),
@@ -163,5 +166,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/hub_timeline/", hub_timeline, name="hub_timeline"),
     path(r"api/v1/sla_timeline/", sla_timeline, name="sla_timeline"),
     path(r"api/v1/ticket_timeline/", ticket_timeline, name="ticket_timeline"),
-    path(r"api/v1/add_update/", add_update, name="add_update")
+    path(r"api/v1/add_update/", add_update, name="add_update"),
+    path(r"api/v1/historical_news_feeds/", feed_data, name="feed_data")
 ]
