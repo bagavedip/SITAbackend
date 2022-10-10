@@ -10,3 +10,4 @@ from .process import Process
 from .siem_data import SIEM
 from .soar_data import SOAR
 from .insights_update import HubUpdate
+from .cy_feeds import CyFeeds
