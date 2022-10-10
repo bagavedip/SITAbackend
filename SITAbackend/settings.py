@@ -32,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['devsita.etek.com', 'localhost']
+ALLOWED_HOSTS = ['devsita.etek.com', 'localhost', '*.netrum-tech.com']
 
 
 # Application definition
