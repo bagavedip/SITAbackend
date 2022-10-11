@@ -31,9 +31,9 @@ class UserUpdate(mixins.CreateModelMixin, viewsets.GenericViewSet):
         validated_data = serializer.validated_data
         if serializer.is_valid():
             updated_user = User.objects.get(email = request_user.get("email"))
-            if request_user.get("first_name"):
+            if request_user.get("firstName"):
                 updated_user.first_name = validated_data["first_name"]
-            if request_user.get("last_name"):
+            if request_user.get("lastName"):
                 updated_user.last_name = validated_data["last_name"]
             updated_user.save()
             return Response(
