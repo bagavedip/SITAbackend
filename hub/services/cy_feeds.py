@@ -13,14 +13,19 @@ class Cy_FeedsService:
 
         #using for loop to store the data
         for data in query_data:
+            urls=[]
+            url = data.informationSource_references_references
+            url = url.strip("[").strip("]").replace("'","")
+            urls = url.split(",")
+            
             new_feed = {
             "title": data.title,
             "description" :data.descriptions,
             "iconclass" :"fa-solid fa-display",
-            "linkurl" : data.informationSource_references_references 
+            "linkurls" : urls 
             }
             feeds.append(new_feed)
         return Response({
             "FeedHeader":"CY Pharma",
-            "Feed": feeds
+            "Feeds": feeds
         })
