@@ -21,7 +21,12 @@ class UserUpdate(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def update_name(self, request):
         request_user = request.data
-        serializer = UserUpdateSerializer(data = request_user)
+        request_data = {
+            "email":request_user["email"],
+            "first_name":request_user["firstName"],
+            "last_name":request_user["lastName"]
+        }
+        serializer = UserUpdateSerializer(data = request_data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         if serializer.is_valid():
@@ -34,18 +39,15 @@ class UserUpdate(mixins.CreateModelMixin, viewsets.GenericViewSet):
             return Response(
                 {
                 "Data":serializer.data, 
-                "Status":status.HTTP_201_CREATED,
-                "Message": "User Updated Successfully!!"
+                "status": "SUCCESS",
+                "message": "User Updated Successfully!!"
                 }
             )
         else:
             return Response(
                 {
                 "Data":serializer.data, 
-                "Status":status.HTTP_304_NOT_MODIFIED,
-                "Message": "Oops!!"
+                "status": "SUCCESS",
+                "message": "Oops!! Something went wrong"
                 }
             )
-        # updated_user.save()
-        # return Response({
-        #     "Message": "User Updated Successfully"})
