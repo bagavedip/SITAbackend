@@ -135,11 +135,13 @@ class InsightsSerializer:
                 if '-' in item['name']:
                     id = item['name'].split("-")[0]
                 backgroundColor.append(ColorMap.get_color(self.datasets[0]['label'], id))
+                dataLabelColor = ColorMap.get_color(self.datasets[0]['label'],id)
         self.datasets[0]['data'] = data
         self.datasets[0]['originalData'] = originalData
         self.datasets[0]['hierarchy'] = hierarchy
         self.datasets[0]['labels'] = labels
         self.datasets[0]['backgroundColor'] = backgroundColor
+        self.datasets[0]['dataLabelColor'] = dataLabelColor
 
     def build_dataset_level2(self):
         data = []
@@ -166,11 +168,13 @@ class InsightsSerializer:
                     if '-' in child_item['name']:
                         id = child_item['name'].split("-")[0]
                     backgroundColor.append(ColorMap.get_color(self.datasets[1]['label'], id))
+                    dataLabelColor = ColorMap.get_color(self.datasets[1]['label'],id)
         self.datasets[1]['data'] = data
         self.datasets[1]['originalData'] = originalData
         self.datasets[1]['hierarchy'] = hierarchy
         self.datasets[1]['labels'] = labels
         self.datasets[1]['backgroundColor'] = backgroundColor
+        self.datasets[1]['dataLabelColor'] = dataLabelColor
         self.datasets[1]['spacing'] = 30
         self.datasets[1]['weight'] = 8
 
@@ -205,11 +209,13 @@ class InsightsSerializer:
                         if '-' in child2_item['name']:
                             id = child2_item['name'].split("-")[0]
                         backgroundColor.append(ColorMap.get_color(self.datasets[2]['label'], id))
+                        dataLabelColor = ColorMap.get_color(self.datasets[2]['label'],id)
         self.datasets[2]['data'] = data
         self.datasets[2]['originalData'] = originalData
         self.datasets[2]['hierarchy'] = hierarchy
         self.datasets[2]['labels'] = labels
         self.datasets[2]['backgroundColor'] = backgroundColor
+        self.datasets[2]['dataLabelColor'] = dataLabelColor
         self.datasets[2]['spacing'] = 15
         self.datasets[2]['weight'] = 2
 
@@ -250,11 +256,13 @@ class InsightsSerializer:
                             if '-' in child3_item['name']:
                                 id = child2_item['name'].split("-")[0]
                             backgroundColor.append(ColorMap.get_color(self.datasets[3]['label'], id))
+                            dataLabelColor = ColorMap.get_color(self.datasets[3]['label'],id)
         self.datasets[3]['data'] = data
         self.datasets[3]['originalData'] = originalData
         self.datasets[3]['hierarchy'] = hierarchy
         self.datasets[3]['labels'] = labels
         self.datasets[3]['backgroundColor'] = backgroundColor
+        self.datasets[3]['dataLabelColor'] = dataLabelColor
         self.datasets[3]['spacing'] = 15
         self.datasets[3]['weight'] = 2
 
