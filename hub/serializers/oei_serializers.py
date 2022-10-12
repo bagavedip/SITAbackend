@@ -117,6 +117,7 @@ class OeiSerializer:
         hierarchy = []
         labels = []
         backgroundColor = []
+        dataLabelColor = ""
         if self.hier_data.get(self.datasets[0]['label']) is not None:
             for item in self.hier_data.get(self.datasets[0]['label']):
                 data.append(item['events'])
@@ -146,6 +147,7 @@ class OeiSerializer:
         hierarchy = []
         labels = []
         backgroundColor = []
+        dataLabelColor = ""
         if self.hier_data.get(self.datasets[0]['label']) is not None:
             for item in self.hier_data.get(self.datasets[0]['label']):
                 lable_name = self.datasets[0]['label']
@@ -181,6 +183,7 @@ class OeiSerializer:
         hierarchy = []
         labels = []
         backgroundColor = []
+        dataLabelColor = ""
         if self.hier_data.get(self.datasets[0]['label']) is not None:
             for item in self.hier_data.get(self.datasets[0]['label']):
                 lable_name = self.datasets[0]['label']
@@ -222,6 +225,7 @@ class OeiSerializer:
         hierarchy = []
         labels = []
         backgroundColor = []
+        dataLabelColor = ""
         if self.hier_data.get(self.datasets[0]['label']) is not None:
             for item in self.hier_data.get(self.datasets[0]['label']):
                 lable_name = self.datasets[0]['label']
