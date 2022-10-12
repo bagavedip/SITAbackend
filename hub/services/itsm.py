@@ -159,15 +159,6 @@ class ITSMService:
             "title": "UPDATES",
             "data": updated_data
                     }
-        updates = {
-            "title": "UPDATES",
-            "data": [
-                {
-                    "updateDateTime": "YYYY-MM-DDTHH:mm:ss",
-                    "description": query.reply
-                }
-            ]
-        }
         data_dict = {
             "incidentStatus": request_status,
             "cards": card,
