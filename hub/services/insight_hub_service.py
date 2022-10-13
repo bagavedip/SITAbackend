@@ -181,7 +181,7 @@ class HubService:
             title2 = calendar.month_name[end_time.month]+str(end_time.day)
             for x in range(0, total_days+1):
                 query = (
-                    Hub.objects.filter(starttime__gte=start_date, endtime__lte=end_time).count()
+                    Hub.objects.filter(starttime__gte=start_date, starttime__lte=start_date+timedelta(days=1), endtime__lte=end_time).count()
                 )
                 incidents.append(query)
                 time.append(calendar.month_name[start_date.month]+str(start_date.day))
@@ -194,6 +194,7 @@ class HubService:
             for x in range(0, delta.months):
                 query = (
                     Hub.objects.filter(starttime__gte=start_date,
+                                       starttime__lte=start_date + relativedelta.relativedelta(months=1),
                                        endtime__lte=end_time).count())
                 incidents.append(query)
                 time.append(calendar.month_name[start_date.month])
@@ -208,6 +209,7 @@ class HubService:
             for x in range(1, delta.years):
                 query = (
                     Hub.objects.filter(starttime__gte=start_date,
+                                       starttime__lte=start_date + relativedelta.relativedelta(years=1),
                                        endtime__lte=end_time).count())
                 time.append(start_date.year)
                 incidents.append(query)
