@@ -1,4 +1,4 @@
-# Homzhub Services
+# SITA Services
 
 A Django web application/server for the SITA apps.
 

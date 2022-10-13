@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from .views.assign_task import AssignTaskViewset
 from .views.hub import InsightHub
+from .views.perspective import PerspectiveViewSet
 from .views.process import ProcessViewSet
 from .views.itsm import ITSMViewSet
 from .views.assets import AssetViewSet
@@ -90,7 +91,10 @@ sla_timeline = ITSMViewSet.as_view({"post": "sla_timeline"})
 ticket_timeline = ITSMViewSet.as_view({"post": "ticket_timeline"})
 add_update = InsightHub.as_view({"post": "add_update"})
 
-feed_data = CyFeeds.as_view({"post":"all_feeds"})
+master_dropdown_data = PerspectiveViewSet.as_view({"get": "master_dropdown_data"})
+perspective_grid_data = PerspectiveViewSet.as_view({"get": "perspective_grid_data"})
+
+feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
 urlpatterns = simple_router.urls
 urlpatterns = urlpatterns + [
@@ -167,5 +171,8 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/sla_timeline/", sla_timeline, name="sla_timeline"),
     path(r"api/v1/ticket_timeline/", ticket_timeline, name="ticket_timeline"),
     path(r"api/v1/add_update/", add_update, name="add_update"),
-    path(r"api/v1/historical_news_feeds/", feed_data, name="feed_data")
+    path(r"api/v1/historical_news_feeds/", feed_data, name="feed_data"),
+
+    path(r"api/v1/perspective_grid_data/", perspective_grid_data, name="perspective_grid_data"),
+    path(r"api/v1/master_dropdown_data/", master_dropdown_data, name="master_dropdown_data"),
 ]
