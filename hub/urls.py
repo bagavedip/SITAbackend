@@ -91,8 +91,8 @@ sla_timeline = ITSMViewSet.as_view({"post": "sla_timeline"})
 ticket_timeline = ITSMViewSet.as_view({"post": "ticket_timeline"})
 add_update = InsightHub.as_view({"post": "add_update"})
 
-master_dropdown_data = PerspectiveViewSet.as_view({"get": "master_dropdown_data"})
-perspective_grid_data = PerspectiveViewSet.as_view({"get": "perspective_grid_data"})
+master_dropdown_data = PerspectiveViewSet.as_view({"post": "master_dropdown_data"})
+perspective_grid_data = PerspectiveViewSet.as_view({"post": "perspective_grid_data"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
