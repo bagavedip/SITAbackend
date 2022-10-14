@@ -217,11 +217,13 @@ class ITSMService:
             for x in range(0, total_days+1):
                 within_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + timedelta(days=1),
                                         Ending_time__lte=end_time,
                                         is_overdue= "true").count())
                 within_tickets.append(within_query)
                 outside_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + timedelta(days=1),
                                         Ending_time__lte=end_time,
                                         is_overdue= "false").count())
                 outside_tickets.append(outside_query)
@@ -236,11 +238,13 @@ class ITSMService:
             for x in range(0, delta.months):
                 within_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + relativedelta.relativedelta(months=1),
                                         Ending_time__lte=end_time,
                                         is_overdue= "true").count())
                 within_tickets.append(within_query)
                 outside_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + relativedelta.relativedelta(months=1),
                                         Ending_time__lte=end_time,
                                         is_overdue= "false").count())
                 outside_tickets.append(outside_query)
@@ -256,11 +260,13 @@ class ITSMService:
             for x in range(1, delta.years):
                 within_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + relativedelta.relativedelta(years=1),
                                         Ending_time__lte=end_time,
                                         is_overdue= "true").count())
                 within_tickets.append(within_query)
                 outside_query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + relativedelta.relativedelta(years=1),
                                         Ending_time__lte=end_time,
                                         is_overdue= "false").count())
                 outside_tickets.append(outside_query)
@@ -336,6 +342,7 @@ class ITSMService:
             for x in range(0, total_days+1):
                 query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + timedelta(days=1),
                                         Ending_time__lte=end_time).count()
                 )
                 tickets.append(query)
@@ -349,6 +356,7 @@ class ITSMService:
             for x in range(0, delta.months):
                 query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + relativedelta.relativedelta(months=1),
                                         Ending_time__lte=end_time).count()
                 )
                 tickets.append(query)
@@ -364,6 +372,7 @@ class ITSMService:
             for x in range(1, delta.years):
                 query = (
                     ITSM.objects.filter(CreatedTime__gte=start_date,
+                                        CreatedTime__lte=start_date + relativedelta.relativedelta(years=1),
                                         Ending_time__lte=end_time).count())
                 time.append(start_date.year)
                 tickets.append(query)
