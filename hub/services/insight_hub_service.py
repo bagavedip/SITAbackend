@@ -208,6 +208,7 @@ class HubService:
             for x in range(1, delta.years):
                 query = (
                     Hub.objects.filter(starttime__gte=start_date,
+                                       starttime__lte=start_date + relativedelta.relativedelta(years=1),
                                        endtime__lte=end_time).count())
                 time.append(start_date.year)
                 incidents.append(query)
