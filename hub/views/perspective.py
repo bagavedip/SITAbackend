@@ -1,7 +1,10 @@
+from datetime import datetime
 import logging
-from rest_framework import viewsets,status
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
+from hub.models.perspective import Perspective
 
 logger = logging.getLogger(__name__)
 
@@ -377,3 +380,39 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             ]
         }
         return Response(response_data, status=status.HTTP_200_OK)
+
+    def perspective_record_delete(self, request):
+        """
+         function to delete record of perspective
+        """
+        logger.debug("")
+        perspective_id = request.data.get("id", None)
+        try:
+            queryset = Perspective.objects.get(id=perspective_id)
+            queryset.end_date = datetime.now()
+            queryset.save()
+            message = f"Record deleted for id {perspective_id}"
+            response_status = status.HTTP_200_OK
+            return Response({"message": message, "status": response_status})
+        except Exception as e:
+            message = f"Record not found for id {perspective_id}"
+            response_status = status.HTTP_404_NOT_FOUND
+            return Response({"message": message, "status": response_status})
+
+    def security_pulse_record_delete(self, request):
+        """
+         function to delete record of security pulse
+        """
+        logger.debug("")
+        perspective_id = request.data.get("id", None)
+        try:
+            queryset = Perspective.objects.get(id=perspective_id)
+            queryset.end_date = datetime.now()
+            queryset.save()
+            message = f"Record deleted for id {perspective_id}"
+            response_status = status.HTTP_200_OK
+            return Response({"message": message, "status": response_status})
+        except Exception as e:
+            message = f"Record not found for id {perspective_id}"
+            response_status = status.HTTP_404_NOT_FOUND
+            return Response({"message": message, "status": response_status})
