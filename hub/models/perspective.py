@@ -11,7 +11,7 @@ class Perspective(models.Model):
     """
     class PerspectiveType(models.TextChoices):
         Incident = "Incident", _("Incident")
-        Pattern = "Incident", _("Incident")
+        Pattern = "Pattern", _("Pattern")
 
     class ActionType(models.TextChoices):
         notified = "notified", _("notified")

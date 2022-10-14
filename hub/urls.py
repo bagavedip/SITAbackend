@@ -93,6 +93,7 @@ add_update = InsightHub.as_view({"post": "add_update"})
 
 master_dropdown_data = PerspectiveViewSet.as_view({"post": "master_dropdown_data"})
 perspective_grid_data = PerspectiveViewSet.as_view({"post": "perspective_grid_data"})
+security_pulse_grid_data = PerspectiveViewSet.as_view({"post": "security_pulse_grid_data"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -174,5 +175,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/historical_news_feeds/", feed_data, name="feed_data"),
 
     path(r"api/v1/perspective_grid_data/", perspective_grid_data, name="perspective_grid_data"),
-    path(r"api/v1/master_dropdown_data/", master_dropdown_data, name="master_dropdown_data"),
+    path(r"api/v1/perspective_master_dropdown/", master_dropdown_data, name="master_dropdown_data"),
+    path(r"api/v1/security_pulse_grid_data/", security_pulse_grid_data, name="security_pulse_grid_data")
 ]
