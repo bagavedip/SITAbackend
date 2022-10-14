@@ -1,11 +1,14 @@
 import logging
 from rest_framework import viewsets,status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 logger = logging.getLogger(__name__)
 
 
 class PerspectiveViewSet(viewsets.GenericViewSet):
+
+    permission_classes = [IsAuthenticated]
 
     def perspective_master_dropdown(self, request):
         """
