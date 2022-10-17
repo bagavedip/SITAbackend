@@ -128,3 +128,14 @@ class PerspectiveService:
         logger.debug(f"Updating asset with following kwargs {perspective_kwargs}")
         perspective = Perspective.objects.update(perspective, **perspective_kwargs)
         return perspective
+
+    @staticmethod
+    def delete(perspective):
+        """Function which delete perspective.
+
+        Args:
+            perspective ([perspective]): [Instance of perspective]
+        """
+        # End date in society
+        perspective.delete()
+        logger.info(f"Society with ID {perspective.pk} deleted successfully.")

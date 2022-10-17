@@ -346,6 +346,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
 
         # update asset and asset user information
         logger.debug("Database transaction started")
+        perspective = 1
         with transaction.atomic():
             asset = PerspectiveService.update_from_validated_data(perspective, login_user, validated_data)
         logger.debug("Database transaction finished")
@@ -354,3 +355,14 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         response_data = {"id": asset.pk}
         return Response(response_data)
 
+    def perspective_delete(self, request, *args, **kwargs):
+        """[action to destory society]
+
+        Args:
+            request ([Request]): [Django Request instance]
+        """
+        login_user = request.user
+        perspective_id = request.data.get("id")
+        with transaction.atomic():
+            PerspectiveService.delete(login_user, perspective_id)
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
