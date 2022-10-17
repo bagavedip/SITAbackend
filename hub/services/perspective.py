@@ -1,7 +1,8 @@
 import logging
+from django.utils import timezone
 
 from hub.models.perspective import Perspective
-from hub.models.process import Process
+
 
 logger = logging.getLogger(__name__)
 
@@ -78,3 +79,52 @@ class PerspectiveService:
             }
         ]
         return response
+
+    @staticmethod
+    def create_from_validated_data(user, validated_data):
+        perspective_kwargs = {
+            "perspective_type": validated_data.get("perspective_type"),
+            "action_type": validated_data.get("action_type"),
+            "status_type": validated_data.get("status_type"),
+            "criticality_type": validated_data.get("criticality_type"),
+            "incident_id": validated_data.get("incident_id"),
+            "perspective_title": validated_data.get("perspective_title"),
+            "perspective": validated_data.get("perspective"),
+            "recommendation": validated_data.get("recommendation"),
+            "tags": validated_data.get("tags"),
+            "donut_left_graph": validated_data.get("donut_left_graph"),
+            "donut_right_graph": validated_data.get("donut_right_graph"),
+            "comparative_left_graph": validated_data.get("comparative_left_graph"),
+            "comparative_right_graph": validated_data.get("comparative_right_graph"),
+            "incident_start_date_time": validated_data.get("incident_start_date_time"),
+            "incident_end_date_time": validated_data.get("incident_end_date_time"),
+            "created_by": user,
+            "created_at": timezone.now()
+        }
+        response = Perspective.objects.create(**perspective_kwargs)
+        return response
+
+    @staticmethod
+    def update_from_validated_data(perspective, user, validated_data):
+        perspective_kwargs = {
+            "perspective_type": validated_data.get("perspective_type"),
+            "action_type": validated_data.get("action_type"),
+            "status_type": validated_data.get("status_type"),
+            "criticality_type": validated_data.get("criticality_type"),
+            "incident_id": validated_data.get("incident_id"),
+            "perspective_title": validated_data.get("perspective_title"),
+            "perspective": validated_data.get("perspective"),
+            "recommendation": validated_data.get("recommendation"),
+            "tags": validated_data.get("tags"),
+            "donut_left_graph": validated_data.get("donut_left_graph"),
+            'donut_right_graph': validated_data.get("donut_right_graph"),
+            "comparative_left_graph": validated_data.get("comparative_left_graph"),
+            "comparative_right_graph": validated_data.get("comparative_right_graph"),
+            "incident_start_date_time": validated_data.get("incident_start_date_time"),
+            "incident_end_date_time": validated_data.get("incident_end_date_time"),
+            "created_by": user,
+            "created_at": timezone.now()
+        }
+        logger.debug(f"Updating asset with following kwargs {perspective_kwargs}")
+        perspective = Perspective.objects.update(perspective, **perspective_kwargs)
+        return perspective
