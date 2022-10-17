@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext as _
 
+
 class HubUpdate(models.Model):
 
     soar_id = models.CharField(_("soar_id"), max_length=100, help_text=_("soar_id"))

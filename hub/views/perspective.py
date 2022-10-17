@@ -18,7 +18,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
 
     permission_classes = [IsAuthenticated]
 
-    def master_dropdown_data(self, request):
+    def perspective_master_dropdown(self, request):
         """
          Function for assign user for
         """
