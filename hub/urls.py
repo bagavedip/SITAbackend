@@ -12,6 +12,7 @@ from .views.entity import EntityViewSet
 from .views.geolocation import GeoLocationViewSet
 from .views.category import CategoryViewSet
 from .views.cy_feeds import CyFeeds
+from .views.security_pluse import SecurityPluseDetailsViewset
 
 simple_router = routers.SimpleRouter()
 
@@ -94,6 +95,8 @@ add_update = InsightHub.as_view({"post": "add_update"})
 perspective_master_dropdown = PerspectiveViewSet.as_view({"post": "perspective_master_dropdown"})
 perspective_grid_data = PerspectiveViewSet.as_view({"post": "perspective_grid_data"})
 security_pulse_grid_data = PerspectiveViewSet.as_view({"post": "security_pulse_grid_data"})
+perspective_details_data = PerspectiveViewSet.as_view({"post": "perspective_details_data"})
+security_pulse_details_data = SecurityPluseDetailsViewset.as_view({"post": "security_pulse_details_data"})
 add_perspective = PerspectiveViewSet.as_view({"post": "add_perspective"})
 perspective_update = PerspectiveViewSet.as_view({"post": "perspective_update"})
 
@@ -178,8 +181,5 @@ urlpatterns = urlpatterns + [
 
     path(r"api/v1/perspective_grid_data/", perspective_grid_data, name="perspective_grid_data"),
     path(r"api/v1/perspective_master_dropdown/", perspective_master_dropdown, name="perspective_master_dropdown"),
-    path(r"api/v1/security_pulse_grid_data/", security_pulse_grid_data, name="security_pulse_grid_data"),
-    path(r"api/v1/add_perspective/", add_perspective, name="add_perspective"),
-    path(r"api/v1/perspective_update/", perspective_update, name="perspective_update"),
-
+    path(r"api/v1/security_pulse_grid_data/", security_pulse_grid_data, name="security_pulse_grid_data")
 ]

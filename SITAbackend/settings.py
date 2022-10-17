@@ -111,7 +111,7 @@ WSGI_APPLICATION = 'SITAbackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django_tenants.postgresql_backend',
-        "NAME":  'SITA',       #config("DB_NAME"),
+        "NAME":  'etek',       #config("DB_NAME"),
         "USER": config("DB_USER"),
         "PASSWORD": 'postgres',  #config("DB_PASSWORD"),
         "HOST": config("DB_HOST"),
