@@ -9,6 +9,8 @@ from hub.serializers.assign_user import AssignUserSerializer
 from hub.services.assign_task import AssignTaskService
 from hub.services.perspective import PerspectiveService
 
+from hub.serializers.perspective_grid_data import PerspectiveSerializer
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,6 +30,12 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         """
          Function created for perspective_grid_data view
         """
+        logger.debug(f"Recieved request body {request.data}")
+
+        response_obj = PerspectiveSerializer(request)
+
+        data = PerspectiveService.perspective_grid_data(response_obj)
+
         perspective_grid_data = {
             "gridAddOn": {
                 "showFirstColumnAsCheckbox": False,
@@ -175,7 +183,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                 }
             ]
         }
-        return Response(perspective_grid_data, status=status.HTTP_200_OK)
+        return Response(response_obj.get_response(data), status=status.HTTP_200_OK)
 
     def security_pulse_grid_data(self, request):
         response_data = {

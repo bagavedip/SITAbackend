@@ -1,7 +1,11 @@
 import logging
 
+from django.db.models import Q
+
 from hub.models.perspective import Perspective
 from hub.models.process import Process
+
+from hub.serializers.perspective_grid_data import PerspectiveSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -78,3 +82,15 @@ class PerspectiveService:
             }
         ]
         return response
+
+    @staticmethod
+    def perspective_grid_data():
+        """
+        function fetches all data from the perspective model
+        for perspective_gird_data
+        """
+        @staticmethod
+        def get_tickets(response_obj: PerspectiveSerializer):
+            filter_q = Q(**response_obj.filters)
+            query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
+            return query_data

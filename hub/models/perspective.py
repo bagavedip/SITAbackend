@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from users.models import User
 
 
+
+
 class Perspective(models.Model):
     """
      Models for Data holding for Perspective and Newsletters

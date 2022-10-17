@@ -32,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['devsita.etek.com', 'localhost', 'devsita.netrum-tech.com']
+ALLOWED_HOSTS = ['devsita.etek.com', 'localhost', 'devsita.netrum-tech.com','127.0.0.1']
 
 
 # Application definition
@@ -58,7 +58,7 @@ TENANT_APPS = (
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.gis",
+    # "django.contrib.gis",
     "rest_framework",
     "corsheaders",
     "rest_framework_swagger",
@@ -111,12 +111,12 @@ WSGI_APPLICATION = 'SITAbackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django_tenants.postgresql_backend',
-        "NAME": config("DB_NAME"),
+        "NAME":  'SITA',       #config("DB_NAME"),
         "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
+        "PASSWORD": 'postgres',  #config("DB_PASSWORD"),
         "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT", default=5432, cast=int),
-        "CONN_MAX_AGE": config("DB_CONN_MAX_AGE", default=60, cast=int),
+        # "CONN_MAX_AGE": config("DB_CONN_MAX_AGE", default=60, cast=int),
     }
 }
 
