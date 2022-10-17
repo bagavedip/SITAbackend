@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from hub.serializers.assign_user import AssignUserSerializer
+from hub.serializers.perspective import PerspectiveSerializer,PerspectiveUpdateSerializer
 from hub.services.assign_task import AssignTaskService
 from hub.services.perspective import PerspectiveService
 
@@ -319,3 +320,45 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             ]
         }
         return Response(response_data, status=status.HTTP_200_OK)
+
+    def add_perspective(self, request):
+        try:
+            logger.info("Validating data for Log In.")
+            serializer = PerspectiveSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            validated_data = serializer.validated_data
+            logger.info("Initiating Log in.")
+            login_user = request.user
+            with transaction.atomic():
+                perspective = PerspectiveService.create_from_validated_data(login_user, validated_data)
+            logger.debug("Database transaction finished")
+
+            # response formatting
+            response_data = {"id": perspective.pk}
+            return Response({"message": f"perspective with {response_data} created successfully",
+                            "status": status.HTTP_201_CREATED})
+        except Exception as e:
+            return Response({"message": f"{e}", "status": "failed to create perspective"})
+
+    def perspective_update(self, request, *args, **kwargs):
+        """
+        Function which update asset information.
+        """
+        logger.debug(f"Parsed request body {request.data}")
+        login_user = request.user
+        # Validating incoming request body
+        serializer = PerspectiveUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        logger.debug(f"Data after validation {validated_data}")
+
+        # update asset and asset user information
+        logger.debug("Database transaction started")
+        with transaction.atomic():
+            asset = PerspectiveService.update_from_validated_data(perspective, login_user, validated_data)
+        logger.debug("Database transaction finished")
+
+        # response formatting
+        response_data = {"id": asset.pk}
+        return Response(response_data)
+

@@ -55,13 +55,29 @@ class Perspective(models.Model):
                                          help_text=_("perspective_title"))
     perspective = models.TextField(_("perspective"), null=True, help_text=_("perspective"))
     recommendation = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
+    publish = models.BooleanField(_("publish"), default=False, help_text=_("publish"))
+    tags = ArrayField(ArrayField(models.CharField(max_length=255), verbose_name=_("emails"), default=list,
+                                 help_text=_("Email Ids")), null=True,)
+
+    # Image fields
+    donut_left_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
+                                        help_text=_("donut left graph"))
+    donut_right_graph = models.ImageField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
+                                          help_text=_("donut left graph"))
+    comparative_left_graph = models.ImageField(_("donut left graph"), upload_to="perspective/comparative_graph",
+                                               null=True, help_text=_("donut left graph"))
+    comparative_right_graph = models.ImageField(_("donut left graph"), upload_to="perspective/comparative_graph",
+                                                null=True, help_text=_("donut left graph"))
+
+    # Datetime fields
     incident_start_date_time = models.DateTimeField(_("incident_start_date_time"), null=True,
                                                     help_text=_("incident_start_date_time"))
     incident_end_date_time = models.DateTimeField(_("incident_end_date_time"), null=True,
                                                   help_text=_("incident_end_date_time"))
-    publish = models.BooleanField(_("publish"), default=False, help_text=_("publish"))
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated at"), auto_now=True)
+
+    # foreignkey fields
     created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
