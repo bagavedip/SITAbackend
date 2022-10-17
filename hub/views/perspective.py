@@ -321,7 +321,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
-    def perspective_details_data(self,request):
+    def perspective_details_data(self, request):
         """
         Function for getting perspective details
         """
@@ -391,9 +391,9 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response({"message": f"{e}", "status": "failed to create perspective"})
 
-    def perspective_update(self, request, *args, **kwargs):
+    def perspective_update(self, request, perspective,*args, **kwargs):
         """
-        Function which update asset information.
+        Function which update perspective information.
         """
         logger.debug(f"Parsed request body {request.data}")
         login_user = request.user
@@ -405,12 +405,47 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
 
         # update asset and asset user information
         logger.debug("Database transaction started")
-        perspective = 1
+        perspective = request.data.get("perspectiveId")
         with transaction.atomic():
             asset = PerspectiveService.update_from_validated_data(perspective, login_user, validated_data)
         logger.debug("Database transaction finished")
 
         # response formatting
-        response_data = {"id": asset.pk}
+        response_data = {
+            "imageData1": asset.donut_left_graph,
+            "imageData2": asset.donut_right_graph,
+            "imageData3": asset.comparative_left_graph,
+            "imageData4": asset.comparative_right_graph,
+            "imageData1Name": "doughnut left graph",
+            "imageData2Name": "doughnut right graph",
+            "imageData3Name": "comparative left graph",
+            "imageData4Name": "comparative right graph",
+            "perspectiveTitle": asset.perspective_title,
+            "barGraphTitle": "Bar Graph Tittle",
+            "perspectiveInput": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum quam, voluptatibus optio reiciendis distinctio nihil? Ducimus repellat, labore distinctio quia magni delectus culpa commodi rerum,",
+            "recomendationsInput": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum quam, voluptatibus optio reiciendis distinctio nihil? Ducimus repellat, labore distinctio quia magni delectus culpa commodi rer,Statd",
+            "selectedLevelFilter": "High",
+            "selectedActionTakenFilter": "true",
+            "startDateTime": asset.incident_start_date_time,
+            "selectedIds": [
+                "11223410",
+                "11223420",
+                "11223440"
+            ],
+            "selectedPerspectiveFilter": "Incident",
+            "selectedActedUponFilter": "Yes",
+            "endDateTime": asset.incident_end_date_time,
+            "selectedAssets": [
+                "mobile",
+                "laptop",
+                "desktop"
+            ],
+            "selectedEntities": [
+                "Tcs",
+                "Reliance"
+            ],
+            "perspectiveId": "2356",
+            "isPublished": asset.publish
+        }
+        }
         return Response(response_data)
-
