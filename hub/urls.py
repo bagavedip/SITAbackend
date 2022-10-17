@@ -96,6 +96,7 @@ perspective_grid_data = PerspectiveViewSet.as_view({"post": "perspective_grid_da
 security_pulse_grid_data = PerspectiveViewSet.as_view({"post": "security_pulse_grid_data"})
 add_perspective = PerspectiveViewSet.as_view({"post": "add_perspective"})
 perspective_update = PerspectiveViewSet.as_view({"post": "perspective_update"})
+perspective_record_delete = PerspectiveViewSet.as_view({"post": "perspective_record_delete"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -181,5 +182,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/security_pulse_grid_data/", security_pulse_grid_data, name="security_pulse_grid_data"),
     path(r"api/v1/add_perspective/", add_perspective, name="add_perspective"),
     path(r"api/v1/perspective_update/", perspective_update, name="perspective_update"),
+    path(r"api/v1/perspective_record_delete/", perspective_record_delete, name="perspective_record_delete"),
 
 ]

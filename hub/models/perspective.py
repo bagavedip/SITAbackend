@@ -31,6 +31,7 @@ class Perspective(models.Model):
         Medium = "Medium", _("Medium")
         Low = "Low", _("Low")
 
+    id = models.BigAutoField(_("perspective_id"), primary_key=True)
     perspective_type = models.CharField(
         _("perspective type"), max_length=100, choices=PerspectiveType.choices, help_text=_("perspective type")
     )

@@ -1,13 +1,12 @@
 import logging
 
-from django.db import transaction,IntegrityError
-from rest_framework import viewsets,status
+from django.db import transaction
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from hub.serializers.assign_user import AssignUserSerializer
+from hub.models import Perspective
 from hub.serializers.perspective import PerspectiveSerializer,PerspectiveUpdateSerializer
-from hub.services.assign_task import AssignTaskService
 from hub.services.perspective import PerspectiveService
 
 logger = logging.getLogger(__name__)
@@ -355,14 +354,28 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         response_data = {"id": asset.pk}
         return Response(response_data)
 
-    def perspective_delete(self, request, *args, **kwargs):
+    def perspective_record_delete(self, request, *args, **kwargs):
         """[action to destory society]
 
         Args:
             request ([Request]): [Django Request instance]
         """
-        login_user = request.user
-        perspective_id = request.data.get("id")
-        with transaction.atomic():
-            PerspectiveService.delete(login_user, perspective_id)
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        try:
+            login_user = request.user
+            perspective_id = request.data.get("id")
+            queryset = Perspective.objects.get(id=perspective_id)
+            with transaction.atomic():
+                PerspectiveService.delete(queryset)
+                response_data = {
+                    "message": f"Record {perspective_id} Deleted SuccessFully !",
+                    "status": "success"
+                }
+            return Response(response_data)
+        except Exception as e:
+            response_data = {
+                "message": "Error while deleting record",
+                "status": "error"
+            }
+            return Response(response_data)
+
+
