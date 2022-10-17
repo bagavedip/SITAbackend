@@ -181,5 +181,10 @@ urlpatterns = urlpatterns + [
 
     path(r"api/v1/perspective_grid_data/", perspective_grid_data, name="perspective_grid_data"),
     path(r"api/v1/perspective_master_dropdown/", perspective_master_dropdown, name="perspective_master_dropdown"),
-    path(r"api/v1/security_pulse_grid_data/", security_pulse_grid_data, name="security_pulse_grid_data")
+    path(r"api/v1/security_pulse_grid_data/", security_pulse_grid_data, name="security_pulse_grid_data"),
+    path(r"api/v1/add_perspective/", add_perspective, name="add_perspective"),
+    path(r"api/v1/perspective_update/", perspective_update, name="perspective_update"),
+    path(r"api/v1/perspective_details_data/", perspective_details_data, name="perspective_details_data"),
+    path(r"api/v1/security_pulse_details_data/", security_pulse_details_data, name="security_pulse_details_data"),
+
 ]
