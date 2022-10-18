@@ -254,7 +254,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                     "column1" : "000000053",
                     "column2" : "Publish",
                     "column3" : "09.09.2022",
-                    "column4" : "Lorem ipsum dolor sit amet, consectetur.",
+                    "column4" : "It’s Attention-Grabbing",
                     "column5" : "Medium",
                     "column6" : "Mobile , Laptop",
                     "column7" : "Ram Kumar"
@@ -262,7 +262,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                     "column1" : "000000053",
                     "column2" : "Publish",
                     "column3" : "09.09.2022",
-                    "column4" : "Lorem ipsum dolor sit amet, consectetur.",
+                    "column4" : "It’s Concise.",
                     "column5" : "Medium",
                     "column6" : "Laptop",
                     "column7" : "Suresh Kumar"
@@ -270,7 +270,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                     "column1" : "000000053",
                     "column2" : "Publish",
                     "column3" : "09.09.2022",
-                    "column4" : "Lorem ipsum dolor sit amet, consectetur.",
+                    "column4" : "It’s Readable in Most Email Clients.",
                     "column5" : "Medium",
                     "column6" : "Laptop",
                     "column7" : "Suresh Kumar"
@@ -278,7 +278,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                     "column1" : "000000053",
                     "column2" : "Publish",
                     "column3" : "09.09.2022",
-                    "column4" : "Lorem ipsum dolor sit amet, consectetur.",
+                    "column4" : "It Invokes Curiosity.",
                     "column5" : "Medium",
                     "column6" : "Laptop",
                     "column7" : "Suresh Kumar"
@@ -286,7 +286,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                     "column1" : "000000053",
                     "column2" : "Publish",
                     "column3" : "09.09.2022",
-                    "column4" : "Lorem ipsum dolor sit amet, consectetur.",
+                    "column4" : "It Provides Value",
                     "column5" : "Low",
                     "column6" : "Laptop",
                     "column7" : "Suresh Kumar"
@@ -294,7 +294,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                     "column1" : "000000053",
                     "column2" : "Publish",
                     "column3" : "09.09.2022",
-                    "column4" : "Lorem ipsum dolor sit amet, consectetur.",
+                    "column4" : "It Relates to Your Content.",
                     "column5" : "Low",
                     "column6" : "Laptop",
                     "column7" : "Suresh Kumar"
@@ -302,7 +302,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                     "column1" : "000000053",
                     "column2" : "Publish",
                     "column3" : "09.09.2022",
-                    "column4" : "Lorem ipsum dolor sit amet, consectetur.",
+                    "column4" : "It’s Relevant to Your Audience.",
                     "column5" : "Low",
                     "column6" : "Laptop",
                     "column7" : "Suresh Kumar"
