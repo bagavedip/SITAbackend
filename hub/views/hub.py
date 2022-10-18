@@ -123,6 +123,7 @@ class InsightHub(viewsets.GenericViewSet):
                             "color": "black"
                         },
                         {
+
                             "text": "High {high}".format(high=incidents_high),
                             "font": {
                                 "size": "25"

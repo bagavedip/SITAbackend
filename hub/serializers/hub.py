@@ -18,6 +18,8 @@ class InsightsSerializer:
         filter_data = request.data
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
+        if filter_data.get("fromLocation"):
+            self.location_name = filter_data.get("formLoacation")
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
         add_criticality = False
         for filter in filterOptions:
