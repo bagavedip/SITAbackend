@@ -312,47 +312,56 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
-    def add_perspective(self, request):
+    def add_perspective_record(self, request):
         try:
             logger.info("Validating data for Log In.")
-            serializer = PerspectiveSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
+            # serializer = PerspectiveSerializer(data=request.data)
+            # serializer.is_valid(raise_exception=True)
+            validated_data = request.data
             logger.info("Initiating Log in.")
             login_user = request.user
             with transaction.atomic():
-                perspective = PerspectiveService.create_from_validated_data(login_user, validated_data)
+                perspective = PerspectiveService.create_from_validated_data(login_user,validated_data)
             logger.debug("Database transaction finished")
 
             # response formatting
             response_data = {"id": perspective.pk}
             return Response({"message": f"perspective with {response_data} created successfully",
-                            "status": status.HTTP_201_CREATED})
+                             "status": status.HTTP_201_CREATED})
         except Exception as e:
             return Response({"message": f"{e}", "status": "failed to create perspective"})
 
-    def perspective_update(self, request, *args, **kwargs):
+    def edit_perspective_record_submit(self, request):
         """
         Function which update asset information.
         """
-        logger.debug(f"Parsed request body {request.data}")
-        login_user = request.user
-        # Validating incoming request body
-        serializer = PerspectiveUpdateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        logger.debug(f"Data after validation {validated_data}")
+        try:
+            logger.debug(f"Parsed request body {request.data}")
+            login_user = request.user
+            # Validating incoming request body
+            # serializer = PerspectiveUpdateSerializer(data=request.data)
+            # serializer.is_valid(raise_exception=True)
+            validated_data = request.data
+            logger.debug(f"Data after validation {validated_data}")
 
-        # update asset and asset user information
-        logger.debug("Database transaction started")
-        perspective = 1
-        with transaction.atomic():
-            asset = PerspectiveService.update_from_validated_data(perspective, login_user, validated_data)
-        logger.debug("Database transaction finished")
+            # update asset and asset user information
+            logger.debug("Database transaction started")
+            with transaction.atomic():
+                asset = PerspectiveService.update_from_validated_data(login_user,validated_data)
+            logger.debug("Database transaction finished")
 
-        # response formatting
-        response_data = {"id": asset.pk}
-        return Response(response_data)
+            # response formatting
+            response_data = {
+                "message": "Record Updated SuccessFully !",
+                "status": "success"
+            }
+            return Response(response_data)
+        except Exception as e:
+            response_data = {
+                "message": f"{e}",
+                "status": "error"
+            }
+            return Response(response_data)
 
     def perspective_details_data(self, request):
 
