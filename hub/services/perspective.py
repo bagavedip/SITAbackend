@@ -1,6 +1,6 @@
 import logging
 from django.utils import timezone
-
+from django.core.files.base import ContentFile
 from hub.models.perspective import Perspective
 
 
@@ -82,24 +82,42 @@ class PerspectiveService:
 
     @staticmethod
     def create_from_validated_data(user, validated_data):
+        imageData1 = validated_data.get("imageData1")
+        imageData2 = validated_data.get("imageData2")
+        imageData3 = validated_data.get("imageData3")
+        imageData4 = validated_data.get("imageData4")
+
+        imageData1Name = validated_data.get("imageData1Name")
+        imageData2Name = validated_data.get("imageData2Name")
+        imageData3Name = validated_data.get("imageData3Name")
+        imageData4Name = validated_data.get("imageData4Name")
+        donut_left_graph = ContentFile(imageData1, name=imageData1Name)
+        donut_right_graph = ContentFile(imageData2, name=imageData2Name)
+        comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
+        comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
         perspective_kwargs = {
-            "perspective_type": validated_data.get("perspective_type"),
-            "action_type": validated_data.get("action_type"),
-            "status_type": validated_data.get("status_type"),
-            "criticality_type": validated_data.get("criticality_type"),
-            "incident_id": validated_data.get("incident_id"),
-            "perspective_title": validated_data.get("perspective_title"),
-            "perspective": validated_data.get("perspective"),
-            "recommendation": validated_data.get("recommendation"),
-            "tags": validated_data.get("tags"),
-            "donut_left_graph": validated_data.get("donut_left_graph"),
-            "donut_right_graph": validated_data.get("donut_right_graph"),
-            "comparative_left_graph": validated_data.get("comparative_left_graph"),
-            "comparative_right_graph": validated_data.get("comparative_right_graph"),
-            "incident_start_date_time": validated_data.get("incident_start_date_time"),
-            "incident_end_date_time": validated_data.get("incident_end_date_time"),
+            "perspective_type": validated_data.get("selectedPerspectiveFilter"),
+            "action_type": validated_data.get("selectedActionTakenFilter"),
+            "status_type": validated_data.get("selectedActedUponFilter"),
+            "criticality_type": validated_data.get("selectedLevelFilter"),
+            "incident_id": validated_data.get("selectedIds"),
+            "perspective_title": validated_data.get("perspectiveTitle"),
+            "bar_graph_title": validated_data.get("barGraphTitle"),
+            "perspective": validated_data.get("perspectiveInput"),
+            "recommendation": validated_data.get("recomendationsInput"),
+            "selected_assets": validated_data.get("selectedAssets"),
+            "selected_entities": validated_data.get("selectedEntities"),
+            "is_published": validated_data.get("isPublished"),
+            "donut_left_graph": donut_left_graph,
+            "donut_right_graph": donut_right_graph,
+            "comparative_left_graph": comparative_left_graph,
+            "comparative_right_graph": comparative_right_graph,
+            "incident_start_date_time": validated_data.get("startDateTime"),
+            "incident_end_date_time": validated_data.get("endDateTime"),
             "created_by": user,
-            "created_at": timezone.now()
+            "updated_by": user,
+            "created_at": timezone.now(),
+            "updated_at": timezone.now()
         }
         response = Perspective.objects.create(**perspective_kwargs)
         return response

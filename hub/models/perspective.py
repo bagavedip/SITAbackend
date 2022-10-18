@@ -48,11 +48,12 @@ class Perspective(models.Model):
                                          help_text=_("perspective_title"))
     perspective = models.TextField(_("perspective"), null=True, help_text=_("perspective"))
     recommendation = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
-    publish = models.BooleanField(_("publish"), default=False, help_text=_("publish"))
+    bar_graph_title = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
+    is_published = models.BooleanField(_("is_published"), default=False, help_text=_("is_published"))
 
     # ArrayFields
     incident_id = ArrayField(
-        models.SmallIntegerField(),
+        models.IntegerField(),
         default=list,
         help_text=_("incident_id"),
         verbose_name=_("incident_id"),
@@ -63,12 +64,6 @@ class Perspective(models.Model):
                                    help_text=_("selected entities"))
 
     # Image fields
-    donut_left_graph_hex = models.TextField(_("donut_left_graph_hex"), null=True, help_text=_("donut_left_graph_hex"))
-    donut_right_graph_hex = models.TextField(_("donut_right_graph_hex"), null=True, help_text=_("donut_right_graph_hex"))
-    comparative_left_graph_hex = models.TextField(_("comparative_left_graph_hex"), null=True,
-                                                  help_text=_("comparative_left_graph_hex"))
-    comparative_right_graph_hex = models.TextField(_("comparative_right_graph_hex"), null=True,
-                                                   help_text=_("comparative_right_graph_hex"))
     donut_left_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
                                         help_text=_("donut left graph"))
     donut_right_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,

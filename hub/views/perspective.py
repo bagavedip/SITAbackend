@@ -315,9 +315,9 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
     def add_perspective_record(self, request):
         try:
             logger.info("Validating data for Log In.")
-            serializer = PerspectiveSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
+            # serializer = PerspectiveSerializer(data=request.data)
+            # serializer.is_valid(raise_exception=True)
+            validated_data = request.data
             logger.info("Initiating Log in.")
             login_user = request.user
             with transaction.atomic():
