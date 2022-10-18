@@ -69,6 +69,20 @@ class Perspective(models.Model):
     comparative_right_graph = models.ImageField(_("donut left graph"), upload_to="perspective/comparative_graph",
                                                 null=True, help_text=_("donut left graph"))
 
+    imageData1 = models.ImageField(_("imageData1"), upload_to="perspective/donut_graph", null=True,
+                                   help_text=_("imageData1"))
+    imageData2 = models.ImageField(_("imageData2"), upload_to="perspective/donut_graph", null=True,
+                                   help_text=_("imageData2"))
+    imageData3 = models.ImageField(_("imageData3"), upload_to="perspective/donut_graph", null=True,
+                                   help_text=_("imageData3"))
+    imageData4 = models.ImageField(_("imageData4"), upload_to="perspective/donut_graph", null=True,
+                                   help_text=_("imageData4"))
+
+    imageData1Name = models.CharField(_("imageData1Name"), max_length=200, null=True, help_text="image data1 Name")
+    imageData2Name = models.CharField(_("imageData2Name"), max_length=200, null=True, help_text="image data2 Name")
+    imageData3Name = models.CharField(_("imageData3Name"), max_length=200, null=True, help_text="image data3 Name")
+    imageData4Name = models.CharField(_("imageData4Name"), max_length=200, null=True, help_text="image data4 Name")
+
     # Datetime fields
     incident_start_date_time = models.DateTimeField(_("incident_start_date_time"), null=True,
                                                     help_text=_("incident_start_date_time"))
