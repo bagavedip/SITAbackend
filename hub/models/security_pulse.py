@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class SecurityPulse(models.Model):
-    id = models.BigAutoField(_("security_pulse_id"), primary=True)
+    id = models.BigAutoField(_("security_pulse_id"), primary_key=True)
     security_pulse_title = models.CharField(_("security_pulse_title"), null=True, max_length=400,
                                             help_text=_("security_pulse_title"))
     main_title = models.CharField(_("main_title"), null=True, max_length=400,
