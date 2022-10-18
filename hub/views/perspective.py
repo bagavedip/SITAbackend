@@ -356,7 +356,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
     def perspective_details_data(self, request):
 
         perspective_id = request.data.get("id")
-        response_data =        response_data = {
+        response_data = {
             "perspectiveFormData": {
                 "perspectiveTitle": "Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur.",
                 "selectedIds": [
