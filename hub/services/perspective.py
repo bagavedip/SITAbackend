@@ -130,6 +130,46 @@ class PerspectiveService:
         return perspective
 
     @staticmethod
+    def perspective_details_data(perspective_id):
+        """
+         function to show perspective_details_data
+         using given id
+        """
+        queryset = Perspective.objects.get(id=perspective_id)
+        perspective_title = queryset.perspective_title
+        selected_id = queryset.incident_id
+        selected_assets = queryset.selected_assets
+        selected_entities = queryset.selected_entities
+        created_at = queryset.created_at
+        created_date = str(created_at)[:10]
+        created_time = str(created_at)[11:19]
+        updated_at = queryset.updated_at
+        updated_date = str(updated_at)[:10]
+        updated_time = str(updated_at)[11:19]
+        response_data = {
+            "perspectiveFormData": {
+                "perspectiveTitle": perspective_title,
+                "selectedIds": selected_id,
+                "selectedAssets": selected_assets,
+                "selectedEntities": selected_entities,
+                "imageData1": None
+            },
+            "footerData": {
+                "lastUpdateInformation": {
+                    "user": queryset.updated_by,
+                    "date": created_date,
+                    "time": created_time
+                },
+                "originallyCreatedBy": {
+                    "user": queryset.created_by,
+                    "date": updated_date,
+                    "time": updated_time
+                }
+            }
+        }
+        return response_data
+
+    @staticmethod
     def delete(perspective):
         """Function which delete perspective.
 

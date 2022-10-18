@@ -312,7 +312,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
-    def add_perspective(self, request):
+    def add_perspective_record(self, request):
         try:
             logger.info("Validating data for Log In.")
             serializer = PerspectiveSerializer(data=request.data)
@@ -354,6 +354,15 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         response_data = {"id": asset.pk}
         return Response(response_data)
 
+    def perspective_details_data(self, request):
+        try:
+            perspective_id = request.data.get("id")
+            perspective = PerspectiveService.perspective_details_data(perspective_id)
+            return Response(perspective, status=status.HTTP_200_OK)
+        except Exception as e:
+            response_data = f"{e}"
+            return Response(response_data)
+
     def perspective_record_delete(self, request, *args, **kwargs):
         """[action to destory society]
 
@@ -373,7 +382,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             return Response(response_data)
         except Exception as e:
             response_data = {
-                "message": "Error while deleting record",
+                "message": f"{e}",
                 "status": "error"
             }
             return Response(response_data)
