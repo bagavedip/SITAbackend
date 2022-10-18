@@ -19,8 +19,8 @@ class InsightsSerializer:
         self.start_date = filter_data.get('fromDate')
         self.end_date = filter_data.get('toDate')
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
-        if filter_data.get("forLocation"):
-            self.location_name = filter_data.get("forLoacation")
+        # if filter_data.get("forLocation"):
+        #     self.location_name = filter_data.get("forLoacation")
         add_criticality = False
         for filter in filterOptions:
             if filter == 'Criticality':
