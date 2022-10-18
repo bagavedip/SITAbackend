@@ -189,4 +189,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/perspective_update/", perspective_update, name="perspective_update"),
     path(r"api/v1/perspective_details_data/", perspective_details_data, name="perspective_details_data"),
     path(r"api/v1/security_pulse_details_data/", security_pulse_details_data, name="security_pulse_details_data"),
+    path(r"api/v1/security_pulse_record_delete/", security_pulse_record_delete, name="security_pulse_record_delete"),
+    path(r"api/v1/perspective_record_delete/", perspective_record_delete, name="perspective_record_delete"),
 ]
