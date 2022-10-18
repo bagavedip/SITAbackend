@@ -30,7 +30,8 @@ class Perspective(models.Model):
         High = "High", _("High")
         Medium = "Medium", _("Medium")
         Low = "Low", _("Low")
-    id = models.BigAutoField(_("id"), primary_key=True)
+
+    id = models.BigAutoField(_("perspective_id"), primary_key=True)
     perspective_type = models.CharField(
         _("perspective type"), max_length=100, choices=PerspectiveType.choices, help_text=_("perspective type")
     )
@@ -43,23 +44,44 @@ class Perspective(models.Model):
     criticality_type = models.CharField(
         _("perspective type"), max_length=100, choices=CriticalityType.choices, help_text=_("perspective type")
     )
-    incident_id = ArrayField(
-        models.SmallIntegerField(),
-        default=list,
-        help_text=_("incident_id"),
-        verbose_name=_("incident_id"),
-    )
     perspective_title = models.CharField(_("perspective_title"), max_length=100, null=True,
                                          help_text=_("perspective_title"))
     perspective = models.TextField(_("perspective"), null=True, help_text=_("perspective"))
     recommendation = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
+    bar_graph_title = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
+    is_published = models.BooleanField(_("is_published"), default=False, help_text=_("is_published"))
+
+    # ArrayFields
+    incident_id = ArrayField(
+        models.IntegerField(),
+        default=list,
+        help_text=_("incident_id"),
+        verbose_name=_("incident_id"),
+    )
+    selected_assets = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_assets"), default=list,
+                                 help_text=_("selected assets"))
+    selected_entities = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_entities"), default=list,
+                                   help_text=_("selected entities"))
+
+    # Image fields
+    donut_left_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
+                                        help_text=_("donut left graph"))
+    donut_right_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
+                                         help_text=_("donut left graph"))
+    comparative_left_graph = models.FileField(_("donut left graph"), upload_to="perspective/comparative_graph",
+                                              null=True, help_text=_("donut left graph"))
+    comparative_right_graph = models.FileField(_("donut left graph"), upload_to="perspective/comparative_graph",
+                                               null=True, help_text=_("donut left graph"))
+
+    # Datetime fields
     incident_start_date_time = models.DateTimeField(_("incident_start_date_time"), null=True,
                                                     help_text=_("incident_start_date_time"))
     incident_end_date_time = models.DateTimeField(_("incident_end_date_time"), null=True,
                                                   help_text=_("incident_end_date_time"))
-    publish = models.BooleanField(_("publish"), default=False, help_text=_("publish"))
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated at"), auto_now=True)
+
+    # foreignkey fields
     created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
