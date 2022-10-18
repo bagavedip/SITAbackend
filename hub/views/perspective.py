@@ -1,3 +1,4 @@
+
 import logging
 
 from django.db import transaction,IntegrityError
@@ -444,8 +445,8 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                 "Tcs",
                 "Reliance"
             ],
-            "perspectiveId": "2356",
+            "perspectiveId": asset.incident_id,
             "isPublished": asset.publish
         }
-        }
+
         return Response(response_data)
