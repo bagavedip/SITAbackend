@@ -99,6 +99,7 @@ add_perspective = PerspectiveViewSet.as_view({"post": "add_perspective"})
 perspective_update = PerspectiveViewSet.as_view({"post": "perspective_update"})
 perspective_details_data = PerspectiveViewSet.as_view({"post": "perspective_details_data"})
 security_pulse_details_data = PerspectiveViewSet.as_view({"post": "security_pulse_details_data"})
+perspective_record_delete = PerspectiveViewSet.as_view({"post": "perspective_record_delete"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 

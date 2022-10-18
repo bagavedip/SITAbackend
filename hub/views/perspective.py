@@ -5,6 +5,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from hub.models.perspective import Perspective
 from hub.serializers.perspective import PerspectiveSerializer, PerspectiveUpdateSerializer
 from hub.services.perspective import PerspectiveService
 
@@ -476,3 +477,27 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             }
         }
         return Response(response_data, status=status.HTTP_200_OK)
+
+    def perspective_record_delete(self, request, *args, **kwargs):
+        """[action to destory society]
+
+        Args:
+            request ([Request]): [Django Request instance]
+        """
+        try:
+            login_user = request.user
+            perspective_id = request.data.get("id")
+            queryset = Perspective.objects.get(id=perspective_id)
+            with transaction.atomic():
+                PerspectiveService.delete(queryset)
+                response_data = {
+                    "message": f"Record {perspective_id} Deleted SuccessFully !",
+                    "status": "success"
+                }
+            return Response(response_data)
+        except Exception as e:
+            response_data = {
+                "message": f"{e}",
+                "status": "error"
+            }
+            return Response(response_data)
