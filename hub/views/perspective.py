@@ -325,8 +325,8 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             logger.debug("Database transaction finished")
 
             # response formatting
-            response_data = {"id": perspective.pk}
-            return Response({"message": f"perspective with {response_data} created successfully",
+            perspective_id = perspective.pk
+            return Response({"message": f"perspective with {perspective_id} created successfully",
                              "status": status.HTTP_201_CREATED})
         except Exception as e:
             return Response({"message": f"{e}", "status": "failed to create perspective"})
