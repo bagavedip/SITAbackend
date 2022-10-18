@@ -25,7 +25,8 @@ class HubService:
     @staticmethod
     def get_insights(response_obj: InsightsSerializer):
         query_data = (
-            Hub.objects.filter(starttime__gte=response_obj.start_date, endtime__lte=response_obj.end_date).
+            Hub.objects.filter(starttime__gte=response_obj.start_date, endtime__lte=response_obj.end_date,
+                               location_name=response_obj.location_name).
             values(*response_obj.model_group_map).order_by().annotate(events=Count('itsm_id')))
         response_obj.set_requst_queryset(query_data)
         incidents = (
