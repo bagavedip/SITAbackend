@@ -63,6 +63,12 @@ class Perspective(models.Model):
                                    help_text=_("selected entities"))
 
     # Image fields
+    donut_left_graph_hex = models.TextField(_("donut_left_graph_hex"), null=True, help_text=_("donut_left_graph_hex"))
+    donut_right_graph_hex = models.TextField(_("donut_right_graph_hex"), null=True, help_text=_("donut_right_graph_hex"))
+    comparative_left_graph_hex = models.TextField(_("comparative_left_graph_hex"), null=True,
+                                                  help_text=_("comparative_left_graph_hex"))
+    comparative_right_graph_hex = models.TextField(_("comparative_right_graph_hex"), null=True,
+                                                   help_text=_("comparative_right_graph_hex"))
     donut_left_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
                                         help_text=_("donut left graph"))
     donut_right_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
