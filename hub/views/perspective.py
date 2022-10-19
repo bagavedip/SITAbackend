@@ -22,7 +22,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         """
         logger.debug(f"Received request body {request.data}")
         response_data = PerspectiveService.perspective_dropdown_data()
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        return Response(response_data, status="success")
 
     def perspective_grid_data(self, request):
         """
@@ -175,7 +175,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                 }
             ]
         }
-        return Response(perspective_grid_data, status=status.HTTP_200_OK)
+        return Response(perspective_grid_data, status="success")
 
     def security_pulse_grid_data(self, request):
         response_data = {
@@ -310,7 +310,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                 }
             ]
         }
-        return Response(response_data, status=status.HTTP_200_OK)
+        return Response(response_data, status="success")
 
     def add_perspective_record(self, request):
         try:
@@ -327,9 +327,9 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             # response formatting
             perspective_id = perspective.pk
             return Response({"message": f"perspective with {perspective_id} created successfully",
-                             "status": status.HTTP_201_CREATED})
+                             "status": "success"})
         except Exception as e:
-            return Response({"message": f"{e}", "status": "failed to create perspective"})
+            return Response({"message": f"{e}", "status": "error"})
 
     def edit_perspective_record_submit(self, request):
         """
@@ -409,7 +409,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                 }
             }
         }
-        return Response(response_data, status=status.HTTP_200_OK)
+        return Response(response_data, status="success")
 
     def security_pulse_details_data(self, request):
         security_pulse_id = request.data.get("id")
@@ -485,7 +485,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                 ]
             }
         }
-        return Response(response_data, status=status.HTTP_200_OK)
+        return Response(response_data, status="success")
 
     def perspective_record_delete(self, request, *args, **kwargs):
         """[action to destory society]
