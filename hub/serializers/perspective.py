@@ -6,7 +6,6 @@ class PerspectiveSerializer(serializers.ModelSerializer):
     """
     Model serializer for Process information
     """
-    # tags = serializers.ListField(allow_empty=False, child=serializers.ListField(allow_empty=True, allow_null=True, child=serializers.CharField(label='Tags', max_length=255), help_text='Email Ids', label='Emails', required=False))
 
     class Meta:
         model = Perspective

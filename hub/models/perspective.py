@@ -5,8 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from users.models import User
 
 
-
-
 class Perspective(models.Model):
     """
      Models for Data holding for Perspective and Newsletters
@@ -33,6 +31,7 @@ class Perspective(models.Model):
         Medium = "Medium", _("Medium")
         Low = "Low", _("Low")
 
+    id = models.BigAutoField(_("perspective_id"), primary_key=True)
     perspective_type = models.CharField(
         _("perspective type"), max_length=100, choices=PerspectiveType.choices, help_text=_("perspective type")
     )
@@ -45,43 +44,34 @@ class Perspective(models.Model):
     criticality_type = models.CharField(
         _("perspective type"), max_length=100, choices=CriticalityType.choices, help_text=_("perspective type")
     )
-    incident_id = ArrayField(
-        models.SmallIntegerField(),
-        default=list,
-        help_text=_("incident_id"),
-        verbose_name=_("incident_id"),
-    )
     perspective_title = models.CharField(_("perspective_title"), max_length=100, null=True,
                                          help_text=_("perspective_title"))
     perspective = models.TextField(_("perspective"), null=True, help_text=_("perspective"))
     recommendation = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
-    publish = models.BooleanField(_("publish"), default=False, help_text=_("publish"))
-    tags = ArrayField(ArrayField(models.CharField(max_length=255), verbose_name=_("emails"), default=list,
-                                 help_text=_("Email Ids")), null=True,)
+    bar_graph_title = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
+    is_published = models.BooleanField(_("is_published"), default=False, help_text=_("is_published"))
+
+    # ArrayFields
+    incident_id = ArrayField(
+        models.IntegerField(),
+        default=list,
+        help_text=_("incident_id"),
+        verbose_name=_("incident_id"),
+    )
+    selected_assets = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_assets"), default=list,
+                                 help_text=_("selected assets"))
+    selected_entities = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_entities"), default=list,
+                                   help_text=_("selected entities"))
 
     # Image fields
     donut_left_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
                                         help_text=_("donut left graph"))
-    donut_right_graph = models.ImageField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
-                                          help_text=_("donut left graph"))
-    comparative_left_graph = models.ImageField(_("donut left graph"), upload_to="perspective/comparative_graph",
+    donut_right_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
+                                         help_text=_("donut left graph"))
+    comparative_left_graph = models.FileField(_("donut left graph"), upload_to="perspective/comparative_graph",
+                                              null=True, help_text=_("donut left graph"))
+    comparative_right_graph = models.FileField(_("donut left graph"), upload_to="perspective/comparative_graph",
                                                null=True, help_text=_("donut left graph"))
-    comparative_right_graph = models.ImageField(_("donut left graph"), upload_to="perspective/comparative_graph",
-                                                null=True, help_text=_("donut left graph"))
-
-    imageData1 = models.ImageField(_("imageData1"), upload_to="perspective/donut_graph", null=True,
-                                   help_text=_("imageData1"))
-    imageData2 = models.ImageField(_("imageData2"), upload_to="perspective/donut_graph", null=True,
-                                   help_text=_("imageData2"))
-    imageData3 = models.ImageField(_("imageData3"), upload_to="perspective/donut_graph", null=True,
-                                   help_text=_("imageData3"))
-    imageData4 = models.ImageField(_("imageData4"), upload_to="perspective/donut_graph", null=True,
-                                   help_text=_("imageData4"))
-
-    imageData1Name = models.CharField(_("imageData1Name"), max_length=200, null=True, help_text="image data1 Name")
-    imageData2Name = models.CharField(_("imageData2Name"), max_length=200, null=True, help_text="image data2 Name")
-    imageData3Name = models.CharField(_("imageData3Name"), max_length=200, null=True, help_text="image data3 Name")
-    imageData4Name = models.CharField(_("imageData4Name"), max_length=200, null=True, help_text="image data4 Name")
 
     # Datetime fields
     incident_start_date_time = models.DateTimeField(_("incident_start_date_time"), null=True,

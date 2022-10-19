@@ -316,3 +316,28 @@ class InsightHub(viewsets.GenericViewSet):
             return Response(response_data)
         except UnboundLocalError:
             return Response({"error": "there is no such selectedIncidents."})
+
+    def daily_metrics(self, request):
+        """
+         function to count daily records of incident, events, detects, contained
+        """
+        response_data = [
+            {
+                "name": "Detects",
+                "value": "5M"
+            },
+            {
+                "name": "Events",
+                "value": "1.3M"
+            },
+            {
+                "name": "Incidents",
+                "value": "300"
+            },
+            {
+                "name": "Contained",
+                "value": "98%"
+            },
+
+        ]
+        return Response(response_data, status=status.HTTP_200_OK)

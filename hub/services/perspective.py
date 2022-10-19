@@ -1,4 +1,6 @@
 import logging
+
+from django.core.files.base import ContentFile
 from django.utils import timezone
 
 from hub.models.perspective import Perspective
@@ -16,6 +18,17 @@ class PerspectiveService:
     def get_queryset():
         """Function to return all Entity"""
         return Perspective.objects.all()
+
+    @staticmethod
+    def update(asset, **kwargs):
+        """
+        Function update an asset from kwargs
+        """
+        for key, value in kwargs.items():
+            setattr(asset, key, value)
+        asset.save()
+
+        return asset
 
     @staticmethod
     def perspective_dropdown_data():
@@ -82,49 +95,98 @@ class PerspectiveService:
 
     @staticmethod
     def create_from_validated_data(user, validated_data):
+        imageData1 = validated_data.get("imageData1")
+        imageData2 = validated_data.get("imageData2")
+        imageData3 = validated_data.get("imageData3")
+        imageData4 = validated_data.get("imageData4")
+
+        imageData1Name = validated_data.get("imageData1Name")
+        imageData2Name = validated_data.get("imageData2Name")
+        imageData3Name = validated_data.get("imageData3Name")
+        imageData4Name = validated_data.get("imageData4Name")
+        donut_left_graph = ContentFile(imageData1, name=imageData1Name)
+        donut_right_graph = ContentFile(imageData2, name=imageData2Name)
+        comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
+        comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
         perspective_kwargs = {
-            "perspective_type": validated_data.get("perspective_type"),
-            "action_type": validated_data.get("action_type"),
-            "status_type": validated_data.get("status_type"),
-            "criticality_type": validated_data.get("criticality_type"),
-            "incident_id": validated_data.get("incident_id"),
-            "perspective_title": validated_data.get("perspective_title"),
-            "perspective": validated_data.get("perspective"),
-            "recommendation": validated_data.get("recommendation"),
-            "tags": validated_data.get("tags"),
-            "donut_left_graph": validated_data.get("donut_left_graph"),
-            "donut_right_graph": validated_data.get("donut_right_graph"),
-            "comparative_left_graph": validated_data.get("comparative_left_graph"),
-            "comparative_right_graph": validated_data.get("comparative_right_graph"),
-            "incident_start_date_time": validated_data.get("incident_start_date_time"),
-            "incident_end_date_time": validated_data.get("incident_end_date_time"),
+            "perspective_type": validated_data.get("selectedPerspectiveFilter"),
+            "action_type": validated_data.get("selectedActionTakenFilter"),
+            "status_type": validated_data.get("selectedActedUponFilter"),
+            "criticality_type": validated_data.get("selectedLevelFilter"),
+            "incident_id": validated_data.get("selectedIds"),
+            "perspective_title": validated_data.get("perspectiveTitle"),
+            "bar_graph_title": validated_data.get("barGraphTitle"),
+            "perspective": validated_data.get("perspectiveInput"),
+            "recommendation": validated_data.get("recomendationsInput"),
+            "selected_assets": validated_data.get("selectedAssets"),
+            "selected_entities": validated_data.get("selectedEntities"),
+            "is_published": validated_data.get("isPublished"),
+            "donut_left_graph": donut_left_graph,
+            "donut_right_graph": donut_right_graph,
+            "comparative_left_graph": comparative_left_graph,
+            "comparative_right_graph": comparative_right_graph,
+            "incident_start_date_time": validated_data.get("startDateTime"),
+            "incident_end_date_time": validated_data.get("endDateTime"),
             "created_by": user,
-            "created_at": timezone.now()
+            "updated_by": user,
+            "created_at": timezone.now(),
+            "updated_at": timezone.now()
         }
         response = Perspective.objects.create(**perspective_kwargs)
         return response
 
     @staticmethod
-    def update_from_validated_data(perspective, user, validated_data):
+    def update_from_validated_data(user, validated_data):
+        perspectiveId = int(validated_data.get("perspectiveId"))
+        queryset = Perspective.objects.get(id=perspectiveId)
+        imageData1 = validated_data.get("imageData1", None)
+        imageData2 = validated_data.get("imageData2", None)
+        imageData3 = validated_data.get("imageData3", None)
+        imageData4 = validated_data.get("imageData4", None)
+
+        imageData1Name = validated_data.get("imageData1Name", None)
+        imageData2Name = validated_data.get("imageData2Name", None)
+        imageData3Name = validated_data.get("imageData3Name", None)
+        imageData4Name = validated_data.get("imageData4Name", None)
+        donut_left_graph = ContentFile(imageData1, name=imageData1Name)
+        donut_right_graph = ContentFile(imageData2, name=imageData2Name)
+        comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
+        comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
         perspective_kwargs = {
-            "perspective_type": validated_data.get("perspective_type"),
-            "action_type": validated_data.get("action_type"),
-            "status_type": validated_data.get("status_type"),
-            "criticality_type": validated_data.get("criticality_type"),
-            "incident_id": validated_data.get("incident_id"),
-            "perspective_title": validated_data.get("perspective_title"),
-            "perspective": validated_data.get("perspective"),
-            "recommendation": validated_data.get("recommendation"),
-            "tags": validated_data.get("tags"),
-            "donut_left_graph": validated_data.get("donut_left_graph"),
-            'donut_right_graph': validated_data.get("donut_right_graph"),
-            "comparative_left_graph": validated_data.get("comparative_left_graph"),
-            "comparative_right_graph": validated_data.get("comparative_right_graph"),
-            "incident_start_date_time": validated_data.get("incident_start_date_time"),
-            "incident_end_date_time": validated_data.get("incident_end_date_time"),
+            "perspective_type": validated_data.get("selectedPerspectiveFilter", None),
+            "action_type": validated_data.get("selectedActionTakenFilter", None),
+            "status_type": validated_data.get("selectedActedUponFilter", None),
+            "criticality_type": validated_data.get("selectedLevelFilter", None),
+            "incident_id": validated_data.get("selectedIds", None),
+            "perspective_title": validated_data.get("perspectiveTitle", None),
+            "bar_graph_title": validated_data.get("barGraphTitle", None),
+            "perspective": validated_data.get("perspectiveInput", None),
+            "recommendation": validated_data.get("recomendationsInput", None),
+            "selected_assets": validated_data.get("selectedAssets", None),
+            "selected_entities": validated_data.get("selectedEntities", None),
+            "donut_left_graph": donut_left_graph,
+            'donut_right_graph': donut_right_graph,
+            "comparative_left_graph": comparative_left_graph,
+            "comparative_right_graph": comparative_right_graph,
+            "incident_start_date_time": validated_data.get("startDateTime", None),
+            "incident_end_date_time": validated_data.get("endDateTime", None),
+            "is_published": validated_data.get("isPublished", None),
             "created_by": user,
-            "created_at": timezone.now()
+            "updated_by": user,
+            "created_at": timezone.now(),
+            "updated_at": timezone.now()
         }
         logger.debug(f"Updating asset with following kwargs {perspective_kwargs}")
-        perspective = Perspective.objects.update(perspective, **perspective_kwargs)
-        return perspective
+        perspective = PerspectiveService.update(queryset, **perspective_kwargs)
+        return queryset
+
+    @staticmethod
+    def delete(perspective):
+        """Function which delete perspective.
+
+        Args:
+            perspective ([perspective]): [Instance of perspective]
+        """
+        # End date in society
+        perspective.delete()
+        logger.info(f"Society with ID {perspective.pk} deleted successfully.")
