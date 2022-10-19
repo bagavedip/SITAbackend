@@ -93,6 +93,15 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             response_data = f"{e}"
             return Response(response_data)
 
+    def edit_perspective_record_fetch(self, request):
+        try:
+            perspective_id = request.data.get("id")
+            perspective = PerspectiveService.edit_perspective_record_fetch(perspective_id)
+            return Response(perspective, status=status.HTTP_200_OK)
+        except Exception as e:
+            response_data = f"{e}"
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
     def perspective_record_delete(self, request, *args, **kwargs):
         """[action to destory society]
 

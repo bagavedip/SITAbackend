@@ -232,6 +232,50 @@ class PerspectiveService:
         return response_data
 
     @staticmethod
+    def edit_perspective_record_fetch(perspective_id):
+        """
+         function to show edit_perspective_record_fetch
+         using given id
+        """
+        queryset = Perspective.objects.get(id=perspective_id)
+        perspective_title = queryset.perspective_title
+        selected_id = queryset.incident_id
+        selected_assets = queryset.selected_assets
+        selected_entities = queryset.selected_entities
+        donut_left_graph = queryset.donut_left_graph.read()
+        donut_right_graph = queryset.donut_right_graph.read()
+        comparative_left_graph = queryset.comparative_left_graph.read()
+        comparative_right_graph = queryset.comparative_right_graph.read()
+        response_data = {
+            "perspectiveFormData": {
+                "perspectiveTitle": perspective_title,
+                "barGraphTitle": queryset.bar_graph_title,
+                "perspectiveInput": queryset.perspective,
+                "recomendationsInput": queryset.recommendation,
+                "selectedLevelFilter": queryset.criticality_type,
+                "selectedActionTakenFilter": queryset.action_type,
+                "startDateTime": queryset.incident_start_date_time,
+                "endDateTime": queryset.incident_end_date_time,
+                "selectedPerspectiveFilter": queryset.perspective_type,
+                "selectedActedUponFilter": queryset.status_type,
+                "selectedIds": selected_id,
+                "selectedAssets": selected_assets,
+                "selectedEntities": selected_entities,
+                "imageData1": donut_left_graph,
+                "imageData2": donut_right_graph,
+                "imageData3": comparative_left_graph,
+                "imageData4": comparative_right_graph,
+                "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
+                "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
+                "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
+                "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
+                "perspectiveId": perspective_id,
+                "isPublished": queryset.is_published
+            },
+        }
+        return response_data
+
+    @staticmethod
     def perspective_grid(response_obj: PerspectiveGridSerializer):
         filter_q = Q(**response_obj.filters)
         query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
