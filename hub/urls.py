@@ -97,6 +97,7 @@ perspective_master_dropdown = PerspectiveViewSet.as_view({"post": "perspective_m
 perspective_grid_data = PerspectiveViewSet.as_view({"post": "perspective_grid_data"})
 security_pulse_grid_data = PerspectiveViewSet.as_view({"post": "security_pulse_grid_data"})
 add_perspective_record = PerspectiveViewSet.as_view({"post": "add_perspective_record"})
+edit_perspective_record_fetch = InsightHub.as_view({"post": "edit_perspective_record_fetch"})
 edit_perspective_record_submit = PerspectiveViewSet.as_view({"post": "edit_perspective_record_submit"})
 perspective_details_data = PerspectiveViewSet.as_view({"post": "perspective_details_data"})
 security_pulse_details_data = PerspectiveViewSet.as_view({"post": "security_pulse_details_data"})
@@ -194,6 +195,7 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/add_perspective_record/", add_perspective_record, name="add_perspective_record"),
     path(r"api/v1/edit_perspective_record_submit/", edit_perspective_record_submit,
          name="edit_perspective_record_submit"),
+    path(r"api/v1/edit_perspective_record_fetch/", edit_perspective_record_fetch, name="edit_perspective_record_fetch"),
     path(r"api/v1/perspective_details_data/", perspective_details_data, name="perspective_details_data"),
     path(r"api/v1/security_pulse_details_data/", security_pulse_details_data, name="security_pulse_details_data"),
     path(r"api/v1/security_pulse_record_delete/", security_pulse_record_delete, name="security_pulse_record_delete"),
