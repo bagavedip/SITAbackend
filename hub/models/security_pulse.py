@@ -22,3 +22,4 @@ class SecurityPulse(models.Model):
                                  help_text=_("selected assets"))
     selected_entities = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_entities"), default=list,
                                    help_text=_("selected entities"))
+    links = ArrayField(models.JSONField(_("links"), default=dict, help_text=_("links")), null=True)
