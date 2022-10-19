@@ -99,6 +99,7 @@ perspective_details_data = PerspectiveViewSet.as_view({"post": "perspective_deta
 security_pulse_details_data = SecurityPluseDetailsViewset.as_view({"post": "security_pulse_details_data"})
 add_perspective = PerspectiveViewSet.as_view({"post": "add_perspective"})
 perspective_update = PerspectiveViewSet.as_view({"post": "perspective_update"})
+edit_perspective_record_fetch = InsightHub.as_view({"post": "edit_perspective_record_fetch"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -186,5 +187,7 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/perspective_update/", perspective_update, name="perspective_update"),
     path(r"api/v1/perspective_details_data/", perspective_details_data, name="perspective_details_data"),
     path(r"api/v1/security_pulse_details_data/", security_pulse_details_data, name="security_pulse_details_data"),
+    path(r"api/v1/edit_perspective_record_fetch/", edit_perspective_record_fetch, name="edit_perspective_record_fetch"),
+
 
 ]
