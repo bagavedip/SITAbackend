@@ -9,15 +9,22 @@ class User(AbstractUser):
     """
      Model for User data mapping
     """
+    class Roles(models.TextChoices):
+        SitaAdmin = "SitaAdmin", _("SitaAdmin")
+        EtekAnalyst = "EtekAnalyst", _("EtekAnalyst")
+        ClientAdmin = "ClientAdmin", _("ClientAdmin")
+        ClientUser = "ClientUser", _("ClientUser")
     username = None
     id = models.BigAutoField(_("id"), primary_key=True)
     email = models.EmailField(_("email"), help_text="User email", unique=True, max_length=255)
     first_name = models.CharField(_("first_name"), max_length=50, help_text="first name")
     last_name = models.CharField(_("last_name"), max_length=50, help_text="last_name")
     is_admin = models.BooleanField(_("is_admin"), help_text="is_admin")
+    role = models.CharField(_("role"), max_length=100, choices=Roles.choices,
+                                   default="ClientUser", help_text=_("Role"))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['is_admin']  # Email & Password are required by default.
+    REQUIRED_FIELDS = ['is_admin','role']  # Email & Password are required by default.
 
     objects = CustomUserManager()
 
