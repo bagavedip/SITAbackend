@@ -12,6 +12,7 @@ class UserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=256, required=False)
     last_name = serializers.CharField(max_length=256, required=False)
     is_admin = serializers.BooleanField(required=True)
+    role = serializers.CharField(max_length=100, required=True)
 
     class Meta:
         fields = "__all__"
