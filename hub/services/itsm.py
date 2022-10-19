@@ -97,8 +97,8 @@ class ITSMService:
                 color = "#00FF00"
                 card_icon = "GreenCaution"
             else:
-                priority = "Yellow"
-                color = "#FFFF00"
+                priority = "Orange"
+                color = "#FFA500"
                 card_icon = "OrangeCaution"
             tread_level = {"cardTitle": priority, "textColor": color, "cardSubTitle": "Threat Level",
                            "cardIcon": card_icon}
