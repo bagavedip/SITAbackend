@@ -326,9 +326,9 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             # response formatting
             perspective_id = perspective.pk
             return Response({"message": f"perspective with {perspective_id} created successfully",
-                             "status": status.HTTP_201_CREATED})
+                             "status": "success"})
         except Exception as e:
-            return Response({"message": f"{e}", "status": "failed to create perspective"})
+            return Response({"message": f"{e}", "status": "error"})
 
     def edit_perspective_record_submit(self, request):
         """
