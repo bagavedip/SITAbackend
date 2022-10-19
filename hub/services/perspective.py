@@ -229,7 +229,6 @@ class PerspectiveService:
         }
         return response_data
 
-
     @staticmethod
     def perspective_grid(response_obj: PerspectiveGridSerializer):
         filter_q = Q(**response_obj.filters)

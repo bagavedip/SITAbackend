@@ -1,11 +1,12 @@
 import logging
 
 from django.db import transaction
-from rest_framework import viewsets
+from rest_framework import viewsets,status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from hub.models import SecurityPulse
+from hub.serializers.security_pulse_grid import SecurityPulseGridSerializer
 from hub.services.perspective import PerspectiveService
 from hub.services.security_pulse import SecurityPulseService
 
@@ -39,3 +40,11 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                 "status": "error"
             }
             return Response(response_data)
+
+    def security_pulse_grid_data(self, request):
+        logger.debug(f"Received request body {request.data}")
+
+        response_obj = SecurityPulseGridSerializer(request)
+
+        data = SecurityPulseService.security_pulse_grid(response_obj)
+        return Response(data, status=status.HTTP_200_OK)
