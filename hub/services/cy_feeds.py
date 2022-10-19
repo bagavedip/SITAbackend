@@ -21,11 +21,11 @@ class Cy_FeedsService:
             new_feed = {
             "title": data.title,
             "description" :data.descriptions,
-            "iconclass" :"fa-solid fa-display",
+            "iconclass" :"fa-solid fa-newspaper-o",
             "linkurls" : urls 
             }
             feeds.append(new_feed)
         return Response({
-            "FeedHeader":"CY Pharma",
+            "FeedHeader":"CY Firma",
             "Feeds": feeds
         })
