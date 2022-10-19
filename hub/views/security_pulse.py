@@ -31,9 +31,9 @@ class SecurityPulseViewSet(viewsets.GenericViewSet):
             # response formatting
             security_pulse_id = perspective.pk
             return Response({"message": f"perspective with {security_pulse_id} created successfully",
-                             "status": status.HTTP_201_CREATED})
+                             "status": "success"})
         except Exception as e:
-            return Response({"message": f"{e}", "status": "failed to create perspective"})
+            return Response({"message": f"{e}", "status": "error"})
 
     def edit_security_pulse_record_submit(self, request):
         """
