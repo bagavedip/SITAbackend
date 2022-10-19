@@ -510,3 +510,42 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
                 "status": "error"
             }
             return Response(response_data)
+
+    def fetch_incident_tags(self, request):
+        serializer = request.data.get("inputFilter")
+        queryset = Perspective.objects.all()
+        incidents = []
+        for query in queryset:
+            incident = query.incident_id
+            for i in incident:
+                if serializer in str(i):
+                    incidents.append(i)
+        tags = set(incidents)
+        incidents = list(tags)
+        return Response(incidents)
+
+    def fetch_asset_tags(self, request):
+        serializer = request.data.get("inputFilter")
+        queryset = Perspective.objects.all()
+        assets = []
+        for query in queryset:
+            incident = query.selected_assets
+            for i in incident:
+                if serializer in str(i):
+                    assets.append(i)
+        tags = set(assets)
+        assets = list(tags)
+        return Response(assets)
+
+    def fetch_enity_tags(self, request):
+        serializer = request.data.get("inputFilter")
+        queryset = Perspective.objects.all()
+        entities = []
+        for entity in queryset:
+            incident = entity.selected_entities
+            for i in incident:
+                if serializer in str(i):
+                    entities.append(i)
+        tags = set(entities)
+        entities = list(tags)
+        return Response(entities)

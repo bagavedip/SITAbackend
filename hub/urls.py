@@ -104,6 +104,9 @@ perspective_record_delete = PerspectiveViewSet.as_view({"post": "perspective_rec
 security_pulse_record_delete = SecurityPulseViewSet.as_view({"post": "security_pulse_record_delete"})
 edit_security_pulse_record_submit = SecurityPulseViewSet.as_view({"post": "edit_security_pulse_record_submit"})
 add_security_pulse_record = SecurityPulseViewSet.as_view({"post": "add_security_pulse_record"})
+fetch_incident_tags = PerspectiveViewSet.as_view({"post": "fetch_incident_tags"})
+fetch_asset_tags = PerspectiveViewSet.as_view({"post": "fetch_asset_tags"})
+fetch_enity_tags = PerspectiveViewSet.as_view({"post": "fetch_enity_tags"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -198,5 +201,8 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/edit_security_pulse_record_submit/", edit_security_pulse_record_submit,
          name="edit_security_pulse_record_submit"),
     path(r"api/v1/add_security_pulse_record/", add_security_pulse_record, name="add_security_pulse_record"),
+    path(r"api/v1/fetch_asset_tags/", fetch_asset_tags, name="fetch_asset_tags"),
+    path(r"api/v1/fetch_enity_tags/", fetch_enity_tags, name="fetch_enity_tags"),
+    path(r"api/v1/fetch_incident_tags/", fetch_incident_tags, name="fetch_incident_tags"),
 
 ]
