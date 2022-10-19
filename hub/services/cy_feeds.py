@@ -21,7 +21,7 @@ class Cy_FeedsService:
             new_feed = {
             "title": data.title,
             "description" :data.descriptions,
-            "iconclass" :"fa-solid fa-newspaper-o",
+            "iconclass" :"fa-newspaper-o",
             "linkurls" : urls 
             }
             feeds.append(new_feed)
