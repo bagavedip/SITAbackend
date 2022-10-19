@@ -100,6 +100,9 @@ security_pulse_details_data = SecurityPluseDetailsViewset.as_view({"post": "secu
 add_perspective = PerspectiveViewSet.as_view({"post": "add_perspective"})
 perspective_update = PerspectiveViewSet.as_view({"post": "perspective_update"})
 edit_perspective_record_fetch = InsightHub.as_view({"post": "edit_perspective_record_fetch"})
+fetch_incident_tags = InsightHub.as_view({"post": "fetch_incident_tags"})
+fetch_asset_tags = InsightHub.as_view({"post": "fetch_asset_tags"})
+fetch_enity_tags = InsightHub.as_view({"post": "fetch_enity_tags"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -188,6 +191,8 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/perspective_details_data/", perspective_details_data, name="perspective_details_data"),
     path(r"api/v1/security_pulse_details_data/", security_pulse_details_data, name="security_pulse_details_data"),
     path(r"api/v1/edit_perspective_record_fetch/", edit_perspective_record_fetch, name="edit_perspective_record_fetch"),
-
+    path(r"api/v1/fetch_incident_tags/", fetch_incident_tags, name="fetch_incident_tags"),
+    path(r"api/v1/fetch_asset_tags/", fetch_asset_tags, name="fetch_asset_tags"),
+    path(r"api/v1/fetch_enity_tags/", fetch_enity_tags, name="fetch_enity_tags"),
 
 ]

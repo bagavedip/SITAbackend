@@ -188,6 +188,9 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         return Response(response_obj.get_response(data), status=status.HTTP_200_OK)
 
     def security_pulse_grid_data(self, request):
+        """
+        this function send the security pluse grid data
+        """
         response_data = {
             "gridAddOn" : {
                 "showFirstColumnAsCheckbox" : False,
@@ -499,3 +502,94 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         }
     }
         return Response(response_data)
+
+    def fetch_incident_tags(self,request):
+        """
+        this function fetch tags in incident
+        """
+        pass
+
+
+    def fetch_asset_tags(self, request):
+        """
+        this function fetch tags in asset
+        """
+        pass
+
+    def fetch_enity_tags(self, request):
+        """
+        this function fetch tags in enity
+        """
+        pass
+
+
+def security_pulse_details_data(self, request):
+    security_pulse_id = request.data.get("id")
+    queryset = SecurityPulse.objects.get(id=security_pulse_id)
+    security_pulse_title = queryset.perspsecurity_pulse_title
+    main_title = queryset.mainTitle,
+    selected_entities = queryset.selected_entities
+    created_at = queryset.created_at
+    created_date = str(created_at)[:10]
+    recommendations = queryset.recommendations
+    selected_assets = queryset.selected_assets
+    selected_incident = queryset.selected_incident
+    response_data =  {
+            "headerData": {
+                "user": "John Cifuentes",
+                "designation": "Cyber Security Engineer",
+                "createdDate": created_date
+            },
+            "securityPulseFormData": {
+                "securityPulseTitle": security_pulse_title,
+                "mainTitle": main_title,
+                "sections": [
+                    {
+                        "imageData": image_donut
+                    },
+                    ],
+                "recommendations": [ recommendations,
+                ],
+                "links": [
+                    {
+                        "linkText": "Habilitar la protección extendida para funciones de autenticación (EPA) así como la ",
+                        "linkUrl": "https://support.microsoft.com/en-gb/topic/kb5005413-mitigating-ntlm-relay-attacks-on-active-directory-certificate- services-ad-cs-3612b773-4043-4aa9-b23d-b87910cd3429"
+                    },
+                    {
+                        "linkText": "Desactivar HTTP en los servidores AD CS",
+                        "linkUrl": "https://support.microsoft.com/en-gb/topic/kb5005413-mitigating-ntlm-relay-attacks-on-active-directory-certificate- services-ad-cs-3612b773-4043-4aa9-b23d-b87910cd3429"
+                    },
+                    {
+                        "linkText": "Desactivar HTTP en los servidores AD CS",
+                        "linkUrl": "https://securityaffairs.co/wordpress/13"
+                    }
+                ],
+                "selectedIncidents": [
+                    selected_incident,
+                ],
+                "selectedAssets": [
+                    selected_assets,
+                ],
+                "selectedEntities": [
+                    selected_entities,
+                ]
+            },
+            "footerData": {
+                "email": "info@etek.com",
+                "contacts": [
+                    {
+                        "countryName": "Colombia",
+                        "contactNo": "+57(1)2571520"
+                    },
+                    {
+                        "countryName": "Peru'",
+                        "contactNo": "+51(1)6124343"
+                    },
+                    {
+                        "countryName": "India",
+                        "contactNo": "+91-9873451221"
+                    }
+                ]
+            }
+        }
+    return Response(response_data, status=status.HTTP_200_OK)
