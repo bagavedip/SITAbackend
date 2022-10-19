@@ -197,13 +197,15 @@ class PerspectiveService:
         updated_at = queryset.updated_at
         updated_date = str(updated_at)[:10]
         updated_time = str(updated_at)[11:19]
+        donut_left_graph = str(queryset.donut_left_graph)
+        image_donut = open(donut_left_graph, "rb")
         response_data = {
             "perspectiveFormData": {
                 "perspectiveTitle": perspective_title,
                 "selectedIds": selected_id,
                 "selectedAssets": selected_assets,
                 "selectedEntities": selected_entities,
-                "imageData1": queryset.donut_left_graph.seek(0),
+                "imageData1": image_donut,
                 "imageData2": queryset.donut_right_graph.seek(0),
                 "imageData3": queryset.comparative_left_graph.seek(0),
                 "imageData4": queryset.comparative_right_graph.seek(0),

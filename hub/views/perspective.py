@@ -197,9 +197,6 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         try:
             logger.debug(f"Parsed request body {request.data}")
             login_user = request.user
-            # Validating incoming request body
-            # serializer = PerspectiveUpdateSerializer(data=request.data)
-            # serializer.is_valid(raise_exception=True)
             validated_data = request.data
             logger.debug(f"Data after validation {validated_data}")
 
