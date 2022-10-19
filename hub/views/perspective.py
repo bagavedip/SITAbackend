@@ -5,6 +5,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from hub.models import Hub
 from hub.models.perspective import Perspective
 from hub.services.perspective import PerspectiveService
 
@@ -512,39 +513,36 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
 
     def fetch_incident_tags(self, request):
         serializer = request.data.get("inputFilter")
-        queryset = Perspective.objects.all()
+        queryset = Hub.objects.all()
         incidents = []
         for query in queryset:
-            incident = query.incident_id
-            for i in incident:
-                if serializer in str(i):
-                    incidents.append(i)
+            incident = query.ticket_id
+            if serializer in incident:
+                incidents.append(incident)
         tags = set(incidents)
         incidents = list(tags)
         return Response(incidents)
 
     def fetch_asset_tags(self, request):
         serializer = request.data.get("inputFilter")
-        queryset = Perspective.objects.all()
+        queryset = Hub.objects.all()
         assets = []
         for query in queryset:
-            incident = query.selected_assets
-            for i in incident:
-                if serializer in str(i):
-                    assets.append(i)
+            incident = query.asset_name
+            if serializer in incident:
+                assets.append(incident)
         tags = set(assets)
         assets = list(tags)
         return Response(assets)
 
     def fetch_enity_tags(self, request):
         serializer = request.data.get("inputFilter")
-        queryset = Perspective.objects.all()
+        queryset = Hub.objects.all()
         entities = []
         for entity in queryset:
-            incident = entity.selected_entities
-            for i in incident:
-                if serializer in str(i):
-                    entities.append(i)
+            incident = entity.entity_name
+            if serializer in incident:
+                entities.append(incident)
         tags = set(entities)
         entities = list(tags)
         return Response(entities)
