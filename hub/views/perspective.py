@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from hub.models.perspective import Perspective
-from hub.serializers.perspective import PerspectiveSerializer, PerspectiveUpdateSerializer
 from hub.services.perspective import PerspectiveService
 
 logger = logging.getLogger(__name__)
