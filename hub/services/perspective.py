@@ -1,8 +1,10 @@
 import logging
+
+from django.db.models import Q
 from django.utils import timezone
 from django.core.files.base import ContentFile
 from hub.models.perspective import Perspective
-
+from hub.serializers.perspective_grid_view import PerspectiveGridSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -224,6 +226,13 @@ class PerspectiveService:
             }
         }
         return response_data
+
+
+    @staticmethod
+    def perspective_grid(response_obj: PerspectiveGridSerializer):
+        filter_q = Q(**response_obj.filters)
+        query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
+        return query_data
 
     @staticmethod
     def delete(perspective):

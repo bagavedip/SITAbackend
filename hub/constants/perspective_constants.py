@@ -5,11 +5,11 @@ this Dictionary used to pick column name
 id_del = 'IDDEL'
 hire_del = 'HIREDEL'
 PERSPECTIVE_TABLE_HEADER = {
-    'TICKET': 'SIEM_id',
-    'CATEGORY': 'service_category',
-    'TICKET DETAILS': 'Description',
-    'DATE RAISED': 'CreatedTime',
-    'DUE DATE': 'Ending_time',
-    'STATUS': 'RequestStatus',
-    'LEVEL': 'Priority'
+    'INCIDENT ID': 'perspective_title',
+    'Publish / Draft': 'is_published',
+    'PERSPECTIVE DATE': 'incident_start_date_time',
+    'PERSECTIVE TYPE': 'perspective_type',
+    'PERSPECTIVE  TITLE': 'perspective_title',
+    'STATUS': 'status_type',
+    'ACTION': 'action_type'
 }
