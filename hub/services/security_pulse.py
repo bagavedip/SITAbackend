@@ -106,6 +106,7 @@ class SecurityPulseService:
             for query in queryset:
                 security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
         return security_pulse_image
+
     @staticmethod
     def edit_security_pulse_record_fetch(security_id):
         """
@@ -117,19 +118,23 @@ class SecurityPulseService:
         selected_assets = queryset.selected_assets
         selected_entities = queryset.selected_entities
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
+        section = []
         for query in query:
             image = query.image_data.read()
             info = query.info
             image_name = str(queryset.image_data).split('/')[2],
             image_kwargs = {
-
+                "imageData": image,
+                "imageDataName": image_name,
+                "info": info
             }
+            section.append(image_kwargs)
         response_data = {
             "perspectiveFormData": {
                 "securityPulseTitle": queryset.security_pulse_title,
                 "mainTitle": queryset.main_title,
                 "criticality": queryset.perspective,
-                "sections": [{"imageData": "abc", "imagename":"abc", "info":"info"}],
+                "sections": section,
                 "recommendations": queryset.criticality_type,
                 "links": queryset.action_type,
                 "selectedIds": selected_id,
@@ -140,13 +145,3 @@ class SecurityPulseService:
             },
         }
         return response_data
-
-#
-# "imageData1": donut_left_graph ,
-# "imageData2": donut_right_graph ,
-# "imageData3": comparative_left_graph ,
-# "imageData4": comparative_right_graph ,
-# "imageData1Name": str(queryset.donut_left_graph).split('/')[2] ,
-# "imageData2Name": str(queryset.donut_right_graph).split('/')[2] ,
-# "imageData3Name": str(queryset.comparative_left_graph).split('/')[2] ,
-# "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
