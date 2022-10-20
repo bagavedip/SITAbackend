@@ -90,12 +90,12 @@ class SecurityPulseService:
             "created_at": timezone.now(),
             "updated_at": timezone.now()
         }
-        response = SecurityPulseService.update(queryset,**security_pulse_kwargs)
+        response = SecurityPulseService.update(queryset, **security_pulse_kwargs)
         for section in sections:
-            image_data = section.get("imageData",None)
+            image_data = section.get("imageData", None)
             image_data_name = validated_data.get("imageDataName",None)
-            image = ContentFile(image_data,name=image_data_name)
-            info = section.get("info",None)
+            image = ContentFile(image_data, name=image_data_name)
+            info = section.get("info", None)
             security_pulse_image_kwargs = {
                 "image_data": image,
                 "info": info,
@@ -104,7 +104,7 @@ class SecurityPulseService:
             }
             queryset = SecurityPulseImage.objects.filter(security_pulse=securityPulseId)
             for query in queryset:
-                security_pulse_image = SecurityPulseService.update(query,**security_pulse_image_kwargs)
+                security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
         return security_pulse_image
 
     @staticmethod
