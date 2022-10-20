@@ -195,7 +195,7 @@ class SecurityPulseService:
                 "recommendations": queryset.recommendations,
                 "criticality": queryset.criticality_type,
                 "links": queryset.links,
-                "selectedIds": queryset.selected_id,
+                "selectedIds": queryset.selected_incident,
                 "selectedAssets": queryset.selected_assets,
                 "selectedEntities": queryset.selected_entities,
             },
