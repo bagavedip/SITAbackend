@@ -1,6 +1,7 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from users.models import User
 
 
 class SecurityPulse(models.Model):
@@ -33,3 +34,25 @@ class SecurityPulse(models.Model):
         default="Low",)
     # links = ArrayField(models.JSONField(_("links"), default=dict, help_text=_("links")), null=True)
     links = models.JSONField(default=list, null=True, blank=True)
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(_("updated at"), auto_now=True, null=True)
+
+    # foreignkey fields
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        db_index=False,
+        verbose_name=_("Created by"),
+        help_text=_("Created by"),
+        related_name="+",
+    )
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        db_index=False,
+        verbose_name=_("Updated by"),
+        help_text=_("Updated by"),
+        related_name="+",
+    )
