@@ -133,10 +133,10 @@ class SecurityPulseService:
             "perspectiveFormData": {
                 "securityPulseTitle": queryset.security_pulse_title,
                 "mainTitle": queryset.main_title,
-                "criticality": queryset.perspective,
+                "criticality": queryset.criticality_type,
                 "sections": section,
-                "recommendations": queryset.criticality_type,
-                "links": queryset.action_type,
+                "recommendations": queryset.recommendations,
+                "links": queryset.links,
                 "selectedIds": selected_id,
                 "selectedAssets": selected_assets,
                 "selectedEntities": selected_entities,
@@ -145,3 +145,60 @@ class SecurityPulseService:
             },
         }
         return response_data
+    
+    @staticmethod
+    def security_pulse_details_data(security_id):
+        """
+          function to show edit_perspective_record_fetch
+          using given id
+         """
+        queryset = SecurityPulse.objects.get(id=security_id)
+        query = SecurityPulseImage.objects.filter(security_pulse=security_id)
+        section = []
+        for query in query:
+            image = query.image_data.read()
+            info = query.info
+            image_name = str(queryset.image_data).split('/')[2],
+            image_kwargs = {
+                "imageData": image,
+                "imageDataName": image_name,
+                "info": info
+            }
+            section.append(image_kwargs)
+        response_data = {
+            "headerData": {
+                "user": queryset.created_by,
+                "designation": "Cyber Security Engineer",
+                "createdDate": queryset.created_at
+            },
+            "perspectiveFormData": {
+                "securityPulseTitle": queryset.security_pulse_title,
+                "mainTitle": queryset.main_title,
+                "sections": section,
+                "recommendations": queryset.recommendations,
+                "criticality": queryset.criticality_type,
+                "links": queryset.links,
+                "selectedIds": queryset.selected_id,
+                "selectedAssets": queryset.selected_assets,
+                "selectedEntities": queryset.selected_entities,
+            },
+            "footerData": {
+                "email": "info@etek.com",
+                "contacts": [
+                    {
+                        "countryName": "Colombia",
+                        "contactNo": "+57(1)2571520"
+                    },
+                    {
+                        "countryName": "Peru'",
+                        "contactNo": "+51(1)6124343"
+                    },
+                    {
+                        "countryName": "India",
+                        "contactNo": "+91-9873451221"
+                    }
+                ]
+            }
+        }
+        return response_data
+    
