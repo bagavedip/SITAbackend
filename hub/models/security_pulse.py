@@ -4,6 +4,12 @@ from django.utils.translation import gettext_lazy as _
 
 
 class SecurityPulse(models.Model):
+
+    class CriticalityType(models.TextChoices):
+        High = "High", _("High")
+        Medium = "Medium", _("Medium")
+        Low = "Low", _("Low")
+
     id = models.BigAutoField(_("security_pulse_id"), primary_key=True)
     security_pulse_title = models.CharField(_("security_pulse_title"), null=True, max_length=400,
                                             help_text=_("security_pulse_title"))
@@ -22,4 +28,8 @@ class SecurityPulse(models.Model):
                                  help_text=_("selected assets"))
     selected_entities = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_entities"), default=list,
                                    help_text=_("selected entities"))
-    links = ArrayField(models.JSONField(_("links"), default=dict, help_text=_("links")), null=True)
+    criticality_type = models.CharField(
+        _("perspective type"), max_length=100, choices=CriticalityType.choices, help_text=_("perspective type"),
+        default="Low",)
+    # links = ArrayField(models.JSONField(_("links"), default=dict, help_text=_("links")), null=True)
+    links = models.JSONField(default=list, null=True, blank=True)

@@ -5,11 +5,11 @@ this Dictionary used to pick column name
 id_del = 'IDDEL'
 hire_del = 'HIREDEL'
 SECURITY_PULSE_TABLE_HEADER = {
-    'INCIDENT ID': 'perspective_title',
+    'INCIDENT ID': 'id',
     'Publish / Draft': 'is_published',
     'NEWSLETTER DATE': 'incident_start_date_time',
     'TITLE': 'main_title',
-    'CRITICALITY': 'perspective_title',
+    'CRITICALITY': 'criticality_type',
     'ASSET TYPE': 'status_type',
     'ANALYST': 'action_type'
 }
