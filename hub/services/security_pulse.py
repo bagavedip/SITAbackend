@@ -107,7 +107,7 @@ class SecurityPulseService:
                 "security_pulse": response
 
             }
-            security_pulse_image = SecurityPulseImage.update(queryset, **security_pulse_image_kwargs)
+            security_pulse_image = SecurityPulseService.update(queryset, **security_pulse_image_kwargs)
         else:
             for section in sections:
                 image_data = section.get("imageData")
