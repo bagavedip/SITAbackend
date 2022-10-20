@@ -5,7 +5,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from hub.models import Perspective
+from hub.models import Perspective ,Hub
 from hub.serializers.perspective_grid_view import PerspectiveGridSerializer
 from hub.services.perspective import PerspectiveService
 
@@ -126,4 +126,38 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             }
             return Response(response_data)
 
+    def fetch_incident_tags(self, request):
+        serializer = request.data.get("inputFilter")
+        queryset = Hub.objects.all()
+        incidents = []
+        for query in queryset:
+            incident = query.ticket_id
+            if serializer in incident:
+                incidents.append(incident)
+        tags = set(incidents)
+        incidents = list(tags)
+        return Response(incidents)
 
+    def fetch_asset_tags(self, request):
+        serializer = request.data.get("inputFilter")
+        queryset = Hub.objects.all()
+        assets = []
+        for query in queryset:
+            incident = query.asset_name
+            if serializer in incident:
+                assets.append(incident)
+        tags = set(assets)
+        assets = list(tags)
+        return Response(assets)
+
+    def fetch_enity_tags(self, request):
+        serializer = request.data.get("inputFilter")
+        queryset = Hub.objects.all()
+        entities = []
+        for entity in queryset:
+            incident = entity.entity_name
+            if serializer in incident:
+                entities.append(incident)
+        tags = set(entities)
+        entities = list(tags)
+        return Response(entities)
