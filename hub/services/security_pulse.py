@@ -1,203 +1,296 @@
 import logging
 
-from django.core.files.base import ContentFile
+from django.db.models import Q
 from django.utils import timezone
-
-from hub.models import SecurityPulse,SecurityPulseImage
-from hub.serializers.security_pulse_grid import SecurityPulseGridSerializer
+from django.core.files.base import ContentFile
+from hub.models.perspective import Perspective
+from hub.serializers.perspective_grid_view import PerspectiveGridSerializer
 
 logger = logging.getLogger(__name__)
 
 
-class SecurityPulseService:
+class PerspectiveService:
+    """
+     Services for perspective models
+    """
 
     @staticmethod
-    def update(asset,**kwargs):
+    def get_queryset():
+        """Function to return all Entity"""
+        return Perspective.objects.all()
+
+    @staticmethod
+    def update(asset, **kwargs):
         """
         Function update an asset from kwargs
         """
-        for key,value in kwargs.items():
-            setattr(asset,key,value)
+        for key, value in kwargs.items():
+            setattr(asset, key, value)
         asset.save()
 
         return asset
 
     @staticmethod
-    def create_from_validated_data(user,validated_data):
-        sections = validated_data.get("sections")
-        security_pulse_kwargs = {
-            "criticality_type": validated_data.get("criticality"),
-            "security_pulse_title": validated_data.get("securityPulseTitle"),
-            "main_title": validated_data.get("mainTitle"),
-            "links": validated_data.get("links"),
-            "recommendations": validated_data.get("recommendations"),
-            "selected_assets": validated_data.get("selectedAssets"),
-            "selected_entities": validated_data.get("selectedEntities"),
-            "is_published": validated_data.get("isPublished"),
-            "created_by": user,
-            "updated_by": user,
-            "created_at": timezone.now(),
-            "updated_at": timezone.now()
-        }
-        response = SecurityPulse.objects.create(**security_pulse_kwargs)
-        for section in sections:
-            image_data = section.get("imageData")
-            image_data_name = section.get("imageDataName")
-            image = ContentFile(image_data,name=image_data_name)
-            info = section.get("info")
-            security_pulse_image_kwargs = {
-                "image_data": image,
-                "info": info,
-                "security_pulse": response
+    def perspective_dropdown_data():
+        """
+         function fetch all required data from
+         Perspective model for perspective_dropdown_data.
+        """
+        # fetch perspective_type list in models
+        perspective_type = Perspective.objects.values_list('perspective_type').distinct()
+        perspective_dropdown = [{
+            "label": "Prospective Type",
+            "value": "Select"
+        }]
 
+        # fetch action_type list in models
+        action_type = Perspective.objects.values_list('action_type').distinct()
+        action_dropdown = [{
+            "label": "Action Taken",
+            "value": "Select",
+        }]
+
+        # fetch status list in models
+        status = Perspective.objects.values_list('status_type').distinct()
+        status_dropdown = [{
+            "label": "Status",
+            "value": "Select"
+        }]
+        for perspective in perspective_type:
+            for per in perspective:
+                new_asset = {
+                    "label": per,
+                    "value": per,
+                }
+
+                perspective_dropdown.append(new_asset)
+        for action in action_type:
+            for act in action:
+                new_geo = {
+                    "label": act,
+                    "value": act
+                }
+                action_dropdown.append(new_geo)
+        for stat in status:
+            for i in stat:
+                new_entity = {
+                    "label": i,
+                    "value": i
+                }
+                status_dropdown.append(new_entity)
+
+        # final response which gives actual dropdown_data
+        response = [
+            {
+                "id": "PerspectiveType",
+                "dropdownoption": perspective_dropdown
+            },
+            {
+                "id": "ActionTaken",
+                "dropdownoption": action_dropdown
+            },
+            {
+                "id": "Status",
+                "dropdownoption": status_dropdown
             }
-            security_pulse_image = SecurityPulseImage.objects.create(**security_pulse_image_kwargs)
+        ]
         return response
 
     @staticmethod
-    def security_pulse_grid(response_obj: SecurityPulseGridSerializer):
-        # filter_q = Q(**response_obj.filters)
-        query_data = SecurityPulse.objects.all().values(*response_obj.select_cols)
-        return query_data
+    def create_from_validated_data(user, validated_data):
+        imageData1 = validated_data.get("imageData1")
+        imageData2 = validated_data.get("imageData2")
+        imageData3 = validated_data.get("imageData3")
+        imageData4 = validated_data.get("imageData4")
 
-    @staticmethod
-    def delete(security):
-        """Function which delete security_pulse.
-
-        Args:
-            security ([security_pulse]): [Instance of security_pulse]
-        """
-        # End date in society
-        security.delete()
-        logger.info(f"Society with ID {security.pk} deleted successfully.")
-
-    @staticmethod
-    def update_from_validated_data(user,validated_data):
-        securityPulseId = int(validated_data.get("securityPulseId"))
-        queryset = SecurityPulse.objects.get(id=securityPulseId)
-        sections = validated_data.get("sections")
-        security_pulse_kwargs = {
-            "criticality_type": validated_data.get("criticality"),
-            "security_pulse_title": validated_data.get("securityPulseTitle"),
-            "main_title": validated_data.get("mainTitle"),
-            "links": validated_data.get("links"),
-            "recommendations": validated_data.get("recommendations"),
+        imageData1Name = validated_data.get("imageData1Name")
+        imageData2Name = validated_data.get("imageData2Name")
+        imageData3Name = validated_data.get("imageData3Name")
+        imageData4Name = validated_data.get("imageData4Name")
+        donut_left_graph = ContentFile(imageData1, name=imageData1Name)
+        donut_right_graph = ContentFile(imageData2, name=imageData2Name)
+        comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
+        comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
+        perspective_kwargs = {
+            "perspective_type": validated_data.get("selectedPerspectiveFilter"),
+            "action_type": validated_data.get("selectedActionTakenFilter"),
+            "status_type": validated_data.get("selectedActedUponFilter"),
+            "criticality_type": validated_data.get("selectedLevelFilter"),
+            "incident_id": validated_data.get("selectedIds"),
+            "perspective_title": validated_data.get("perspectiveTitle"),
+            "bar_graph_title": validated_data.get("barGraphTitle"),
+            "perspective": validated_data.get("perspectiveInput"),
+            "recommendation": validated_data.get("recomendationsInput"),
             "selected_assets": validated_data.get("selectedAssets"),
             "selected_entities": validated_data.get("selectedEntities"),
             "is_published": validated_data.get("isPublished"),
+            "donut_left_graph": donut_left_graph,
+            "donut_right_graph": donut_right_graph,
+            "comparative_left_graph": comparative_left_graph,
+            "comparative_right_graph": comparative_right_graph,
+            "incident_start_date_time": validated_data.get("startDateTime"),
+            "incident_end_date_time": validated_data.get("endDateTime"),
             "created_by": user,
             "updated_by": user,
             "created_at": timezone.now(),
             "updated_at": timezone.now()
         }
-        response = SecurityPulseService.update(queryset,**security_pulse_kwargs)
-        for section in sections:
-            image_data = section.get("imageData",None)
-            image_data_name = validated_data.get("imageDataName",None)
-            image = ContentFile(image_data,name=image_data_name)
-            info = section.get("info",None)
-            security_pulse_image_kwargs = {
-                "image_data": image,
-                "info": info,
-                "security_pulse": response
-
-            }
-            queryset = SecurityPulseImage.objects.filter(security_pulse=securityPulseId)
-            for query in queryset:
-                security_pulse_image = SecurityPulseService.update(query,**security_pulse_image_kwargs)
-        return security_pulse_image
+        response = Perspective.objects.create(**perspective_kwargs)
+        return response
 
     @staticmethod
-    def edit_security_pulse_record_fetch(security_id):
+    def update_from_validated_data(user, validated_data):
+        perspectiveId = int(validated_data.get("perspectiveId"))
+        queryset = Perspective.objects.get(id=perspectiveId)
+        imageData1 = validated_data.get("imageData1", None)
+        imageData2 = validated_data.get("imageData2", None)
+        imageData3 = validated_data.get("imageData3", None)
+        imageData4 = validated_data.get("imageData4", None)
+
+        imageData1Name = validated_data.get("imageData1Name", None)
+        imageData2Name = validated_data.get("imageData2Name", None)
+        imageData3Name = validated_data.get("imageData3Name", None)
+        imageData4Name = validated_data.get("imageData4Name", None)
+        donut_left_graph = ContentFile(imageData1, name=imageData1Name)
+        donut_right_graph = ContentFile(imageData2, name=imageData2Name)
+        comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
+        comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
+        perspective_kwargs = {
+            "perspective_type": validated_data.get("selectedPerspectiveFilter", None),
+            "action_type": validated_data.get("selectedActionTakenFilter", None),
+            "status_type": validated_data.get("selectedActedUponFilter", None),
+            "criticality_type": validated_data.get("selectedLevelFilter", None),
+            "incident_id": validated_data.get("selectedIds", None),
+            "perspective_title": validated_data.get("perspectiveTitle", None),
+            "bar_graph_title": validated_data.get("barGraphTitle", None),
+            "perspective": validated_data.get("perspectiveInput", None),
+            "recommendation": validated_data.get("recomendationsInput", None),
+            "selected_assets": validated_data.get("selectedAssets", None),
+            "selected_entities": validated_data.get("selectedEntities", None),
+            "donut_left_graph": donut_left_graph,
+            'donut_right_graph': donut_right_graph,
+            "comparative_left_graph": comparative_left_graph,
+            "comparative_right_graph": comparative_right_graph,
+            "incident_start_date_time": validated_data.get("startDateTime", None),
+            "incident_end_date_time": validated_data.get("endDateTime", None),
+            "is_published": validated_data.get("isPublished", None),
+            "created_by": user,
+            "updated_by": user,
+            "created_at": timezone.now(),
+            "updated_at": timezone.now()
+        }
+        logger.debug(f"Updating asset with following kwargs {perspective_kwargs}")
+        perspective = PerspectiveService.update(queryset, **perspective_kwargs)
+        return perspective
+
+    @staticmethod
+    def perspective_details_data(perspective_id):
         """
-          function to show edit_perspective_record_fetch
-          using given id
-         """
-        queryset = SecurityPulse.objects.get(id=security_id)
-        selected_id = queryset.selected_incident
+         function to show perspective_details_data
+         using given id
+        """
+        queryset = Perspective.objects.get(id=perspective_id)
+        perspective_title = queryset.perspective_title
+        selected_id = queryset.incident_id
         selected_assets = queryset.selected_assets
         selected_entities = queryset.selected_entities
-        query = SecurityPulseImage.objects.filter(security_pulse=security_id)
-        section = []
-        for query in query:
-            image = query.image_data.read()
-            info = query.info
-            image_name = str(query.image_data).split('/')[2],
-            image_kwargs = {
-                "imageData": image,
-                "imageDataName": image_name,
-                "info": info
-            }
-            section.append(image_kwargs)
+        created_at = queryset.created_at
+        created_date = str(created_at)[:10]
+        created_time = str(created_at)[11:19]
+        updated_at = queryset.updated_at
+        updated_date = str(updated_at)[:10]
+        updated_time = str(updated_at)[11:19]
+        donut_left_graph = queryset.donut_left_graph.read()
+        donut_right_graph = queryset.donut_right_graph.read()
+        comparative_left_graph = queryset.comparative_left_graph.read()
+        comparative_right_graph = queryset.comparative_right_graph.read()
         response_data = {
             "perspectiveFormData": {
-                "securityPulseTitle": queryset.security_pulse_title,
-                "mainTitle": queryset.main_title,
-                "criticality": queryset.criticality_type,
-                "sections": section,
-                "recommendations": queryset.recommendations,
-                "links": queryset.links,
+                "perspectiveTitle": perspective_title,
                 "selectedIds": selected_id,
                 "selectedAssets": selected_assets,
                 "selectedEntities": selected_entities,
-                "securityPulseId": security_id,
+                "imageData1": donut_left_graph,
+                "imageData2": donut_right_graph,
+                "imageData3": comparative_left_graph,
+                "imageData4": comparative_right_graph,
+                "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
+                "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
+                "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
+                "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
+            },
+            "footerData": {
+                "lastUpdateInformation": {
+                    "user": str(queryset.updated_by.first_name),
+                    "date": created_date,
+                    "time": created_time
+                },
+                "originallyCreatedBy": {
+                    "user": str(queryset.created_by.first_name),
+                    "date": updated_date,
+                    "time": updated_time
+                }
+            }
+        }
+        return response_data
+
+    @staticmethod
+    def edit_perspective_record_fetch(perspective_id):
+        """
+         function to show edit_perspective_record_fetch
+         using given id
+        """
+        queryset = Perspective.objects.get(id=perspective_id)
+        perspective_title = queryset.perspective_title
+        selected_id = queryset.incident_id
+        selected_assets = queryset.selected_assets
+        selected_entities = queryset.selected_entities
+        donut_left_graph = queryset.donut_left_graph.read()
+        donut_right_graph = queryset.donut_right_graph.read()
+        comparative_left_graph = queryset.comparative_left_graph.read()
+        comparative_right_graph = queryset.comparative_right_graph.read()
+        response_data = {
+            "perspectiveFormData": {
+                "perspectiveTitle": perspective_title,
+                "barGraphTitle": queryset.bar_graph_title,
+                "perspectiveInput": queryset.perspective,
+                "recomendationsInput": queryset.recommendation,
+                "selectedLevelFilter": queryset.criticality_type,
+                "selectedActionTakenFilter": queryset.action_type,
+                "startDateTime": queryset.incident_start_date_time,
+                "endDateTime": queryset.incident_end_date_time,
+                "selectedPerspectiveFilter": queryset.perspective_type,
+                "selectedActedUponFilter": queryset.status_type,
+                "selectedIds": selected_id,
+                "selectedAssets": selected_assets,
+                "selectedEntities": selected_entities,
+                "imageData1": donut_left_graph,
+                "imageData2": donut_right_graph,
+                "imageData3": comparative_left_graph,
+                "imageData4": comparative_right_graph,
+                "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
+                "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
+                "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
+                "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
+                "perspectiveId": perspective_id,
                 "isPublished": queryset.is_published
             },
         }
         return response_data
 
     @staticmethod
-    def security_pulse_details_data(security_id):
+    def perspective_grid(response_obj: PerspectiveGridSerializer):
+        filter_q = Q(**response_obj.filters)
+        query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
+        return query_data
+
+    @staticmethod
+    def delete(perspective):
+        """Function which delete perspective.
+
+        Args:
+            perspective ([perspective]): [Instance of perspective]
         """
-          function to show edit_perspective_record_fetch
-          using given id
-         """
-        queryset = SecurityPulse.objects.get(id=security_id)
-        query = SecurityPulseImage.objects.filter(security_pulse=security_id)
-        section = []
-        for query in query:
-            image = query.image_data.read()
-            info = query.info
-            image_name = str(queryset.image_data).split('/')[2],
-            image_kwargs = {
-                "imageData": image,
-                "imageDataName": image_name,
-                "info": info
-            }
-            section.append(image_kwargs)
-        response_data = {
-            "headerData": {
-                "user": queryset.created_by,
-                "designation": "Cyber Security Engineer",
-                "createdDate": queryset.created_at
-            },
-            "perspectiveFormData": {
-                "securityPulseTitle": queryset.security_pulse_title,
-                "mainTitle": queryset.main_title,
-                "sections": section,
-                "recommendations": queryset.recommendations,
-                "criticality": queryset.criticality_type,
-                "links": queryset.links,
-                "selectedIds": queryset.selected_id,
-                "selectedAssets": queryset.selected_assets,
-                "selectedEntities": queryset.selected_entities,
-            },
-            "footerData": {
-                "email": "info@etek.com",
-                "contacts": [
-                    {
-                        "countryName": "Colombia",
-                        "contactNo": "+57(1)2571520"
-                    },
-                    {
-                        "countryName": "Peru'",
-                        "contactNo": "+51(1)6124343"
-                    },
-                    {
-                        "countryName": "India",
-                        "contactNo": "+91-9873451221"
-                    }
-                ]
-            }
-        }
-        return response_data
+        # End date in society
+        perspective.delete()
+        logger.info(f"Society with ID {perspective.pk} deleted successfully.")
