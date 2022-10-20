@@ -98,38 +98,37 @@ class PerspectiveService:
 
     @staticmethod
     def create_from_validated_data(user, validated_data):
-        imageData1 = validated_data.get("imageData1")
-        imageData2 = validated_data.get("imageData2")
-        imageData3 = validated_data.get("imageData3")
-        imageData4 = validated_data.get("imageData4")
-
-        imageData1Name = validated_data.get("imageData1Name")
-        imageData2Name = validated_data.get("imageData2Name")
-        imageData3Name = validated_data.get("imageData3Name")
-        imageData4Name = validated_data.get("imageData4Name")
-        donut_left_graph = ContentFile(imageData1, name=imageData1Name)
-        donut_right_graph = ContentFile(imageData2, name=imageData2Name)
-        comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
-        comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
+        imageData1 = validated_data.get("imageData1", None)
+        imageData2 = validated_data.get("imageData2", None)
+        imageData3 = validated_data.get("imageData3", None)
+        imageData4 = validated_data.get("imageData4", None)
+        imageData1Name = validated_data.get("imageData1Name", None)
+        imageData2Name = validated_data.get("imageData2Name", None)
+        imageData3Name = validated_data.get("imageData3Name", None)
+        imageData4Name = validated_data.get("imageData4Name", None)
+        donut_left_graph = None if imageData1 is None else ContentFile(imageData1, name=imageData1Name)
+        donut_right_graph = None if imageData2 is None else ContentFile(imageData2, name=imageData2Name)
+        comparative_left_graph = None if imageData3 is None else ContentFile(imageData3, name=imageData3Name)
+        comparative_right_graph = None if imageData4 is None else ContentFile(imageData4, name=imageData4Name)
         perspective_kwargs = {
-            "perspective_type": validated_data.get("selectedPerspectiveFilter"),
-            "action_type": validated_data.get("selectedActionTakenFilter"),
-            "status_type": validated_data.get("selectedActedUponFilter"),
-            "criticality_type": validated_data.get("selectedLevelFilter"),
-            "incident_id": validated_data.get("selectedIds"),
-            "perspective_title": validated_data.get("perspectiveTitle"),
-            "bar_graph_title": validated_data.get("barGraphTitle"),
-            "perspective": validated_data.get("perspectiveInput"),
-            "recommendation": validated_data.get("recomendationsInput"),
-            "selected_assets": validated_data.get("selectedAssets"),
-            "selected_entities": validated_data.get("selectedEntities"),
-            "is_published": validated_data.get("isPublished"),
+            "perspective_type": validated_data.get("selectedPerspectiveFilter",  None),
+            "action_type": validated_data.get("selectedActionTakenFilter",  None),
+            "status_type": validated_data.get("selectedActedUponFilter",  None),
+            "criticality_type": validated_data.get("selectedLevelFilter",  None),
+            "incident_id": validated_data.get("selectedIds",  None),
+            "perspective_title": validated_data.get("perspectiveTitle",  None),
+            "bar_graph_title": validated_data.get("barGraphTitle",  None),
+            "perspective": validated_data.get("perspectiveInput",  None),
+            "recommendation": validated_data.get("recomendationsInput",  None),
+            "selected_assets": validated_data.get("selectedAssets",  None),
+            "selected_entities": validated_data.get("selectedEntities",  None),
+            "is_published": validated_data.get("isPublished",  None),
             "donut_left_graph": donut_left_graph,
             "donut_right_graph": donut_right_graph,
             "comparative_left_graph": comparative_left_graph,
             "comparative_right_graph": comparative_right_graph,
-            "incident_start_date_time": validated_data.get("startDateTime"),
-            "incident_end_date_time": validated_data.get("endDateTime"),
+            "incident_start_date_time": validated_data.get("startDateTime",  None),
+            "incident_end_date_time": validated_data.get("endDateTime",  None),
             "created_by": user,
             "updated_by": user,
             "created_at": timezone.now(),
@@ -146,15 +145,14 @@ class PerspectiveService:
         imageData2 = validated_data.get("imageData2", None)
         imageData3 = validated_data.get("imageData3", None)
         imageData4 = validated_data.get("imageData4", None)
-
         imageData1Name = validated_data.get("imageData1Name", None)
         imageData2Name = validated_data.get("imageData2Name", None)
         imageData3Name = validated_data.get("imageData3Name", None)
         imageData4Name = validated_data.get("imageData4Name", None)
-        donut_left_graph = ContentFile(imageData1, name=imageData1Name)
-        donut_right_graph = ContentFile(imageData2, name=imageData2Name)
-        comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
-        comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
+        donut_left_graph = None if imageData1 is None else ContentFile(imageData1, name=imageData1Name)
+        donut_right_graph = None if imageData2 is None else ContentFile(imageData2, name=imageData2Name)
+        comparative_left_graph = None if imageData3 is None else ContentFile(imageData3, name=imageData3Name)
+        comparative_right_graph = None if imageData4 is None else ContentFile(imageData4, name=imageData4Name)
         perspective_kwargs = {
             "perspective_type": validated_data.get("selectedPerspectiveFilter", None),
             "action_type": validated_data.get("selectedActionTakenFilter", None),
@@ -200,10 +198,10 @@ class PerspectiveService:
         updated_at = queryset.updated_at
         updated_date = str(updated_at)[:10]
         updated_time = str(updated_at)[11:19]
-        donut_left_graph = queryset.donut_left_graph.read()
-        donut_right_graph = queryset.donut_right_graph.read()
-        comparative_left_graph = queryset.comparative_left_graph.read()
-        comparative_right_graph = queryset.comparative_right_graph.read()
+        donut_left_graph = None if bool(queryset.donut_left_graph) is False else queryset.donut_left_graph.read()
+        donut_right_graph = None if bool(queryset.donut_right_graph) is False else queryset.donut_right_graph.read()
+        comparative_left_graph = None if bool(queryset.comparative_left_graph) is False else queryset.comparative_left_graph.read()
+        comparative_right_graph = None if bool(queryset.comparative_right_graph) is False else queryset.comparative_right_graph.read()
         response_data = {
             "perspectiveFormData": {
                 "perspectiveTitle": perspective_title,
@@ -214,10 +212,14 @@ class PerspectiveService:
                 "imageData2": donut_right_graph,
                 "imageData3": comparative_left_graph,
                 "imageData4": comparative_right_graph,
-                "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
-                "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
-                "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
-                "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
+                "imageData1Name": None if bool(queryset.donut_left_graph) is False else
+                str(queryset.donut_left_graph).split('/')[2],
+                "imageData2Name": None if bool(queryset.donut_right_graph) is False else
+                str(queryset.donut_right_graph).split('/')[2],
+                "imageData3Name": None if bool(queryset.comparative_left_graph) is False else
+                str(queryset.comparative_left_graph).split('/')[2],
+                "imageData4Name": None if bool(queryset.comparative_right_graph) is False else
+                str(queryset.comparative_right_graph).split('/')[2],
             },
             "footerData": {
                 "lastUpdateInformation": {
@@ -245,10 +247,10 @@ class PerspectiveService:
         selected_id = queryset.incident_id
         selected_assets = queryset.selected_assets
         selected_entities = queryset.selected_entities
-        donut_left_graph = queryset.donut_left_graph.read()
-        donut_right_graph = queryset.donut_right_graph.read()
-        comparative_left_graph = queryset.comparative_left_graph.read()
-        comparative_right_graph = queryset.comparative_right_graph.read()
+        donut_left_graph = None if bool(queryset.donut_left_graph) is False else queryset.donut_left_graph.read()
+        donut_right_graph = None if bool(queryset.donut_right_graph) is False else queryset.donut_right_graph.read()
+        comparative_left_graph = None if bool(queryset.comparative_left_graph) is False else queryset.comparative_left_graph.read()
+        comparative_right_graph = None if bool(queryset.comparative_right_graph) is False else queryset.comparative_right_graph.read()
         response_data = {
             "perspectiveFormData": {
                 "perspectiveTitle": perspective_title,
@@ -268,10 +270,10 @@ class PerspectiveService:
                 "imageData2": donut_right_graph,
                 "imageData3": comparative_left_graph,
                 "imageData4": comparative_right_graph,
-                "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
-                "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
-                "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
-                "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
+                "imageData1Name": None if bool(queryset.donut_left_graph) is False else str(queryset.donut_left_graph).split('/')[2],
+                "imageData2Name": None if bool(queryset.donut_right_graph) is False else str(queryset.donut_right_graph).split('/')[2],
+                "imageData3Name": None if bool(queryset.comparative_left_graph) is False else str(queryset.comparative_left_graph).split('/')[2],
+                "imageData4Name": None if bool(queryset.comparative_right_graph) is False else str(queryset.comparative_right_graph).split('/')[2],
                 "perspectiveId": perspective_id,
                 "isPublished": queryset.is_published
             },
