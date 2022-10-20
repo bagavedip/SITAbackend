@@ -146,15 +146,16 @@ class PerspectiveService:
         imageData2 = validated_data.get("imageData2", None)
         imageData3 = validated_data.get("imageData3", None)
         imageData4 = validated_data.get("imageData4", None)
-
         imageData1Name = validated_data.get("imageData1Name", None)
         imageData2Name = validated_data.get("imageData2Name", None)
         imageData3Name = validated_data.get("imageData3Name", None)
         imageData4Name = validated_data.get("imageData4Name", None)
-        donut_left_graph = ContentFile(imageData1, name=imageData1Name)
-        donut_right_graph = ContentFile(imageData2, name=imageData2Name)
-        comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
-        comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
+        # a = [[imageData1, imageData1Name], [imageData2, imageData2Name],
+        #      [imageData3, ], []]
+        donut_left_graph = None if imageData1 is None else ContentFile(imageData1, name=imageData1Name)
+        donut_right_graph = None if imageData2 is None else ContentFile(imageData2, name=imageData2Name)
+        comparative_left_graph = None if imageData3 is None else ContentFile(imageData3, name=imageData3Name)
+        comparative_right_graph = None if imageData4 is None else ContentFile(imageData4, name=imageData4Name)
         perspective_kwargs = {
             "perspective_type": validated_data.get("selectedPerspectiveFilter", None),
             "action_type": validated_data.get("selectedActionTakenFilter", None),
