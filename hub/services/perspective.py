@@ -1,8 +1,6 @@
 import logging
-
-from django.core.files.base import ContentFile
 from django.utils import timezone
-
+from django.core.files.base import ContentFile
 from hub.models.perspective import Perspective
 
 
@@ -179,6 +177,53 @@ class PerspectiveService:
         logger.debug(f"Updating asset with following kwargs {perspective_kwargs}")
         perspective = PerspectiveService.update(queryset, **perspective_kwargs)
         return queryset
+
+    @staticmethod
+    def perspective_details_data(perspective_id):
+        """
+         function to show perspective_details_data
+         using given id
+        """
+        queryset = Perspective.objects.get(id=perspective_id)
+        perspective_title = queryset.perspective_title
+        selected_id = queryset.incident_id
+        selected_assets = queryset.selected_assets
+        selected_entities = queryset.selected_entities
+        created_at = queryset.created_at
+        created_date = str(created_at)[:10]
+        created_time = str(created_at)[11:19]
+        updated_at = queryset.updated_at
+        updated_date = str(updated_at)[:10]
+        updated_time = str(updated_at)[11:19]
+        response_data = {
+            "perspectiveFormData": {
+                "perspectiveTitle": perspective_title,
+                "selectedIds": selected_id,
+                "selectedAssets": selected_assets,
+                "selectedEntities": selected_entities,
+                "imageData1": queryset.donut_left_graph.seek(0),
+                "imageData2": queryset.donut_right_graph.seek(0),
+                "imageData3": queryset.comparative_left_graph.seek(0),
+                "imageData4": queryset.comparative_right_graph.seek(0),
+                "imageData1Name": queryset.donut_left_graph.seek(1),
+                "imageData2Name": queryset.donut_right_graph.seek(1),
+                "imageData3Name": queryset.comparative_left_graph.seek(1),
+                "imageData4Name": queryset.comparative_right_graph.seek(1),
+            },
+            "footerData": {
+                "lastUpdateInformation": {
+                    "user": queryset.updated_by,
+                    "date": created_date,
+                    "time": created_time
+                },
+                "originallyCreatedBy": {
+                    "user": queryset.created_by,
+                    "date": updated_date,
+                    "time": updated_time
+                }
+            }
+        }
+        return response_data
 
     @staticmethod
     def delete(perspective):

@@ -1,8 +1,6 @@
-
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from users.models import User
 
 
 class SecurityPulse(models.Model):
@@ -24,27 +22,3 @@ class SecurityPulse(models.Model):
                                  help_text=_("selected assets"))
     selected_entities = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_entities"), default=list,
                                    help_text=_("selected entities"))
-    imageData = models.FileField(_("imageData"), upload_to="perspective/donut_graph", null=True,
-                                        help_text=_("imageData"))
-    link_text = models.TextField(_("link text"), max_length= 400, verbose_name =_("link_text"),default=list,
-                                 help_text=_("link text"))
-    links = ArrayField(models.CharField(max_length=1000), verbose_name=_("links"), default=list,
-                                   help_text= _("links"))
-    created_by = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        null=True,
-        db_index=False,
-        verbose_name=_("Created by"),
-        help_text=_("Created by"),
-        related_name="+",
-    )
-    updated_by = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        null=True,
-        db_index=False,
-        verbose_name=_("Updated by"),
-        help_text=_("Updated by"),
-        related_name="+",
-    )
