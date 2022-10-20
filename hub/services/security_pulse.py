@@ -114,7 +114,7 @@ class SecurityPulseService:
           using given id
          """
         queryset = SecurityPulse.objects.get(id=security_id)
-        selected_id = queryset.incident_id
+        selected_id = queryset.selected_incident
         selected_assets = queryset.selected_assets
         selected_entities = queryset.selected_entities
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
@@ -178,7 +178,7 @@ class SecurityPulseService:
                 "recommendations": queryset.recommendations,
                 "criticality": queryset.criticality_type,
                 "links": queryset.links,
-                "selectedIds": queryset.selected_id,
+                "selectedIds": queryset.selected_incident,
                 "selectedAssets": queryset.selected_assets,
                 "selectedEntities": queryset.selected_entities,
             },
