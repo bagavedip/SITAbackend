@@ -35,17 +35,15 @@ class SecurityPulseGridSerializer:
 
         grid_data = []
         for row in data:
+
+            None if row.get("created_at") is None else row.update({"created_at": row.get("created_at").strftime("%d-%m-%Y")})
+            row.update({"is_published": "Publish"}) if row.get("is_published") else row.update({"is_published": "Draft"})
             row_data = {}
             for index in range(len(row)):
                 row_data["column" + (str(index + 1))] = str(row.get(self.select_cols[index]))
             grid_data.append(row_data)
 
         response_json = {
-            "gridSelectedFilter": {
-                "startDate": self.start_date,
-                "endDate": self.end_date,
-                "selectedDropdownFiters": []
-            },
             "gridAddOn": {
                 "showFirstColumnAsCheckbox": True,
                 "showLastColumnAsAction": True
