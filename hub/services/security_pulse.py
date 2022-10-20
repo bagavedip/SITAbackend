@@ -42,7 +42,7 @@ class SecurityPulseService:
         response = SecurityPulse.objects.create(**security_pulse_kwargs)
         for section in sections:
             image_data = section.get("imageData")
-            image_data_name = validated_data.get("imageDataName")
+            image_data_name = section.get("imageDataName")
             image = ContentFile(image_data,name=image_data_name)
             info = section.get("info")
             security_pulse_image_kwargs = {
@@ -90,12 +90,12 @@ class SecurityPulseService:
             "created_at": timezone.now(),
             "updated_at": timezone.now()
         }
-        response = SecurityPulseService.update(queryset, **security_pulse_kwargs)
+        response = SecurityPulseService.update(queryset,**security_pulse_kwargs)
         for section in sections:
-            image_data = section.get("imageData", None)
+            image_data = section.get("imageData",None)
             image_data_name = validated_data.get("imageDataName",None)
-            image = ContentFile(image_data, name=image_data_name)
-            info = section.get("info", None)
+            image = ContentFile(image_data,name=image_data_name)
+            info = section.get("info",None)
             security_pulse_image_kwargs = {
                 "image_data": image,
                 "info": info,
@@ -104,7 +104,7 @@ class SecurityPulseService:
             }
             queryset = SecurityPulseImage.objects.filter(security_pulse=securityPulseId)
             for query in queryset:
-                security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
+                security_pulse_image = SecurityPulseService.update(query,**security_pulse_image_kwargs)
         return security_pulse_image
 
     @staticmethod
@@ -122,7 +122,7 @@ class SecurityPulseService:
         for query in query:
             image = query.image_data.read()
             info = query.info
-            image_name = str(queryset.image_data).split('/')[2],
+            image_name = str(query.image_data).split('/')[2],
             image_kwargs = {
                 "imageData": image,
                 "imageDataName": image_name,
@@ -130,6 +130,7 @@ class SecurityPulseService:
             }
             section.append(image_kwargs)
         response_data = {
+            "perspectiveFormData": {
                 "securityPulseTitle": queryset.security_pulse_title,
                 "mainTitle": queryset.main_title,
                 "criticality": queryset.criticality_type,
@@ -141,6 +142,7 @@ class SecurityPulseService:
                 "selectedEntities": selected_entities,
                 "securityPulseId": security_id,
                 "isPublished": queryset.is_published
+            },
         }
         return response_data
 
@@ -176,7 +178,7 @@ class SecurityPulseService:
                 "recommendations": queryset.recommendations,
                 "criticality": queryset.criticality_type,
                 "links": queryset.links,
-                "selectedIds": queryset.selected_incident,
+                "selectedIds": queryset.selected_id,
                 "selectedAssets": queryset.selected_assets,
                 "selectedEntities": queryset.selected_entities,
             },
