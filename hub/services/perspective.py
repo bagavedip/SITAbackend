@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from django.db.models import Q
 from django.utils import timezone
@@ -58,21 +59,21 @@ class PerspectiveService:
         }]
         for perspective_type in perspective_type:
             new_asset = {
-                "value": perspective_type,
-                "label": perspective_type
+                "value": str(perspective_type),
+                "label": str(perspective_type)
             }
 
             perspective_dropdown.append(new_asset)
         for action in action_type:
             new_geo = {
-                "value": action,
-                "label": action
+                "value": str(action),
+                "label": str(action)
             }
             action_dropdown.append(new_geo)
         for status in status:
             new_entity = {
-                "value": status,
-                "label": status
+                "value": str(status),
+                "label": str(status)
             }
             status_dropdown.append(new_entity)
 
@@ -108,6 +109,12 @@ class PerspectiveService:
         donut_right_graph = ContentFile(imageData2, name=imageData2Name)
         comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
         comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
+        start_date = validated_data.get("startDateTime")
+        format = "%Y-%m-%d %H:%M:%S.%f%z"
+        times = datetime.strptime(start_date, format)
+        DATE_FORMAT = '%d.%m.%Y'
+        proper_time_format = f"{times.date().month}.{str(times.date().day).zfill(2)}.{times.date().year}"
+        start_time = datetime.strptime(proper_time_format, DATE_FORMAT)
         perspective_kwargs = {
             "perspective_type": validated_data.get("selectedPerspectiveFilter"),
             "action_type": validated_data.get("selectedActionTakenFilter"),
@@ -125,7 +132,7 @@ class PerspectiveService:
             "donut_right_graph": donut_right_graph,
             "comparative_left_graph": comparative_left_graph,
             "comparative_right_graph": comparative_right_graph,
-            "incident_start_date_time": validated_data.get("startDateTime"),
+            "incident_start_date_time": start_time,
             "incident_end_date_time": validated_data.get("endDateTime"),
             "created_by": user,
             "updated_by": user,
