@@ -213,7 +213,7 @@ class SecurityPulseService:
             for query in query:
                 image = None if bool(query.image_data) is False else query.image_data.read()
                 info = query.info
-                image_name = None if bool(query.image_data) is False else str(queryset.image_data).split('/')[2],
+                image_name = None if bool(query.image_data) is False else str(query.image_data).split('/')[2],
                 image_kwargs = {
                     "imageData": image,
                     "imageDataName": image_name,
