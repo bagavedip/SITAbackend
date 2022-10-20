@@ -13,9 +13,26 @@ from hub.services.security_pulse import SecurityPulseService
 logger = logging.getLogger(__name__)
 
 
-class PerspectiveViewSet(viewsets.GenericViewSet):
+class SecurityPulseViewSet(viewsets.GenericViewSet):
 
     permission_classes = [IsAuthenticated]
+
+    def add_security_pulse_record(self, request):
+        try:
+            logger.info("Validating data for Log In.")
+            validated_data = request.data
+            logger.info("Initiating Log in.")
+            login_user = request.user
+            with transaction.atomic():
+                perspective = SecurityPulseService.create_from_validated_data(login_user, validated_data)
+            logger.debug("Database transaction finished")
+
+            # response formatting
+            response_data = {"id": perspective.pk}
+            return Response({"message": f"perspective with {response_data} created successfully",
+                            "status": status.HTTP_201_CREATED})
+        except Exception as e:
+            return Response({"message": f"{e}", "status": "failed to create perspective"})
 
     def security_pulse_record_delete(self, request):
         """[action to destory society]

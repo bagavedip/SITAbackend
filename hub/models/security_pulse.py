@@ -19,6 +19,8 @@ class SecurityPulse(models.Model):
     # ArrayFields
     recommendations = ArrayField(models.TextField(max_length=255), verbose_name=_("recommendations"), default=list,
                                  help_text=_("recommendations"))
+
+    is_published = models.BooleanField(_("is_published"), default=False, help_text=_("is_published"))
     selected_incident = ArrayField(
         models.SmallIntegerField(),
         default=list,
@@ -30,8 +32,7 @@ class SecurityPulse(models.Model):
     selected_entities = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_entities"), default=list,
                                    help_text=_("selected entities"))
     criticality_type = models.CharField(
-        _("perspective type"), max_length=100, choices=CriticalityType.choices, help_text=_("perspective type"),
-        default="Low",)
+        _("criticality_type"), max_length=100, choices=CriticalityType.choices, help_text=_("criticality_type"),)
     # links = ArrayField(models.JSONField(_("links"), default=dict, help_text=_("links")), null=True)
     links = models.JSONField(default=list, null=True, blank=True)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=True)
