@@ -81,7 +81,7 @@ class SecurityPulseService:
         logger.info(f"Society with ID {security.pk} deleted successfully.")
 
     @staticmethod
-    def update_from_validated_data(user,validated_data):
+    def update_from_validated_data(user, validated_data):
         securityPulseId = int(validated_data.get("securityPulseId"))
         queryset = SecurityPulse.objects.get(id=securityPulseId)
         sections = validated_data.get("sections")
