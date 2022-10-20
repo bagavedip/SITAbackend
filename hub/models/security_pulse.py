@@ -18,21 +18,21 @@ class SecurityPulse(models.Model):
                                   help_text=_("main_title"))
     # ArrayFields
     recommendations = ArrayField(models.TextField(max_length=255), verbose_name=_("recommendations"), default=list,
-                                 help_text=_("recommendations"))
+                                 help_text=_("recommendations"), null=True)
 
-    is_published = models.BooleanField(_("is_published"), default=False, help_text=_("is_published"))
+    is_published = models.BooleanField(_("is_published"), default=False, help_text=_("is_published"), null=True)
     selected_incident = ArrayField(
         models.SmallIntegerField(),
         default=list,
         help_text=_("selected_incident"),
-        verbose_name=_("selected_incident"),
+        verbose_name=_("selected_incident"), null=True
     )
     selected_assets = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_assets"), default=list,
-                                 help_text=_("selected assets"))
+                                 help_text=_("selected assets"), null=True)
     selected_entities = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_entities"), default=list,
-                                   help_text=_("selected entities"))
+                                   help_text=_("selected entities"), null=True)
     criticality_type = models.CharField(
-        _("criticality_type"), max_length=500, choices=CriticalityType.choices, help_text=_("criticality_type"),)
+        _("criticality_type"), max_length=500, choices=CriticalityType.choices, help_text=_("criticality_type"), null=True)
     links = ArrayField(models.JSONField(_("links"), default=dict, help_text=_("links")), null=True)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=True)
     updated_at = models.DateTimeField(_("updated at"), auto_now=True, null=True)
