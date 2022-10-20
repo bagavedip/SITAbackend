@@ -171,7 +171,7 @@ class SecurityPulseService:
          """
         queryset = SecurityPulse.objects.get(id=security_id)
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
-        final_date = queryset.created_at.strptime("%d-%m-%Y")
+        final_date = queryset.created_at.strftime("%d-%m-%Y")
         section = []
         for query in query:
             image = None if bool(query.image_data) is False else query.image_data.read()
