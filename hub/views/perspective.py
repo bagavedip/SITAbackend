@@ -22,7 +22,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         """
         logger.debug(f"Received request body {request.data}")
         response_data = PerspectiveService.perspective_dropdown_data()
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        return Response(response_data)
 
     def perspective_grid_data(self, request):
         """
@@ -34,7 +34,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
 
         data = PerspectiveService.perspective_grid(response_obj)
 
-        return Response(response_obj.get_response(data), status=status.HTTP_201_CREATED)
+        return Response(response_obj.get_response(data))
 
     def add_perspective_record(self, request):
         try:
@@ -51,9 +51,9 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             # response formatting
             response_data = {"id": perspective.pk}
             return Response({"message": f"perspective with {response_data} created successfully",
-                            "status": status.HTTP_201_CREATED})
+                            "status": "success"})
         except Exception as e:
-            return Response({"message": f"{e}", "status": "failed to create perspective"})
+            return Response({"message": f"{e}", "status": "error"})
 
     def edit_perspective_record_submit(self, request, *args, **kwargs):
         """
@@ -88,7 +88,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         try:
             perspective_id = request.data.get("id")
             perspective = PerspectiveService.perspective_details_data(perspective_id)
-            return Response(perspective, status=status.HTTP_200_OK)
+            return Response(perspective)
         except Exception as e:
             response_data = f"{e}"
             return Response(response_data)
@@ -97,10 +97,10 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         try:
             perspective_id = request.data.get("id")
             perspective = PerspectiveService.edit_perspective_record_fetch(perspective_id)
-            return Response(perspective, status=status.HTTP_200_OK)
+            return Response(perspective)
         except Exception as e:
             response_data = f"{e}"
-            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response_data)
 
     def perspective_record_delete(self, request, *args, **kwargs):
         """[action to destory society]
