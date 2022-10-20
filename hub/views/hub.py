@@ -323,20 +323,23 @@ class InsightHub(viewsets.GenericViewSet):
         response_data = [
             {
                 "name": "Detects",
-                "value": "5M"
+                "value": "5 M",
+                "color": "#EB6363"
             },
             {
                 "name": "Events",
-                "value": "1.3M"
+                "value": "1.3M",
+                "color": "#7394EA"
             },
             {
                 "name": "Incidents",
-                "value": "300"
+                "value": "300",
+                "color": "#EB6363"
             },
             {
                 "name": "Contained",
-                "value": "98%"
-            },
-
+                "value": "98%",
+                "color": "#64C368"
+            }
         ]
         return Response(response_data, status=status.HTTP_200_OK)
