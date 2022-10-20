@@ -59,21 +59,21 @@ class PerspectiveService:
         }]
         for perspective_type in perspective_type:
             new_asset = {
-                "value": str(perspective_type),
-                "label": str(perspective_type)
+                "value": perspective_type,
+                "label": perspective_type
             }
 
             perspective_dropdown.append(new_asset)
         for action in action_type:
             new_geo = {
-                "value": str(action),
-                "label": str(action)
+                "value": action,
+                "label": action
             }
             action_dropdown.append(new_geo)
         for status in status:
             new_entity = {
-                "value": str(status),
-                "label": str(status)
+                "value": status,
+                "label": status
             }
             status_dropdown.append(new_entity)
 
@@ -81,11 +81,11 @@ class PerspectiveService:
         response = [
             {
                 "id": "PerspectiveType",
-                "dropdownoption": perspective_dropdown
+                "dropdownoption": str(perspective_dropdown)
             },
             {
                 "id": "ActionTaken",
-                "dropdownoption": action_dropdown
+                "dropdownoption": str(action_dropdown)
             },
             {
                 "id": "Status",
@@ -96,15 +96,15 @@ class PerspectiveService:
 
     @staticmethod
     def create_from_validated_data(user, validated_data):
-        imageData1 = validated_data.get("imageData1")
-        imageData2 = validated_data.get("imageData2")
-        imageData3 = validated_data.get("imageData3")
-        imageData4 = validated_data.get("imageData4")
+        imageData1 = validated_data.get("imageData1", None)
+        imageData2 = validated_data.get("imageData2", None)
+        imageData3 = validated_data.get("imageData3", None)
+        imageData4 = validated_data.get("imageData4", None)
 
-        imageData1Name = validated_data.get("imageData1Name")
-        imageData2Name = validated_data.get("imageData2Name")
-        imageData3Name = validated_data.get("imageData3Name")
-        imageData4Name = validated_data.get("imageData4Name")
+        imageData1Name = validated_data.get("imageData1Name", None)
+        imageData2Name = validated_data.get("imageData2Name", None)
+        imageData3Name = validated_data.get("imageData3Name", None)
+        imageData4Name = validated_data.get("imageData4Name", None)
         donut_left_graph = ContentFile(imageData1, name=imageData1Name)
         donut_right_graph = ContentFile(imageData2, name=imageData2Name)
         comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
@@ -116,24 +116,24 @@ class PerspectiveService:
         proper_time_format = f"{times.date().month}.{str(times.date().day).zfill(2)}.{times.date().year}"
         start_time = datetime.strptime(proper_time_format, DATE_FORMAT)
         perspective_kwargs = {
-            "perspective_type": validated_data.get("selectedPerspectiveFilter"),
-            "action_type": validated_data.get("selectedActionTakenFilter"),
-            "status_type": validated_data.get("selectedActedUponFilter"),
-            "criticality_type": validated_data.get("selectedLevelFilter"),
-            "incident_id": validated_data.get("selectedIds"),
-            "perspective_title": validated_data.get("perspectiveTitle"),
-            "bar_graph_title": validated_data.get("barGraphTitle"),
-            "perspective": validated_data.get("perspectiveInput"),
-            "recommendation": validated_data.get("recomendationsInput"),
-            "selected_assets": validated_data.get("selectedAssets"),
-            "selected_entities": validated_data.get("selectedEntities"),
-            "is_published": validated_data.get("isPublished"),
+            "perspective_type": validated_data.get("selectedPerspectiveFilter", None),
+            "action_type": validated_data.get("selectedActionTakenFilter", None),
+            "status_type": validated_data.get("selectedActedUponFilter", None),
+            "criticality_type": validated_data.get("selectedLevelFilter", None),
+            "incident_id": validated_data.get("selectedIds", None),
+            "perspective_title": validated_data.get("perspectiveTitle", None),
+            "bar_graph_title": validated_data.get("barGraphTitle", None),
+            "perspective": validated_data.get("perspectiveInput", None),
+            "recommendation": validated_data.get("recomendationsInput", None),
+            "selected_assets": validated_data.get("selectedAssets", None),
+            "selected_entities": validated_data.get("selectedEntities", None),
+            "is_published": validated_data.get("isPublished", None),
             "donut_left_graph": donut_left_graph,
             "donut_right_graph": donut_right_graph,
             "comparative_left_graph": comparative_left_graph,
             "comparative_right_graph": comparative_right_graph,
             "incident_start_date_time": start_time,
-            "incident_end_date_time": validated_data.get("endDateTime"),
+            "incident_end_date_time": validated_data.get("endDateTime", None),
             "created_by": user,
             "updated_by": user,
             "created_at": timezone.now(),
