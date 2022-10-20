@@ -130,7 +130,6 @@ class SecurityPulseService:
             }
             section.append(image_kwargs)
         response_data = {
-            "perspectiveFormData": {
                 "securityPulseTitle": queryset.security_pulse_title,
                 "mainTitle": queryset.main_title,
                 "criticality": queryset.criticality_type,
@@ -142,7 +141,6 @@ class SecurityPulseService:
                 "selectedEntities": selected_entities,
                 "securityPulseId": security_id,
                 "isPublished": queryset.is_published
-            },
         }
         return response_data
 
