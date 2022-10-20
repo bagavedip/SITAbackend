@@ -41,11 +41,6 @@ class PerspectiveGridSerializer:
             grid_data.append(row_data)
 
         response_json = {
-            "gridSelectedFilter": {
-                "startDate": self.start_date,
-                "endDate": self.end_date,
-                "selectedDropdownFiters": []
-            },
             "gridAddOn": {
                 "showFirstColumnAsCheckbox": True,
                 "showLastColumnAsAction": True
