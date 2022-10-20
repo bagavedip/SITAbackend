@@ -171,7 +171,7 @@ class SecurityPulseService:
          """
         queryset = SecurityPulse.objects.get(id=security_id)
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
-        date = queryset.created_at
+        date = str(queryset.created_at)
         from datetime import datetime
         # b = "2022-10-20 08:44:11.076876+00:00"
         dt_format = "%Y-%m-%d %H:%M:%S.%f%z"
