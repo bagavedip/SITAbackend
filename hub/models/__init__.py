@@ -13,3 +13,4 @@ from .insights_update import HubUpdate
 from .cy_feeds import CyFeeds
 from .perspective import Perspective
 from .security_pulse import SecurityPulse
+from .security_pulse_image_data import SecurityPulseImage

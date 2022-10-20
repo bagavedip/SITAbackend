@@ -1,8 +1,10 @@
 import logging
+
+from django.db.models import Q
 from django.utils import timezone
 from django.core.files.base import ContentFile
 from hub.models.perspective import Perspective
-
+from hub.serializers.perspective_grid_view import PerspectiveGridSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +178,7 @@ class PerspectiveService:
         }
         logger.debug(f"Updating asset with following kwargs {perspective_kwargs}")
         perspective = PerspectiveService.update(queryset, **perspective_kwargs)
-        return queryset
+        return perspective
 
     @staticmethod
     def perspective_details_data(perspective_id):
@@ -195,35 +197,89 @@ class PerspectiveService:
         updated_at = queryset.updated_at
         updated_date = str(updated_at)[:10]
         updated_time = str(updated_at)[11:19]
+        donut_left_graph = queryset.donut_left_graph.read()
+        donut_right_graph = queryset.donut_right_graph.read()
+        comparative_left_graph = queryset.comparative_left_graph.read()
+        comparative_right_graph = queryset.comparative_right_graph.read()
         response_data = {
             "perspectiveFormData": {
                 "perspectiveTitle": perspective_title,
                 "selectedIds": selected_id,
                 "selectedAssets": selected_assets,
                 "selectedEntities": selected_entities,
-                "imageData1": queryset.donut_left_graph.seek(0),
-                "imageData2": queryset.donut_right_graph.seek(0),
-                "imageData3": queryset.comparative_left_graph.seek(0),
-                "imageData4": queryset.comparative_right_graph.seek(0),
-                "imageData1Name": queryset.donut_left_graph.seek(1),
-                "imageData2Name": queryset.donut_right_graph.seek(1),
-                "imageData3Name": queryset.comparative_left_graph.seek(1),
-                "imageData4Name": queryset.comparative_right_graph.seek(1),
+                "imageData1": donut_left_graph,
+                "imageData2": donut_right_graph,
+                "imageData3": comparative_left_graph,
+                "imageData4": comparative_right_graph,
+                "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
+                "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
+                "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
+                "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
             },
             "footerData": {
                 "lastUpdateInformation": {
-                    "user": queryset.updated_by,
+                    "user": str(queryset.updated_by.first_name),
                     "date": created_date,
                     "time": created_time
                 },
                 "originallyCreatedBy": {
-                    "user": queryset.created_by,
+                    "user": str(queryset.created_by.first_name),
                     "date": updated_date,
                     "time": updated_time
                 }
             }
         }
         return response_data
+
+    @staticmethod
+    def edit_perspective_record_fetch(perspective_id):
+        """
+         function to show edit_perspective_record_fetch
+         using given id
+        """
+        queryset = Perspective.objects.get(id=perspective_id)
+        perspective_title = queryset.perspective_title
+        selected_id = queryset.incident_id
+        selected_assets = queryset.selected_assets
+        selected_entities = queryset.selected_entities
+        donut_left_graph = queryset.donut_left_graph.read()
+        donut_right_graph = queryset.donut_right_graph.read()
+        comparative_left_graph = queryset.comparative_left_graph.read()
+        comparative_right_graph = queryset.comparative_right_graph.read()
+        response_data = {
+            "perspectiveFormData": {
+                "perspectiveTitle": perspective_title,
+                "barGraphTitle": queryset.bar_graph_title,
+                "perspectiveInput": queryset.perspective,
+                "recomendationsInput": queryset.recommendation,
+                "selectedLevelFilter": queryset.criticality_type,
+                "selectedActionTakenFilter": queryset.action_type,
+                "startDateTime": queryset.incident_start_date_time,
+                "endDateTime": queryset.incident_end_date_time,
+                "selectedPerspectiveFilter": queryset.perspective_type,
+                "selectedActedUponFilter": queryset.status_type,
+                "selectedIds": selected_id,
+                "selectedAssets": selected_assets,
+                "selectedEntities": selected_entities,
+                "imageData1": donut_left_graph,
+                "imageData2": donut_right_graph,
+                "imageData3": comparative_left_graph,
+                "imageData4": comparative_right_graph,
+                "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
+                "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
+                "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
+                "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
+                "perspectiveId": perspective_id,
+                "isPublished": queryset.is_published
+            },
+        }
+        return response_data
+
+    @staticmethod
+    def perspective_grid(response_obj: PerspectiveGridSerializer):
+        filter_q = Q(**response_obj.filters)
+        query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
+        return query_data
 
     @staticmethod
     def delete(perspective):
