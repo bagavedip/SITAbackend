@@ -95,13 +95,15 @@ daily_metrics = InsightHub.as_view({"post": "daily_metrics"})
 
 perspective_master_dropdown = PerspectiveViewSet.as_view({"post": "perspective_master_dropdown"})
 perspective_grid_data = PerspectiveViewSet.as_view({"post": "perspective_grid_data"})
-security_pulse_grid_data = PerspectiveViewSet.as_view({"post": "security_pulse_grid_data"})
+security_pulse_grid_data = SecurityPulseViewSet.as_view({"post": "security_pulse_grid_data"})
 add_perspective_record = PerspectiveViewSet.as_view({"post": "add_perspective_record"})
 edit_perspective_record_submit = PerspectiveViewSet.as_view({"post": "edit_perspective_record_submit"})
 perspective_record_delete = PerspectiveViewSet.as_view({"post": "perspective_record_delete"})
+security_pulse_record_delete = SecurityPulseViewSet.as_view({"post": "security_pulse_record_delete"})
 perspective_details_data = PerspectiveViewSet.as_view({"post": "perspective_details_data"})
 edit_perspective_record_fetch = PerspectiveViewSet.as_view({"post": "edit_perspective_record_fetch"})
 add_security_pulse_record = SecurityPulseViewSet.as_view({"post": "add_security_pulse_record"})
+edit_security_pulse_record_submit = SecurityPulseViewSet.as_view({"post": "edit_security_pulse_record_submit"})
 
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
@@ -191,7 +193,10 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/edit_perspective_record_submit/", edit_perspective_record_submit,
          name="edit_perspective_record_submit"),
     path(r"api/v1/edit_perspective_record_fetch/", edit_perspective_record_fetch, name="edit_perspective_record_fetch"),
+    path(r"api/v1/security_pulse_record_delete/", security_pulse_record_delete, name="security_pulse_record_delete"),
     path(r"api/v1/perspective_record_delete/", perspective_record_delete, name="perspective_record_delete"),
     path(r"api/v1/perspective_details_data/", perspective_details_data, name="perspective_details_data"),
     path(r"api/v1/add_security_pulse_record/", add_security_pulse_record, name="add_security_pulse_record"),
+    path(r"api/v1/edit_security_pulse_record_submit/", edit_security_pulse_record_submit,
+         name="edit_security_pulse_record_submit"),
 ]

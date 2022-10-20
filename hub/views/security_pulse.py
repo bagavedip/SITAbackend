@@ -30,9 +30,9 @@ class SecurityPulseViewSet(viewsets.GenericViewSet):
             # response formatting
             response_data = {"id": perspective.pk}
             return Response({"message": f"perspective with {response_data} created successfully",
-                            "status": status.HTTP_201_CREATED})
+                            "status": "success"})
         except Exception as e:
-            return Response({"message": f"{e}", "status": "failed to create perspective"})
+            return Response({"message": f"{e}", "status": "error"})
 
     def security_pulse_record_delete(self, request):
         """[action to destory society]
@@ -64,4 +64,34 @@ class SecurityPulseViewSet(viewsets.GenericViewSet):
         response_obj = SecurityPulseGridSerializer(request)
 
         data = SecurityPulseService.security_pulse_grid(response_obj)
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(response_obj.get_response(data), status=status.HTTP_200_OK)
+
+    def edit_security_pulse_record_submit(self, request):
+        """
+        Function which update asset information.
+        """
+        try:
+            logger.debug(f"Parsed request body {request.data}")
+            login_user = request.user
+            validated_data = request.data
+            logger.debug(f"Data after validation {validated_data}")
+
+            # update asset and asset user information
+            logger.debug("Database transaction started")
+            with transaction.atomic():
+                asset = SecurityPulseService.update_from_validated_data(login_user, validated_data)
+            logger.debug("Database transaction finished")
+
+            # response formatting
+            response_data = {
+                "message": "Record Updated SuccessFully !",
+                "status": "success"
+            }
+            return Response(response_data)
+        except Exception as e:
+            response_data = {
+                "message": f"{e}",
+                "status": "error"
+            }
+            return Response(response_data)
+
