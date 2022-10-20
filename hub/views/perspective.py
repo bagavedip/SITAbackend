@@ -1,11 +1,12 @@
 import logging
 
 from django.db import transaction
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from hub.models import Perspective ,Hub
+from hub.models.perspective import Perspective
+from hub.models.hub import Hub
 from hub.serializers.perspective_grid_view import PerspectiveGridSerializer
 from hub.services.perspective import PerspectiveService
 
