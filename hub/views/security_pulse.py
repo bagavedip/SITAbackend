@@ -95,3 +95,21 @@ class SecurityPulseViewSet(viewsets.GenericViewSet):
             }
             return Response(response_data)
 
+    def perspective_details_data(self, request):
+        try:
+            perspective_id = request.data.get("id")
+            perspective = PerspectiveService.perspective_details_data(perspective_id)
+            return Response(perspective)
+        except Exception as e:
+            response_data = f"{e}"
+            return Response(response_data)
+
+    def edit_security_pulse_record_fetch(self, request):
+        try:
+            perspective_id = request.data.get("id")
+            perspective = SecurityPulseService.edit_security_pulse_record_fetch(perspective_id)
+            return Response(perspective)
+        except Exception as e:
+            response_data = f"{e}"
+            return Response(response_data)
+

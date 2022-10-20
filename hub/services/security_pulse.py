@@ -106,3 +106,47 @@ class SecurityPulseService:
             for query in queryset:
                 security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
         return security_pulse_image
+    @staticmethod
+    def edit_security_pulse_record_fetch(security_id):
+        """
+          function to show edit_perspective_record_fetch
+          using given id
+         """
+        queryset = SecurityPulse.objects.get(id=security_id)
+        selected_id = queryset.incident_id
+        selected_assets = queryset.selected_assets
+        selected_entities = queryset.selected_entities
+        query = SecurityPulseImage.objects.filter(security_pulse=security_id)
+        for query in query:
+            image = query.image_data.read()
+            info = query.info
+            image_name = str(queryset.image_data).split('/')[2],
+            image_kwargs = {
+
+            }
+        response_data = {
+            "perspectiveFormData": {
+                "securityPulseTitle": queryset.security_pulse_title,
+                "mainTitle": queryset.main_title,
+                "criticality": queryset.perspective,
+                "sections": [{"imageData": "abc", "imagename":"abc", "info":"info"}],
+                "recommendations": queryset.criticality_type,
+                "links": queryset.action_type,
+                "selectedIds": selected_id,
+                "selectedAssets": selected_assets,
+                "selectedEntities": selected_entities,
+                "securityPulseId": security_id,
+                "isPublished": queryset.is_published
+            },
+        }
+        return response_data
+
+#
+# "imageData1": donut_left_graph ,
+# "imageData2": donut_right_graph ,
+# "imageData3": comparative_left_graph ,
+# "imageData4": comparative_right_graph ,
+# "imageData1Name": str(queryset.donut_left_graph).split('/')[2] ,
+# "imageData2Name": str(queryset.donut_right_graph).split('/')[2] ,
+# "imageData3Name": str(queryset.comparative_left_graph).split('/')[2] ,
+# "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
