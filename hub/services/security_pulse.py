@@ -171,12 +171,7 @@ class SecurityPulseService:
          """
         queryset = SecurityPulse.objects.get(id=security_id)
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
-        date = str(queryset.created_at)
-        from datetime import datetime
-        # b = "2022-10-20 08:44:11.076876+00:00"
-        dt_format = "%Y-%m-%d %H:%M:%S.%f%z"
-        dt = datetime.strptime(date, dt_format)
-        final_date = dt.strftime("%d-%m-%Y")
+        final_date = queryset.created_at.date()
         section = []
         for query in query:
             image = None if bool(query.image_data) is False else query.image_data.read()
