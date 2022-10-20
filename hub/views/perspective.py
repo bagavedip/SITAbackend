@@ -159,7 +159,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             assets = []
             for query in queryset:
                 incident = query.asset_name
-                if serializer in incident:
+                if serializer.lower() in incident.lower():
                     assets.append(incident)
             tags = set(assets)
             assets = list(tags)
@@ -178,7 +178,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             entities = []
             for entity in queryset:
                 incident = entity.entity_name
-                if serializer in incident:
+                if serializer.lower() in incident.lower():
                     entities.append(incident)
             tags = set(entities)
             entities = list(tags)
