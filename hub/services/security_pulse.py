@@ -184,7 +184,7 @@ class SecurityPulseService:
             section.append(image_kwargs)
         response_data = {
             "headerData": {
-                "user": queryset.created_by,
+                "user": queryset.created_by.first_name,
                 "designation": "Cyber Security Engineer",
                 "createdDate": queryset.created_at
             },
