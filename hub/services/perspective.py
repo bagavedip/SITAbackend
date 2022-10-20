@@ -127,7 +127,7 @@ class PerspectiveService:
             "donut_right_graph": donut_right_graph,
             "comparative_left_graph": comparative_left_graph,
             "comparative_right_graph": comparative_right_graph,
-            "incident_start_date_time": validated_data.get("startDateTime"),
+            "incident_start_date_time": validated_data.get("startDateTime", None),
             "incident_end_date_time": validated_data.get("endDateTime", None),
             "created_by": user,
             "updated_by": user,
