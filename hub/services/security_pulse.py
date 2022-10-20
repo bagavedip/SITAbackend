@@ -159,7 +159,7 @@ class SecurityPulseService:
             "selectedAssets": selected_assets,
             "selectedEntities": selected_entities,
             "securityPulseId": security_id,
-            "isPublished": queryset.is_publish
+            "isPublished": queryset.is_published
         }
         return response_data
 
