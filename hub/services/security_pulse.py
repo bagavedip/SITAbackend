@@ -42,7 +42,7 @@ class SecurityPulseService:
         response = SecurityPulse.objects.create(**security_pulse_kwargs)
         for section in sections:
             image_data = section.get("imageData")
-            image_data_name = validated_data.get("imageDataName")
+            image_data_name = section.get("imageDataName")
             image = ContentFile(image_data, name=image_data_name)
             info = section.get("info")
             security_pulse_image_kwargs = {
@@ -114,7 +114,7 @@ class SecurityPulseService:
           using given id
          """
         queryset = SecurityPulse.objects.get(id=security_id)
-        selected_id = queryset.incident_id
+        selected_id = queryset.selected_incident
         selected_assets = queryset.selected_assets
         selected_entities = queryset.selected_entities
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
@@ -122,7 +122,7 @@ class SecurityPulseService:
         for query in query:
             image = query.image_data.read()
             info = query.info
-            image_name = str(queryset.image_data).split('/')[2],
+            image_name = str(query.image_data).split('/')[2],
             image_kwargs = {
                 "imageData": image,
                 "imageDataName": image_name,
