@@ -1,7 +1,7 @@
-from hub.constants import perspective_constants
+from hub.constants import security_pulse_constants
 
 
-class PerspectiveGridSerializer:
+class SecurityPulseGridSerializer:
     """
      Serializer for Ticket Details for Insights(Hub)
     """
@@ -18,8 +18,8 @@ class PerspectiveGridSerializer:
 
         self.columns_headers = []
         self.select_cols = []
-        for key in perspective_constants.PERSPECTIVE_TABLE_HEADER.keys():
-            self.select_cols.append(perspective_constants.PERSPECTIVE_TABLE_HEADER.get(key))
+        for key in security_pulse_constants.SECURITY_PULSE_TABLE_HEADER.keys():
+            self.select_cols.append(security_pulse_constants.SECURITY_PULSE_TABLE_HEADER.get(key))
             self.columns_headers.append(key)
 
     def get_response(self, data):
