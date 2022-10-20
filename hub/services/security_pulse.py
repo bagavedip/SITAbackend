@@ -99,21 +99,30 @@ class SecurityPulseService:
             "created_at": timezone.now(),
             "updated_at": timezone.now()
         }
-        response = SecurityPulseService.update(queryset,**security_pulse_kwargs)
-        for section in sections:
-            image_data = section.get("imageData",None)
-            image_data_name = validated_data.get("imageDataName",None)
-            image = None if image_data is None else ContentFile(image_data,name=image_data_name)
-            info = section.get("info",None)
+        response = SecurityPulseService.update(queryset, **security_pulse_kwargs)
+        if validated_data.get("sections") is None:
             security_pulse_image_kwargs = {
-                "image_data": image,
-                "info": info,
+                "image_data": None,
+                "info": None,
                 "security_pulse": response
 
             }
+            security_pulse_image = SecurityPulseImage.objects.create(**security_pulse_image_kwargs)
+        else:
+            for section in sections:
+                image_data = section.get("imageData")
+                image_data_name = section.get("imageDataName")
+                image = None if image_data is None else ContentFile(image_data,name=image_data_name)
+                info = section.get("info")
+                security_pulse_image_kwargs = {
+                    "image_data": image,
+                    "info": info,
+                    "security_pulse": response
+
+                }
             queryset = SecurityPulseImage.objects.filter(security_pulse=securityPulseId)
             for query in queryset:
-                security_pulse_image = SecurityPulseService.update(query,**security_pulse_image_kwargs)
+                security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
         return security_pulse_image
 
     @staticmethod
