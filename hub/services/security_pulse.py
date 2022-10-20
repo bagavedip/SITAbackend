@@ -107,7 +107,7 @@ class SecurityPulseService:
                 "security_pulse": response
 
             }
-            security_pulse_image = SecurityPulseImage.objects.create(**security_pulse_image_kwargs)
+            security_pulse_image = SecurityPulseImage.update(queryset, **security_pulse_image_kwargs)
         else:
             for section in sections:
                 image_data = section.get("imageData")
@@ -121,8 +121,9 @@ class SecurityPulseService:
 
                 }
             queryset = SecurityPulseImage.objects.filter(security_pulse=securityPulseId)
-            for query in queryset:
-                security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
+            if validated_data.get("sections") is not None:
+                for query in queryset:
+                    security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
         return security_pulse_image
 
     @staticmethod
