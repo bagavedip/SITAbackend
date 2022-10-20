@@ -29,23 +29,22 @@ class PerspectiveGridSerializer:
                 "key": "column" + str(index + 1),
                 "headerText": self.columns_headers[index],
                 "isSorting": True,
-                "type": "TEXT"
+                "type": "TEXT",
+                "hideOnUI": False,
+                "dataDisplayLength": 0,
             }
             col_headers.append(col)
 
         grid_data = []
         for row in data:
             row_data = {}
+            None if row.get("incident_start_date_time") is None else row.update({"incident_start_date_time": row.get("incident_start_date_time").strftime("%d-%m-%Y")})
+            row.update({"is_published": "Publish"}) if row.get("is_published") else row.update({"is_published": "Draft"})
             for index in range(len(row)):
                 row_data["column" + (str(index + 1))] = str(row.get(self.select_cols[index]))
             grid_data.append(row_data)
 
         response_json = {
-            "gridSelectedFilter": {
-                "startDate": self.start_date,
-                "endDate": self.end_date,
-                "selectedDropdownFiters": []
-            },
             "gridAddOn": {
                 "showFirstColumnAsCheckbox": True,
                 "showLastColumnAsAction": True
