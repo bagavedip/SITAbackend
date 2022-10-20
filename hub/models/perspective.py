@@ -33,35 +33,35 @@ class Perspective(models.Model):
 
     id = models.BigAutoField(_("perspective_id"), primary_key=True)
     perspective_type = models.CharField(
-        _("perspective type"), max_length=100, choices=PerspectiveType.choices, help_text=_("perspective type")
+        _("perspective type"), max_length=100, choices=PerspectiveType.choices, help_text=_("perspective type"), null=True
     )
     action_type = models.CharField(
-        _("action type"), max_length=100, choices=ActionType.choices, help_text=_("action type")
+        _("action type"), max_length=100, choices=ActionType.choices, help_text=_("action type"), null=True
     )
     status_type = models.CharField(
-        _("status type"), max_length=100, choices=StatusType.choices, help_text=_("status type")
+        _("status type"), max_length=100, choices=StatusType.choices, help_text=_("status type"), null=True
     )
     criticality_type = models.CharField(
-        _("perspective type"), max_length=100, choices=CriticalityType.choices, help_text=_("perspective type")
+        _("perspective type"), max_length=100, choices=CriticalityType.choices, help_text=_("perspective type"), null=True
     )
     perspective_title = models.CharField(_("perspective_title"), max_length=100, null=True,
                                          help_text=_("perspective_title"))
     perspective = models.TextField(_("perspective"), null=True, help_text=_("perspective"))
     recommendation = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
     bar_graph_title = models.TextField(_("recommendation"), null=True, help_text=_("recommendation"))
-    is_published = models.BooleanField(_("is_published"), default=False, help_text=_("is_published"))
+    is_published = models.BooleanField(_("is_published"), default=False, help_text=_("is_published"), null=True)
 
     # ArrayFields
     incident_id = ArrayField(
         models.IntegerField(),
         default=list,
         help_text=_("incident_id"),
-        verbose_name=_("incident_id"),
+        verbose_name=_("incident_id"), null=True
     )
     selected_assets = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_assets"), default=list,
-                                 help_text=_("selected assets"))
+                                 help_text=_("selected assets"), null=True)
     selected_entities = ArrayField(models.CharField(max_length=255), verbose_name=_("selected_entities"), default=list,
-                                   help_text=_("selected entities"))
+                                   help_text=_("selected entities"), null=True)
 
     # Image fields
     donut_left_graph = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
