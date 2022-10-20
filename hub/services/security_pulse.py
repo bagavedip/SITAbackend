@@ -43,7 +43,7 @@ class SecurityPulseService:
         for section in sections:
             image_data = section.get("imageData")
             image_data_name = section.get("imageDataName")
-            image = ContentFile(image_data, name=image_data_name)
+            image = None if image_data is None else ContentFile(image_data, name=image_data_name)
             info = section.get("info")
             security_pulse_image_kwargs = {
                 "image_data": image,
@@ -94,7 +94,7 @@ class SecurityPulseService:
         for section in sections:
             image_data = section.get("imageData", None)
             image_data_name = validated_data.get("imageDataName", None)
-            image = ContentFile(image_data, name=image_data_name)
+            image = None if image_data is None else ContentFile(image_data, name=image_data_name)
             info = section.get("info", None)
             security_pulse_image_kwargs = {
                 "image_data": image,
@@ -120,9 +120,9 @@ class SecurityPulseService:
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
         section = []
         for query in query:
-            image = query.image_data.read()
+            image = None if bool(query.image_data) is False else query.image_data.read()
             info = query.info
-            image_name = str(query.image_data).split('/')[2],
+            image_name = None if bool(query.image_data) is False else str(query.image_data).split('/')[2],
             image_kwargs = {
                 "imageData": image,
                 "imageDataName": image_name,
@@ -130,19 +130,17 @@ class SecurityPulseService:
             }
             section.append(image_kwargs)
         response_data = {
-            "perspectiveFormData": {
-                "securityPulseTitle": queryset.security_pulse_title,
-                "mainTitle": queryset.main_title,
-                "criticality": queryset.criticality_type,
-                "sections": section,
-                "recommendations": queryset.recommendations,
-                "links": queryset.links,
-                "selectedIds": selected_id,
-                "selectedAssets": selected_assets,
-                "selectedEntities": selected_entities,
-                "securityPulseId": security_id,
-                "isPublished": queryset.is_published
-            },
+            "securityPulseTitle": queryset.security_pulse_title,
+            "mainTitle": queryset.main_title,
+            "criticality": queryset.criticality_type,
+            "sections": section,
+            "recommendations": queryset.recommendations,
+            "links": queryset.links,
+            "selectedIds": selected_id,
+            "selectedAssets": selected_assets,
+            "selectedEntities": selected_entities,
+            "securityPulseId": security_id,
+            "isPublished": queryset.is_publish
         }
         return response_data
     
@@ -156,9 +154,9 @@ class SecurityPulseService:
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
         section = []
         for query in query:
-            image = query.image_data.read()
+            image = None if bool(query.image_data) is False else query.image_data.read()
             info = query.info
-            image_name = str(queryset.image_data).split('/')[2],
+            image_name = None if bool(query.image_data) is False else str(queryset.image_data).split('/')[2],
             image_kwargs = {
                 "imageData": image,
                 "imageDataName": image_name,
