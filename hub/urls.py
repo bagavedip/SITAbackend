@@ -4,6 +4,7 @@ from rest_framework import routers
 from .views.assign_task import AssignTaskViewset
 from .views.hub import InsightHub
 from .views.perspective import PerspectiveViewSet
+from .views.preference import PreferenceViewSet
 from .views.process import ProcessViewSet
 from .views.itsm import ITSMViewSet
 from .views.assets import AssetViewSet

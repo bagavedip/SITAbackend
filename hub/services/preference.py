@@ -1,4 +1,4 @@
-from SITAbackend.hub.models.preference import Preference
+from hub.models.preference import Preference
 
 
 class PreferenceService:
@@ -20,5 +20,5 @@ class PreferenceService:
         for key, value in preference_kwargs.items():
             setattr(queryset, key, value)
         queryset.save()
-
-        return queryset
+        asset = queryset
+        return asset

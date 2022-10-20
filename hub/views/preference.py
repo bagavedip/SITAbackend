@@ -4,16 +4,18 @@ from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from hub.models import Preference
+from hub.models.preference import Preference
 from hub.models.perspective import Perspective
 from hub.models.hub import Hub
 from hub.serializers.perspective_grid_view import PerspectiveGridSerializer
 from hub.services.perspective import PerspectiveService
 
+from hub.services.preference import PreferenceService
+
 logger = logging.getLogger(__name__)
 
 
-class Preference(viewsets.GenricViewSet):
+class PreferenceViewSet(viewsets.GenericViewSet):
 
     def preference_input(self, request):
         try:
@@ -24,7 +26,7 @@ class Preference(viewsets.GenricViewSet):
             # user_preference = Preference.objects.get("")
             logger.debug("Database transaction started")
             with transaction.atomic():
-                asset = PreferenceService.update_from_validated_data(login_user, validated_data)
+                asset = PreferenceService.preference_input(login_user, validated_data)
             logger.debug("Database transaction finished")
 
             # response formatting
@@ -32,7 +34,7 @@ class Preference(viewsets.GenricViewSet):
                 "message": "Preference Saved SuccessFully !",
                 "status": "success"
             }
-            return Response(response_data)
+            return Response({response_data})
             pass
         except Exception as e:
             response_data = {
