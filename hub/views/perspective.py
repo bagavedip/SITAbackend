@@ -26,7 +26,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             response_data = PerspectiveService.perspective_dropdown_data()
             return Response(response_data)
         except Exception as e:
-            return Response({"error": f"{e}"})
+            return Response({"message": f"{e}", "status": "error"})
 
     def perspective_grid_data(self, request):
         """
@@ -41,7 +41,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
 
             return Response(response_obj.get_response(data))
         except Exception as e:
-            return Response({"error": f"{e}"})
+            return Response({"message": f"{e}", "status": "error"})
 
     def add_perspective_record(self, request):
         try:
@@ -98,7 +98,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             return Response(perspective)
         except Exception as e:
             response_data = f"{e}"
-            return Response(response_data)
+            return Response({"message": response_data, "status": "error"})
 
     def edit_perspective_record_fetch(self, request):
         try:
