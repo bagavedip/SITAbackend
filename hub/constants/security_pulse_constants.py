@@ -7,9 +7,9 @@ hire_del = 'HIREDEL'
 SECURITY_PULSE_TABLE_HEADER = {
     'INCIDENT ID': 'id',
     'Publish / Draft': 'is_published',
-    'NEWSLETTER DATE': 'incident_start_date_time',
+    'NEWSLETTER DATE': 'created_at',
     'TITLE': 'main_title',
     'CRITICALITY': 'criticality_type',
-    'ASSET TYPE': 'status_type',
-    'ANALYST': 'action_type'
+    'ASSET TYPE': 'criticality_type',
+    'ANALYST': 'created_by'
 }
