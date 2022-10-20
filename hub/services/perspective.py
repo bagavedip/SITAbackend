@@ -53,28 +53,31 @@ class PerspectiveService:
         # fetch status list in models
         status = Perspective.objects.values_list('status_type').distinct()
         status_dropdown = [{
-            "value": "Select",
-            "label": "Status"
+            "label": "Status",
+            "value": "Select"
         }]
-        for perspective_type in perspective_type:
-            new_asset = {
-                "value": perspective_type,
-                "label": perspective_type
-            }
+        for perspective in perspective_type:
+            for per in perspective:
+                new_asset = {
+                    "label": per,
+                    "value": per,
+                }
 
-            perspective_dropdown.append(new_asset)
+                perspective_dropdown.append(new_asset)
         for action in action_type:
-            new_geo = {
-                "value": action,
-                "label": action
-            }
-            action_dropdown.append(new_geo)
-        for status in status:
-            new_entity = {
-                "value": status,
-                "label": status
-            }
-            status_dropdown.append(new_entity)
+            for act in action:
+                new_geo = {
+                    "label": act,
+                    "value": act
+                }
+                action_dropdown.append(new_geo)
+        for stat in status:
+            for i in stat:
+                new_entity = {
+                    "label": i,
+                    "value": i
+                }
+                status_dropdown.append(new_entity)
 
         # final response which gives actual dropdown_data
         response = [
