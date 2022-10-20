@@ -37,6 +37,8 @@ class SecurityPulse(models.Model):
     links = models.JSONField(default=list, null=True, blank=True)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=True)
     updated_at = models.DateTimeField(_("updated at"), auto_now=True, null=True)
+    imageData = models.FileField(_("donut left graph"), upload_to="perspective/donut_graph", null=True,
+                                        help_text=_("donut left graph"))
 
     # foreignkey fields
     created_by = models.ForeignKey(

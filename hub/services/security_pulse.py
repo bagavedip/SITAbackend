@@ -72,3 +72,69 @@ class SecurityPulseService:
         # End date in society
         security.delete()
         logger.info(f"Society with ID {security.pk} deleted successfully.")
+    @staticmethod
+    def security_pulse_details_data(security_pulse_id):
+        """
+        this function return details of security_pulse_details_data
+        """
+        queryset = SecurityPulse.objects.get(id=security_pulse_id)
+        security_pulse_title = queryset.security_pulse_title
+        main_title = queryset.mainTitle,
+        image_data = queryset.imageData,
+        selected_entities = queryset.selected_entities,
+        created_at = queryset.created_at
+        created_date = str(created_at)[:10]
+        user = queryset.created_by
+        recommendations = queryset.recommendations
+        selected_assets = queryset.selected_assets
+        selected_incident = queryset.selected_incident
+        links = queryset.links
+        response_data = {
+            "headerData": {
+                "user": user,
+                "designation": "Cyber Security Engineer",
+                "createdDate": created_date
+            },
+            "securityPulseFormData": {
+                "securityPulseTitle": security_pulse_title,
+                "mainTitle": main_title,
+                "sections": [
+                    {
+                        "imageData": image_data
+                    },
+                ],
+                "recommendations": [
+                    recommendations,
+                ],
+                "links": [
+                    { links },
+                ],
+                "selectedIncidents": [
+                    selected_incident,
+                ],
+                "selectedAssets": [
+                    selected_assets,
+                ],
+                "selectedEntities": [
+                    selected_entities,
+                ]
+            },
+            "footerData": {
+                "email": "info@etek.com",
+                "contacts": [
+                    {
+                        "countryName": "Colombia",
+                        "contactNo": "+57(1)2571520"
+                    },
+                    {
+                        "countryName": "Peru'",
+                        "contactNo": "+51(1)6124343"
+                    },
+                    {
+                        "countryName": "India",
+                        "contactNo": "+91-9873451221"
+                    }
+                ]
+            }
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
