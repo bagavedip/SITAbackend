@@ -172,50 +172,87 @@ class SecurityPulseService:
         queryset = SecurityPulse.objects.get(id=security_id)
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
         final_date = queryset.created_at.strftime("%d-%m-%Y")
-        section = []
-        for query in query:
-            image = None if bool(query.image_data) is False else query.image_data.read()
-            info = query.info
-            image_name = None if bool(query.image_data) is False else str(queryset.image_data).split('/')[2],
-            image_kwargs = {
-                "imageData": image,
-                "imageDataName": image_name,
-                "info": info
+        if query is None:
+            response_data = {
+                "headerData": {
+                    "user": queryset.created_by.first_name,
+                    "designation": "Cyber Security Engineer",
+                    "createdDate": final_date
+                },
+                "perspectiveFormData": {
+                    "securityPulseTitle": queryset.security_pulse_title,
+                    "mainTitle": queryset.main_title,
+                    "sections": [],
+                    "recommendations": queryset.recommendations,
+                    "criticality": queryset.criticality_type,
+                    "links": queryset.links,
+                    "selectedIds": queryset.selected_incident,
+                    "selectedAssets": queryset.selected_assets,
+                    "selectedEntities": queryset.selected_entities,
+                },
+                "footerData": {
+                    "email": "info@etek.com",
+                    "contacts": [
+                        {
+                            "countryName": "Colombia",
+                            "contactNo": "+57(1)2571520"
+                        },
+                        {
+                            "countryName": "Peru'",
+                            "contactNo": "+51(1)6124343"
+                        },
+                        {
+                            "countryName": "India",
+                            "contactNo": "+91-9873451221"
+                        }
+                    ]
+                }
             }
-            section.append(image_kwargs)
-        response_data = {
-            "headerData": {
-                "user": queryset.created_by.first_name,
-                "designation": "Cyber Security Engineer",
-                "createdDate": final_date
-            },
-            "perspectiveFormData": {
-                "securityPulseTitle": queryset.security_pulse_title,
-                "mainTitle": queryset.main_title,
-                "sections": section,
-                "recommendations": queryset.recommendations,
-                "criticality": queryset.criticality_type,
-                "links": queryset.links,
-                "selectedIds": queryset.selected_incident,
-                "selectedAssets": queryset.selected_assets,
-                "selectedEntities": queryset.selected_entities,
-            },
-            "footerData": {
-                "email": "info@etek.com",
-                "contacts": [
-                    {
-                        "countryName": "Colombia",
-                        "contactNo": "+57(1)2571520"
-                    },
-                    {
-                        "countryName": "Peru'",
-                        "contactNo": "+51(1)6124343"
-                    },
-                    {
-                        "countryName": "India",
-                        "contactNo": "+91-9873451221"
-                    }
-                ]
+        else:
+            section = []
+            for query in query:
+                image = None if bool(query.image_data) is False else query.image_data.read()
+                info = query.info
+                image_name = None if bool(query.image_data) is False else str(queryset.image_data).split('/')[2],
+                image_kwargs = {
+                    "imageData": image,
+                    "imageDataName": image_name,
+                    "info": info
+                }
+                section.append(image_kwargs)
+            response_data = {
+                "headerData": {
+                    "user": queryset.created_by.first_name,
+                    "designation": "Cyber Security Engineer",
+                    "createdDate": final_date
+                },
+                "perspectiveFormData": {
+                    "securityPulseTitle": queryset.security_pulse_title,
+                    "mainTitle": queryset.main_title,
+                    "sections": section,
+                    "recommendations": queryset.recommendations,
+                    "criticality": queryset.criticality_type,
+                    "links": queryset.links,
+                    "selectedIds": queryset.selected_incident,
+                    "selectedAssets": queryset.selected_assets,
+                    "selectedEntities": queryset.selected_entities,
+                },
+                "footerData": {
+                    "email": "info@etek.com",
+                    "contacts": [
+                        {
+                            "countryName": "Colombia",
+                            "contactNo": "+57(1)2571520"
+                        },
+                        {
+                            "countryName": "Peru'",
+                            "contactNo": "+51(1)6124343"
+                        },
+                        {
+                            "countryName": "India",
+                            "contactNo": "+91-9873451221"
+                        }
+                    ]
+                }
             }
-        }
         return response_data
