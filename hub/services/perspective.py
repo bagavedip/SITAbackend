@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 from django.db.models import Q
 from django.utils import timezone
@@ -54,38 +53,41 @@ class PerspectiveService:
         # fetch status list in models
         status = Perspective.objects.values_list('status_type').distinct()
         status_dropdown = [{
-            "value": "Select",
-            "label": "Status"
+            "label": "Status",
+            "value": "Select"
         }]
-        for perspective_type in perspective_type:
-            new_asset = {
-                "value": perspective_type,
-                "label": perspective_type
-            }
+        for perspective in perspective_type:
+            for per in perspective:
+                new_asset = {
+                    "label": per,
+                    "value": per,
+                }
 
-            perspective_dropdown.append(new_asset)
+                perspective_dropdown.append(new_asset)
         for action in action_type:
-            new_geo = {
-                "value": action,
-                "label": action
-            }
-            action_dropdown.append(new_geo)
-        for status in status:
-            new_entity = {
-                "value": status,
-                "label": status
-            }
-            status_dropdown.append(new_entity)
+            for act in action:
+                new_geo = {
+                    "label": act,
+                    "value": act
+                }
+                action_dropdown.append(new_geo)
+        for stat in status:
+            for i in stat:
+                new_entity = {
+                    "label": i,
+                    "value": i
+                }
+                status_dropdown.append(new_entity)
 
         # final response which gives actual dropdown_data
         response = [
             {
                 "id": "PerspectiveType",
-                "dropdownoption": str(perspective_dropdown)
+                "dropdownoption": perspective_dropdown
             },
             {
                 "id": "ActionTaken",
-                "dropdownoption": str(action_dropdown)
+                "dropdownoption": action_dropdown
             },
             {
                 "id": "Status",
@@ -96,39 +98,38 @@ class PerspectiveService:
 
     @staticmethod
     def create_from_validated_data(user, validated_data):
-        imageData1 = validated_data.get("imageData1", None)
-        imageData2 = validated_data.get("imageData2", None)
-        imageData3 = validated_data.get("imageData3", None)
-        imageData4 = validated_data.get("imageData4", None)
+        imageData1 = validated_data.get("imageData1")
+        imageData2 = validated_data.get("imageData2")
+        imageData3 = validated_data.get("imageData3")
+        imageData4 = validated_data.get("imageData4")
 
-        imageData1Name = validated_data.get("imageData1Name", None)
-        imageData2Name = validated_data.get("imageData2Name", None)
-        imageData3Name = validated_data.get("imageData3Name", None)
-        imageData4Name = validated_data.get("imageData4Name", None)
+        imageData1Name = validated_data.get("imageData1Name")
+        imageData2Name = validated_data.get("imageData2Name")
+        imageData3Name = validated_data.get("imageData3Name")
+        imageData4Name = validated_data.get("imageData4Name")
         donut_left_graph = ContentFile(imageData1, name=imageData1Name)
         donut_right_graph = ContentFile(imageData2, name=imageData2Name)
         comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
         comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
-
         perspective_kwargs = {
-            "perspective_type": validated_data.get("selectedPerspectiveFilter", None),
-            "action_type": validated_data.get("selectedActionTakenFilter", None),
-            "status_type": validated_data.get("selectedActedUponFilter", None),
-            "criticality_type": validated_data.get("selectedLevelFilter", None),
-            "incident_id": validated_data.get("selectedIds", None),
-            "perspective_title": validated_data.get("perspectiveTitle", None),
-            "bar_graph_title": validated_data.get("barGraphTitle", None),
-            "perspective": validated_data.get("perspectiveInput", None),
-            "recommendation": validated_data.get("recomendationsInput", None),
-            "selected_assets": validated_data.get("selectedAssets", None),
-            "selected_entities": validated_data.get("selectedEntities", None),
-            "is_published": validated_data.get("isPublished", None),
+            "perspective_type": validated_data.get("selectedPerspectiveFilter"),
+            "action_type": validated_data.get("selectedActionTakenFilter"),
+            "status_type": validated_data.get("selectedActedUponFilter"),
+            "criticality_type": validated_data.get("selectedLevelFilter"),
+            "incident_id": validated_data.get("selectedIds"),
+            "perspective_title": validated_data.get("perspectiveTitle"),
+            "bar_graph_title": validated_data.get("barGraphTitle"),
+            "perspective": validated_data.get("perspectiveInput"),
+            "recommendation": validated_data.get("recomendationsInput"),
+            "selected_assets": validated_data.get("selectedAssets"),
+            "selected_entities": validated_data.get("selectedEntities"),
+            "is_published": validated_data.get("isPublished"),
             "donut_left_graph": donut_left_graph,
             "donut_right_graph": donut_right_graph,
             "comparative_left_graph": comparative_left_graph,
             "comparative_right_graph": comparative_right_graph,
-            "incident_start_date_time": validated_data.get("startDateTime", None),
-            "incident_end_date_time": validated_data.get("endDateTime", None),
+            "incident_start_date_time": validated_data.get("startDateTime"),
+            "incident_end_date_time": validated_data.get("endDateTime"),
             "created_by": user,
             "updated_by": user,
             "created_at": timezone.now(),
@@ -249,29 +250,31 @@ class PerspectiveService:
         comparative_left_graph = queryset.comparative_left_graph.read()
         comparative_right_graph = queryset.comparative_right_graph.read()
         response_data = {
-            "perspectiveTitle": perspective_title,
-            "barGraphTitle": queryset.bar_graph_title,
-            "perspectiveInput": queryset.perspective,
-            "recomendationsInput": queryset.recommendation,
-            "selectedLevelFilter": queryset.criticality_type,
-            "selectedActionTakenFilter": queryset.action_type,
-            "startDateTime": queryset.incident_start_date_time,
-            "endDateTime": queryset.incident_end_date_time,
-            "selectedPerspectiveFilter": queryset.perspective_type,
-            "selectedActedUponFilter": queryset.status_type,
-            "selectedIds": selected_id,
-            "selectedAssets": selected_assets,
-            "selectedEntities": selected_entities,
-            "imageData1": donut_left_graph,
-            "imageData2": donut_right_graph,
-            "imageData3": comparative_left_graph,
-            "imageData4": comparative_right_graph,
-            "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
-            "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
-            "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
-            "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
-            "perspectiveId": perspective_id,
-            "isPublished": queryset.is_published
+            "perspectiveFormData": {
+                "perspectiveTitle": perspective_title,
+                "barGraphTitle": queryset.bar_graph_title,
+                "perspectiveInput": queryset.perspective,
+                "recomendationsInput": queryset.recommendation,
+                "selectedLevelFilter": queryset.criticality_type,
+                "selectedActionTakenFilter": queryset.action_type,
+                "startDateTime": queryset.incident_start_date_time,
+                "endDateTime": queryset.incident_end_date_time,
+                "selectedPerspectiveFilter": queryset.perspective_type,
+                "selectedActedUponFilter": queryset.status_type,
+                "selectedIds": selected_id,
+                "selectedAssets": selected_assets,
+                "selectedEntities": selected_entities,
+                "imageData1": donut_left_graph,
+                "imageData2": donut_right_graph,
+                "imageData3": comparative_left_graph,
+                "imageData4": comparative_right_graph,
+                "imageData1Name": str(queryset.donut_left_graph).split('/')[2],
+                "imageData2Name": str(queryset.donut_right_graph).split('/')[2],
+                "imageData3Name": str(queryset.comparative_left_graph).split('/')[2],
+                "imageData4Name": str(queryset.comparative_right_graph).split('/')[2],
+                "perspectiveId": perspective_id,
+                "isPublished": queryset.is_published
+            },
         }
         return response_data
 
