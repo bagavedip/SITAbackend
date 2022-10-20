@@ -40,18 +40,27 @@ class SecurityPulseService:
             "updated_at": timezone.now()
         }
         response = SecurityPulse.objects.create(**security_pulse_kwargs)
-        for section in sections:
-            image_data = section.get("imageData")
-            image_data_name = section.get("imageDataName")
-            image = None if image_data is None else ContentFile(image_data,name=image_data_name)
-            info = section.get("info")
+        if validated_data.get("sections") is None:
             security_pulse_image_kwargs = {
-                "image_data": image,
-                "info": info,
+                "image_data": None,
+                "info": None,
                 "security_pulse": response
 
             }
             security_pulse_image = SecurityPulseImage.objects.create(**security_pulse_image_kwargs)
+        else:
+            for section in sections:
+                image_data = section.get("imageData")
+                image_data_name = section.get("imageDataName")
+                image = None if image_data is None else ContentFile(image_data,name=image_data_name)
+                info = section.get("info")
+                security_pulse_image_kwargs = {
+                    "image_data": image,
+                    "info": info,
+                    "security_pulse": response
+
+                }
+                security_pulse_image = SecurityPulseImage.objects.create(**security_pulse_image_kwargs)
         return response
 
     @staticmethod
