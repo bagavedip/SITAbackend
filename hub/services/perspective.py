@@ -111,10 +111,10 @@ class PerspectiveService:
         comparative_left_graph = None if imageData3 is None else ContentFile(imageData3, name=imageData3Name)
         comparative_right_graph = None if imageData4 is None else ContentFile(imageData4, name=imageData4Name)
         perspective_kwargs = {
-            "perspective_type": validated_data.get("selectedPerspectiveFilter",  None),
-            "action_type": validated_data.get("selectedActionTakenFilter",  None),
-            "status_type": validated_data.get("selectedActedUponFilter",  None),
-            "criticality_type": validated_data.get("selectedLevelFilter",  None),
+            "perspective_type": "Incident" if validated_data.get("selectedPerspectiveFilter") is None else validated_data.get("selectedPerspectiveFilter"),
+            "action_type": "no_action" if validated_data.get("selectedActionTakenFilter") is None else validated_data.get("selectedActionTakenFilter"),
+            "status_type": "under_investigation" if validated_data.get("selectedActedUponFilter") is None else validated_data.get("selectedActedUponFilter"),
+            "criticality_type": "Low" if validated_data.get("selectedLevelFilter") is None else validated_data.get("selectedLevelFilter"),
             "incident_id": validated_data.get("selectedIds",  None),
             "perspective_title": validated_data.get("perspectiveTitle",  None),
             "bar_graph_title": validated_data.get("barGraphTitle",  None),
