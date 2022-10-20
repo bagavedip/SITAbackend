@@ -59,12 +59,16 @@ class SecurityPulseViewSet(viewsets.GenericViewSet):
             return Response(response_data)
 
     def security_pulse_grid_data(self, request):
-        logger.debug(f"Received request body {request.data}")
+        try:
+            logger.debug(f"Received request body {request.data}")
 
-        response_obj = SecurityPulseGridSerializer(request)
+            response_obj = SecurityPulseGridSerializer(request)
 
-        data = SecurityPulseService.security_pulse_grid(response_obj)
-        return Response(response_obj.get_response(data), status=status.HTTP_200_OK)
+            data = SecurityPulseService.security_pulse_grid(response_obj)
+            return Response(response_obj.get_response(data), status=status.HTTP_200_OK)
+        except Exception as e:
+            response_data = f"e"
+        return Response({"message": response_data, "status": "error"})
 
     def edit_security_pulse_record_submit(self, request):
         """
@@ -102,7 +106,7 @@ class SecurityPulseViewSet(viewsets.GenericViewSet):
             return Response(perspective)
         except Exception as e:
             response_data = f"{e}"
-            return Response(response_data)
+            return Response({"message": response_data, "status": "error"})
 
     def security_pulse_details_data(self, request):
         try:
@@ -111,4 +115,4 @@ class SecurityPulseViewSet(viewsets.GenericViewSet):
             return Response(perspective)
         except Exception as e:
             response_data = f"{e}"
-            return Response(response_data)
+            return Response({"message": response_data, "status": "error"})
