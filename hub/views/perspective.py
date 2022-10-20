@@ -107,7 +107,10 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             return Response(perspective)
         except Exception as e:
             response_data = f"{e}"
-            return Response(response_data)
+            return Response({
+                "message": response_data,
+                "status": "error"
+            })
 
     def perspective_record_delete(self, request, *args, **kwargs):
         """[action to destory society]
