@@ -109,12 +109,7 @@ class PerspectiveService:
         donut_right_graph = ContentFile(imageData2, name=imageData2Name)
         comparative_left_graph = ContentFile(imageData3, name=imageData3Name)
         comparative_right_graph = ContentFile(imageData4, name=imageData4Name)
-        start_date = validated_data.get("startDateTime")
-        format = "%Y-%m-%d %H:%M:%S.%f%z"
-        times = datetime.strptime(start_date, format)
-        DATE_FORMAT = '%d.%m.%Y'
-        proper_time_format = f"{times.date().month}.{str(times.date().day).zfill(2)}.{times.date().year}"
-        start_time = datetime.strptime(proper_time_format, DATE_FORMAT)
+
         perspective_kwargs = {
             "perspective_type": validated_data.get("selectedPerspectiveFilter", None),
             "action_type": validated_data.get("selectedActionTakenFilter", None),
@@ -132,7 +127,7 @@ class PerspectiveService:
             "donut_right_graph": donut_right_graph,
             "comparative_left_graph": comparative_left_graph,
             "comparative_right_graph": comparative_right_graph,
-            "incident_start_date_time": start_time,
+            "incident_start_date_time": validated_data.get("startDateTime"),
             "incident_end_date_time": validated_data.get("endDateTime", None),
             "created_by": user,
             "updated_by": user,
