@@ -214,10 +214,11 @@ class SecurityPulseService:
                 image = None if bool(query.image_data) is False else query.image_data.read()
                 info = query.info
                 image_name = None if bool(query.image_data) is False else str(query.image_data).split('/')[2],
-                image_name_name = image_name[0]
+                for image_name in image_name:
+                    a = image_name[0]
                 image_kwargs = {
                     "imageData": image,
-                    "imageDataName": image_name_name,
+                    "imageDataName": a,
                     "info": info
                 }
                 section.append(image_kwargs)
