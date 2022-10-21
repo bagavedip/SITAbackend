@@ -40,7 +40,7 @@ class SecurityPulseGridSerializer:
             for index in range(len(row) + 1):
                 row_data["column" + (str(index + 1))] = str(row.get(self.select_cols[index]))
                 None if row.get("created_by") is None else row.update({"created_by": created})
-                grid_data.append(row_data)
+            grid_data.append(row_data)
 
         response_json = {
             "gridAddOn": {
