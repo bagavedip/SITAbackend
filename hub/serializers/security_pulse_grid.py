@@ -26,6 +26,7 @@ class SecurityPulseGridSerializer:
                 "isSorting": True,
                 "type": "TEXT"
             }
+            col.update({"hideOnUI": True}) if index == 0 else col.update({"hideOnUI": False})
             col_headers.append(col)
 
         grid_data = []
