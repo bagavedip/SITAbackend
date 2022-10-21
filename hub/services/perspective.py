@@ -285,7 +285,9 @@ class PerspectiveService:
         query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
         if response_obj.dropdownFilters is not None:
             for drop in response_obj.dropdownFilters:
-                perspect = drop.get("id") == "Perspective_type"
+                if drop.get("id") == "Perspective_type":
+                    x = "perspective_type"
+                    y = (drop.get("value"))
                 perspect = drop.get("id") == "Action taken"
                 perspect = drop.get("id") == "Status"
         return query_data
