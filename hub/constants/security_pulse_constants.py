@@ -10,6 +10,6 @@ SECURITY_PULSE_TABLE_HEADER = {
     'NEWSLETTER DATE': 'created_at',
     'TITLE': 'main_title',
     'CRITICALITY': 'criticality_type',
-    'ASSET TYPE': 'criticality_type',
+    'ASSET TYPE': 'selected_assets',
     'ANALYST': 'created_by'
 }

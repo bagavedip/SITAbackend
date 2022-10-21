@@ -32,14 +32,14 @@ class SecurityPulseGridSerializer:
         grid_data = []
         for row in data:
             row_data = {}
-            # None if row.get("selected_assets") is None else row.update({"selected_assets": ",".join(row.get("selected_assets"))})
+            None if row.get("selected_assets") is None else row.update({"selected_assets": ",".join(row.get("selected_assets"))})
             None if row.get("created_at") is None else row.update({"created_at": row.get("created_at").strftime("%m-%d-%Y")})
             row.update({"is_published": "Publish"}) if row.get("is_published") else row.update({"is_published": "Draft"})
             a = row.get("created_by")
             number = row.get("id")
             queryset = SecurityPulse.objects.get(id=number)
             created = queryset.created_by.first_name + " " + queryset.created_by.last_name
-            for index in range(len(row) + 1):
+            for index in range(len(row)):
                 row_data["column" + (str(index + 1))] = str(row.get(self.select_cols[index]))
                 None if row.get("created_by") is None else row.update({"created_by": created})
             grid_data.append(row_data)
