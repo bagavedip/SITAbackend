@@ -33,6 +33,7 @@ class PerspectiveGridSerializer:
                 "hideOnUI": False,
                 "dataDisplayLength": 0,
             }
+            col.update({"hideOnUI": True}) if index == 0 else col.update({"hideOnUI": False})
             col_headers.append(col)
 
         grid_data = []
