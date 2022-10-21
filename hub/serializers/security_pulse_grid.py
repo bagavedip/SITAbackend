@@ -36,7 +36,7 @@ class SecurityPulseGridSerializer:
         grid_data = []
         for row in data:
 
-            None if row.get("created_at") is None else row.update({"created_at": row.get("created_at").strftime("%d-%m-%Y")})
+            None if row.get("created_at") is None else row.update({"created_at": row.get("created_at").strftime("%m-%d-%Y")})
             row.update({"is_published": "Publish"}) if row.get("is_published") else row.update({"is_published": "Draft"})
             row_data = {}
             for index in range(len(row)):
@@ -45,8 +45,8 @@ class SecurityPulseGridSerializer:
 
         response_json = {
             "gridAddOn": {
-                "showFirstColumnAsCheckbox": True,
-                "showLastColumnAsAction": True
+                "showFirstColumnAsCheckbox": False,
+                "showLastColumnAsAction": False
             },
             "gridHeader": col_headers,
             "gridData": grid_data
