@@ -13,7 +13,7 @@ class UserSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=256, required=False)
     is_admin = serializers.BooleanField(required=True)
     role_id = serializers.IntegerField(source='role_id.id',required = False)
-    role = serializers.CharField(source='role_id.name')
+    role = serializers.CharField(source='role_id.name',required = False)
     
     class Meta:
         fields = "__all__"
