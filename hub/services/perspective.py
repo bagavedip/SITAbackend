@@ -252,7 +252,6 @@ class PerspectiveService:
         comparative_left_graph = None if bool(queryset.comparative_left_graph) is False else queryset.comparative_left_graph.read()
         comparative_right_graph = None if bool(queryset.comparative_right_graph) is False else queryset.comparative_right_graph.read()
         response_data = {
-            "perspectiveFormData": {
                 "perspectiveTitle": perspective_title,
                 "barGraphTitle": queryset.bar_graph_title,
                 "perspectiveInput": queryset.perspective,
@@ -276,7 +275,6 @@ class PerspectiveService:
                 "imageData4Name": None if bool(queryset.comparative_right_graph) is False else str(queryset.comparative_right_graph).split('/')[2],
                 "perspectiveId": perspective_id,
                 "isPublished": queryset.is_published
-            },
         }
         return response_data
 
