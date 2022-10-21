@@ -25,10 +25,10 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             query.key=key
             query.save()
             subject = "Forget Password Link"
-            message = (f"Hi,Please click this link http://localhost:3000/forget_password/{query.id}@{encMessage} to reset your password. Thanks, Shashi")
+            message = (f"Hi,Please click this link http://20.127.195.117:3000/forget_password/{query.id}@{encMessage} to reset your password. Thanks, Shashi")
             email_from = settings.EMAIL_HOST_USER
             email_reciever = [reciever]
-            # messages = (f"Hi,Please click this link http://localhost:3000/forget_password/{query.id}@{encMessage} to reset your password. Thanks, Shashi")
+            # messages = (f"Hi,Please click this link http://20.127.195.117:3000/forget_password/{query.id}@{encMessage} to reset your password. Thanks, Shashi")
             # email_from = settings.FROM
             # email_reciever = [reciever]
             # message = """From: %s\r\nTo: %s\r\nSubject: %s\r\n\
