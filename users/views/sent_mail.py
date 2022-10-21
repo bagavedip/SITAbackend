@@ -73,8 +73,8 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
         }
         for q in user:
             user_key = q.key
-            query.key = ""
-            query.update()
+            user.key = ""
+            user.update()
             print(user_key)
         if user_key :
             key = user_key
