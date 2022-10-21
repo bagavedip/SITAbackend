@@ -12,6 +12,7 @@ class PerspectiveGridSerializer:
 
         self.start_date = request_data.get('fromDate')
         self.end_date = request_data.get('toDate')
+        self.dropdownFilters = request_data.get("dropdownFilters")
         self.filters = {}
         self.filters['incident_start_date_time__gte'] = self.start_date
         self.filters['incident_end_date_time__lte'] = self.end_date
