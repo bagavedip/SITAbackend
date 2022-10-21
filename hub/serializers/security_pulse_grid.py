@@ -32,7 +32,7 @@ class SecurityPulseGridSerializer:
         grid_data = []
         for row in data:
             row_data = {}
-            None if row.get("created_at") is None else row.update({"created_at": row.get("created_at").strftime("%d-%m-%Y")})
+            None if row.get("created_at") is None else row.update({"created_at": row.get("created_at").strftime("%m-%d-%Y")})
             row.update({"is_published": "Publish"}) if row.get("is_published") else row.update({"is_published": "Draft"})
             a = row.get("created_by")
             number = row.get("id")
