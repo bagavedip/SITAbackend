@@ -174,7 +174,6 @@ class PerspectiveService:
             "is_published": validated_data.get("isPublished", None),
             "created_by": user,
             "updated_by": user,
-            "created_at": timezone.now(),
             "updated_at": timezone.now()
         }
         logger.debug(f"Updating asset with following kwargs {perspective_kwargs}")
