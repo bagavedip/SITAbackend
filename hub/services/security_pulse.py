@@ -176,7 +176,7 @@ class SecurityPulseService:
             response_data = {
                 "headerData": {
                     "user": queryset.created_by.first_name,
-                    "designation": "Cyber Security Engineer",
+                    "designation": queryset.created_by.role_id.name,
                     "createdDate": final_date
                 },
                 "securityPulseFormData": {
