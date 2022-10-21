@@ -47,7 +47,7 @@ class SecurityPulseGridSerializer:
         response_json = {
             "gridAddOn": {
                 "showFirstColumnAsCheckbox": False,
-                "showLastColumnAsAction": False
+                "showLastColumnAsAction": True
             },
             "gridHeader": col_headers,
             "gridData": grid_data
