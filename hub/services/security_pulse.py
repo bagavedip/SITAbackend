@@ -175,9 +175,9 @@ class SecurityPulseService:
         if query is None:
             response_data = {
                 "headerData": {
-                    "user": queryset.created_by.first_name,
+                    "user": queryset.created_by.first_name + " " + queryset.created_by.last_name,
                     "designation": queryset.created_by.role_id.name,
-                    "createdDate": final_date
+                    "createdDate": final_date.strftime("%d-%m-%Y")
                 },
                 "securityPulseFormData": {
                     "securityPulseTitle": queryset.security_pulse_title,
