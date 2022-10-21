@@ -283,6 +283,11 @@ class PerspectiveService:
     def perspective_grid(response_obj: PerspectiveGridSerializer):
         filter_q = Q(**response_obj.filters)
         query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
+        if response_obj.dropdownFilters is not None:
+            for drop in response_obj.dropdownFilters:
+                perspect = drop.get("id") == "Perspective_type"
+                perspect = drop.get("id") == "Action taken"
+                perspect = drop.get("id") == "Status"
         return query_data
 
     @staticmethod
