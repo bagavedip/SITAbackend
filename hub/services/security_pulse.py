@@ -218,7 +218,7 @@ class SecurityPulseService:
                     a = image_name[0]
                 image_kwargs = {
                     "imageData": image,
-                    "imageDataName": a,
+                    "imageDataName": image_name.index(0),
                     "info": info
                 }
                 section.append(image_kwargs)
