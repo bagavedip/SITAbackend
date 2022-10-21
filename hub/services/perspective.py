@@ -208,6 +208,8 @@ class PerspectiveService:
                 "selectedIds": selected_id,
                 "selectedAssets": selected_assets,
                 "selectedEntities": selected_entities,
+                "perspectiveInput": queryset.perspective,
+                "recomendationsInput": queryset.recommendation,
                 "imageData1": donut_left_graph,
                 "imageData2": donut_right_graph,
                 "imageData3": comparative_left_graph,
