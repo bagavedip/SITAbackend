@@ -225,12 +225,12 @@ class PerspectiveService:
             },
             "footerData": {
                 "lastUpdateInformation": {
-                    "user": str(queryset.updated_by.first_name),
-                    "date": created_date,
+                    "user": str(queryset.created_by.first_name) + ", " + str(queryset.updated_by.last_name),
+                    "date": created_at.date(),
                     "time": created_time
                 },
                 "originallyCreatedBy": {
-                    "user": str(queryset.created_by.first_name),
+                    "user": str(queryset.created_by.first_name) + ", " + str(queryset.created_by.last_name),
                     "date": updated_date,
                     "time": updated_time
                 }
