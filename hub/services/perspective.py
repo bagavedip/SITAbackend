@@ -111,10 +111,10 @@ class PerspectiveService:
         comparative_left_graph = None if imageData3 is None else ContentFile(imageData3, name=imageData3Name)
         comparative_right_graph = None if imageData4 is None else ContentFile(imageData4, name=imageData4Name)
         perspective_kwargs = {
-            "perspective_type": validated_data.get("selectedPerspectiveFilter",  None),
-            "action_type": validated_data.get("selectedActionTakenFilter",  None),
-            "status_type": validated_data.get("selectedActedUponFilter",  None),
-            "criticality_type": validated_data.get("selectedLevelFilter",  None),
+            "perspective_type": "Incident" if validated_data.get("selectedPerspectiveFilter") is None else validated_data.get("selectedPerspectiveFilter"),
+            "action_type": "no_action" if validated_data.get("selectedActionTakenFilter") is None else validated_data.get("selectedActionTakenFilter"),
+            "status_type": "under_investigation" if validated_data.get("selectedActedUponFilter") is None else validated_data.get("selectedActedUponFilter"),
+            "criticality_type": "Low" if validated_data.get("selectedLevelFilter") is None else validated_data.get("selectedLevelFilter"),
             "incident_id": validated_data.get("selectedIds",  None),
             "perspective_title": validated_data.get("perspectiveTitle",  None),
             "bar_graph_title": validated_data.get("barGraphTitle",  None),
@@ -174,7 +174,6 @@ class PerspectiveService:
             "is_published": validated_data.get("isPublished", None),
             "created_by": user,
             "updated_by": user,
-            "created_at": timezone.now(),
             "updated_at": timezone.now()
         }
         logger.debug(f"Updating asset with following kwargs {perspective_kwargs}")
@@ -208,6 +207,8 @@ class PerspectiveService:
                 "selectedIds": selected_id,
                 "selectedAssets": selected_assets,
                 "selectedEntities": selected_entities,
+                "perspectiveInput": queryset.perspective,
+                "recomendationsInput": queryset.recommendation,
                 "imageData1": donut_left_graph,
                 "imageData2": donut_right_graph,
                 "imageData3": comparative_left_graph,
@@ -223,12 +224,12 @@ class PerspectiveService:
             },
             "footerData": {
                 "lastUpdateInformation": {
-                    "user": str(queryset.updated_by.first_name),
-                    "date": created_date,
+                    "user": str(queryset.created_by.first_name) + " " + str(queryset.updated_by.last_name),
+                    "date": created_at.date(),
                     "time": created_time
                 },
                 "originallyCreatedBy": {
-                    "user": str(queryset.created_by.first_name),
+                    "user": str(queryset.created_by.first_name) + " " + str(queryset.created_by.last_name),
                     "date": updated_date,
                     "time": updated_time
                 }
@@ -252,7 +253,6 @@ class PerspectiveService:
         comparative_left_graph = None if bool(queryset.comparative_left_graph) is False else queryset.comparative_left_graph.read()
         comparative_right_graph = None if bool(queryset.comparative_right_graph) is False else queryset.comparative_right_graph.read()
         response_data = {
-            "perspectiveFormData": {
                 "perspectiveTitle": perspective_title,
                 "barGraphTitle": queryset.bar_graph_title,
                 "perspectiveInput": queryset.perspective,
@@ -276,7 +276,6 @@ class PerspectiveService:
                 "imageData4Name": None if bool(queryset.comparative_right_graph) is False else str(queryset.comparative_right_graph).split('/')[2],
                 "perspectiveId": perspective_id,
                 "isPublished": queryset.is_published
-            },
         }
         return response_data
 
