@@ -11,7 +11,7 @@ from hub.serializers.perspective_grid_view import PerspectiveGridSerializer
 from hub.services.perspective import PerspectiveService
 
 from hub.services.preference import PreferenceService
-
+from hub.serializers.preference import PreferenceSerializer
 logger = logging.getLogger(__name__)
 
 
@@ -21,12 +21,19 @@ class PreferenceViewSet(viewsets.GenericViewSet):
         try:
             logger.debug(f"Parsed request body {request.data}")
             login_user = request.user
-            validated_data = request.data
-            logger.debug(f"Data after validation {validated_data}")
-            # user_preference = Preference.objects.get("")
-            logger.debug("Database transaction started")
-            with transaction.atomic():
-                asset = PreferenceService.preference_input(login_user, validated_data)
+            serializer = PreferenceSerializer(data=request.data)
+            if serializer.is_valid():
+                print("serializer is saved")
+                serializer.save()
+            print("serializer is valid")
+
+            print(serializer.data)
+            print("inside the transaction")
+            graph = serializer.get("graph")
+            graph_name = serializer.get("graph_name")
+            user_id = serializer.get("user_id")
+            value= serializer.get("value")
+            # asset = PreferenceService.preference_input(graph,graph_name, user_id,value)
             logger.debug("Database transaction finished")
 
             # response formatting
@@ -34,8 +41,7 @@ class PreferenceViewSet(viewsets.GenericViewSet):
                 "message": "Preference Saved SuccessFully !",
                 "status": "success"
             }
-            return Response({response_data})
-            pass
+            return Response(response_data)
         except Exception as e:
             response_data = {
                 "message": f"{e}",
