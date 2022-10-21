@@ -71,8 +71,13 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             "Status" : "FAILED",
             "Message" : "Session Timeout!!"
         }
-        if user.key :
-            key = user.key
+        for q in query:
+            user_key = q.key
+            query.key = ""
+            query.update()
+            print(user_key)
+        if user_key :
+            key = user_key
             user.key = ""
             user.save()
             fernet = Fernet(key)
@@ -95,7 +100,6 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     "Status" : "FAILED",
                     "Message" : "Session Timeout!!"
                 }
-        print("data",data)
         return Response(
             {
             "Data":data
