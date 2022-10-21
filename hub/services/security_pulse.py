@@ -12,18 +12,18 @@ logger = logging.getLogger(__name__)
 class SecurityPulseService:
 
     @staticmethod
-    def update(asset, **kwargs):
+    def update(asset,**kwargs):
         """
         Function update an asset from kwargs
         """
-        for key, value in kwargs.items():
-            setattr(asset, key, value)
+        for key,value in kwargs.items():
+            setattr(asset,key,value)
         asset.save()
 
         return asset
 
     @staticmethod
-    def create_from_validated_data(user, validated_data):
+    def create_from_validated_data(user,validated_data):
         sections = validated_data.get("sections")
         security_pulse_kwargs = {
             "criticality_type": validated_data.get("criticality"),
@@ -40,18 +40,27 @@ class SecurityPulseService:
             "updated_at": timezone.now()
         }
         response = SecurityPulse.objects.create(**security_pulse_kwargs)
-        for section in sections:
-            image_data = section.get("imageData")
-            image_data_name = section.get("imageDataName")
-            image = None if image_data is None else ContentFile(image_data, name=image_data_name)
-            info = section.get("info")
+        if validated_data.get("sections") is None:
             security_pulse_image_kwargs = {
-                "image_data": image,
-                "info": info,
+                "image_data": None,
+                "info": None,
                 "security_pulse": response
 
             }
             security_pulse_image = SecurityPulseImage.objects.create(**security_pulse_image_kwargs)
+        else:
+            for section in sections:
+                image_data = section.get("imageData")
+                image_data_name = section.get("imageDataName")
+                image = None if image_data is None else ContentFile(image_data,name=image_data_name)
+                info = section.get("info")
+                security_pulse_image_kwargs = {
+                    "image_data": image,
+                    "info": info,
+                    "security_pulse": response
+
+                }
+                security_pulse_image = SecurityPulseImage.objects.create(**security_pulse_image_kwargs)
         return response
 
     @staticmethod
@@ -91,20 +100,30 @@ class SecurityPulseService:
             "updated_at": timezone.now()
         }
         response = SecurityPulseService.update(queryset, **security_pulse_kwargs)
-        for section in sections:
-            image_data = section.get("imageData", None)
-            image_data_name = validated_data.get("imageDataName", None)
-            image = None if image_data is None else ContentFile(image_data, name=image_data_name)
-            info = section.get("info", None)
+        if validated_data.get("sections") is None:
             security_pulse_image_kwargs = {
-                "image_data": image,
-                "info": info,
+                "image_data": None,
+                "info": None,
                 "security_pulse": response
 
             }
+            security_pulse_image = SecurityPulseService.update(queryset, **security_pulse_image_kwargs)
+        else:
+            for section in sections:
+                image_data = section.get("imageData")
+                image_data_name = section.get("imageDataName")
+                image = None if image_data is None else ContentFile(image_data,name=image_data_name)
+                info = section.get("info")
+                security_pulse_image_kwargs = {
+                    "image_data": image,
+                    "info": info,
+                    "security_pulse": response
+
+                }
             queryset = SecurityPulseImage.objects.filter(security_pulse=securityPulseId)
-            for query in queryset:
-                security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
+            if validated_data.get("sections") is not None:
+                for query in queryset:
+                    security_pulse_image = SecurityPulseService.update(query, **security_pulse_image_kwargs)
         return security_pulse_image
 
     @staticmethod
@@ -143,7 +162,7 @@ class SecurityPulseService:
             "isPublished": queryset.is_published
         }
         return response_data
-    
+
     @staticmethod
     def security_pulse_details_data(security_id):
         """
@@ -152,51 +171,88 @@ class SecurityPulseService:
          """
         queryset = SecurityPulse.objects.get(id=security_id)
         query = SecurityPulseImage.objects.filter(security_pulse=security_id)
-        section = []
-        for query in query:
-            image = None if bool(query.image_data) is False else query.image_data.read()
-            info = query.info
-            image_name = None if bool(query.image_data) is False else str(queryset.image_data).split('/')[2],
-            image_kwargs = {
-                "imageData": image,
-                "imageDataName": image_name,
-                "info": info
+        final_date = queryset.created_at.strftime("%d-%m-%Y")
+        if query is None:
+            response_data = {
+                "headerData": {
+                    "user": queryset.created_by.first_name,
+                    "designation": "Cyber Security Engineer",
+                    "createdDate": final_date
+                },
+                "securityPulseFormData": {
+                    "securityPulseTitle": queryset.security_pulse_title,
+                    "mainTitle": queryset.main_title,
+                    "sections": [],
+                    "recommendations": queryset.recommendations,
+                    "criticality": queryset.criticality_type,
+                    "links": queryset.links,
+                    "selectedIds": queryset.selected_incident,
+                    "selectedAssets": queryset.selected_assets,
+                    "selectedEntities": queryset.selected_entities,
+                },
+                "footerData": {
+                    "email": "info@etek.com",
+                    "contacts": [
+                        {
+                            "countryName": "Colombia",
+                            "contactNo": "+57(1)2571520"
+                        },
+                        {
+                            "countryName": "Peru'",
+                            "contactNo": "+51(1)6124343"
+                        },
+                        {
+                            "countryName": "India",
+                            "contactNo": "+91-9873451221"
+                        }
+                    ]
+                }
             }
-            section.append(image_kwargs)
-        response_data = {
-            "headerData": {
-                "user": queryset.created_by,
-                "designation": "Cyber Security Engineer",
-                "createdDate": queryset.created_at
-            },
-            "perspectiveFormData": {
-                "securityPulseTitle": queryset.security_pulse_title,
-                "mainTitle": queryset.main_title,
-                "sections": section,
-                "recommendations": queryset.recommendations,
-                "criticality": queryset.criticality_type,
-                "links": queryset.links,
-                "selectedIds": queryset.selected_id,
-                "selectedAssets": queryset.selected_assets,
-                "selectedEntities": queryset.selected_entities,
-            },
-            "footerData": {
-                "email": "info@etek.com",
-                "contacts": [
-                    {
-                        "countryName": "Colombia",
-                        "contactNo": "+57(1)2571520"
-                    },
-                    {
-                        "countryName": "Peru'",
-                        "contactNo": "+51(1)6124343"
-                    },
-                    {
-                        "countryName": "India",
-                        "contactNo": "+91-9873451221"
-                    }
-                ]
+        else:
+            section = []
+            for query in query:
+                image = None if bool(query.image_data) is False else query.image_data.read()
+                info = query.info
+                image_name = None if bool(query.image_data) is False else str(query.image_data).split('/')[2],
+                image_kwargs = {
+                    "imageData": image,
+                    "imageDataName": image_name[0],
+                    "info": info
+                }
+                section.append(image_kwargs)
+            response_data = {
+                "headerData": {
+                    "user": queryset.created_by.first_name,
+                    "designation": "Cyber Security Engineer",
+                    "createdDate": final_date
+                },
+                "securityPulseFormData": {
+                    "securityPulseTitle": queryset.security_pulse_title,
+                    "mainTitle": queryset.main_title,
+                    "sections": section,
+                    "recommendations": queryset.recommendations,
+                    "criticality": queryset.criticality_type,
+                    "links": queryset.links,
+                    "selectedIds": queryset.selected_incident,
+                    "selectedAssets": queryset.selected_assets,
+                    "selectedEntities": queryset.selected_entities,
+                },
+                "footerData": {
+                    "email": "info@etek.com",
+                    "contacts": [
+                        {
+                            "countryName": "Colombia",
+                            "contactNo": "+57(1)2571520"
+                        },
+                        {
+                            "countryName": "Peru'",
+                            "contactNo": "+51(1)6124343"
+                        },
+                        {
+                            "countryName": "India",
+                            "contactNo": "+91-9873451221"
+                        }
+                    ]
+                }
             }
-        }
         return response_data
-    
