@@ -71,7 +71,7 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             "Status" : "FAILED",
             "Message" : "Session Timeout!!"
         }
-        for q in query:
+        for q in user:
             user_key = q.key
             query.key = ""
             query.update()
