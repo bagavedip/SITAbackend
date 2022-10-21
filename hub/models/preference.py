@@ -14,11 +14,11 @@ class Preference(models.Model):
         on_delete=models.CASCADE,
         null=True,
         db_index=False,
-        verbose_name=_("User's Defaults"),
-        help_text=_("User's Defaults"),
+        verbose_name=_("User's Preference"),
+        help_text=_("User's Preference"),
         related_name="+",
     )
-    value = models.IntegerField(_("value"), help_text=_("value"), null=True)
+    value = models.CharField(_("value"), max_length=50, help_text=_("value"), null=True)
 
     def __str__(self):
         return self.user_id + "preference"

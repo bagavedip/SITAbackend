@@ -105,6 +105,7 @@ edit_perspective_record_fetch = PerspectiveViewSet.as_view({"post": "edit_perspe
 add_security_pulse_record = SecurityPulseViewSet.as_view({"post": "add_security_pulse_record"})
 
 preference_input = PreferenceViewSet.as_view({"post": "preference_input"})
+preference_fetch = PreferenceViewSet.as_view({"post": "preference_fetch"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -197,4 +198,5 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/perspective_details_data/", perspective_details_data, name="perspective_details_data"),
     path(r"api/v1/add_security_pulse_record/", add_security_pulse_record, name="add_security_pulse_record"),
     path(r"api/v1/preference_input/", preference_input, name="preference_input"),
+    path(r"api/v1/preference_fetch/", preference_fetch, name="preference_fetch"),
 ]

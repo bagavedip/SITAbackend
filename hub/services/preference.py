@@ -4,17 +4,25 @@ from hub.models.preference import Preference
 class PreferenceService:
 
     @staticmethod
-    def preference_input(graph,graph_name, user_id,value):
-        print("inside service")
-        save_preference = Preference(
-            graph=graph,
-            graph_name=graph_name,
-            user_id=user_id,
-            value=value
-        )
-        save_preference.save()
-        print("preference saved successfully")
-        return "Update Added Successfully !!"
+    def preference_input(user_id, validated_data):
+        preference_kwargs = {
+            "graph": validated_data.get("graph"),
+            "graph_name": validated_data.get("graph_name"),
+            "value": validated_data.get("value"),
+            "user_id": user_id,
+        }
+        Preference.objects.create(**preference_kwargs)
+        # ##########################
+        # print("inside service")
+        # save_preference = Preference(
+        #     graph=graph,
+        #     graph_name=graph_name,
+        #     user_id=user_id,
+        #     value=value
+        # )
+        # save_preference.save()
+        # print("preference saved successfully")
+        # return "Update Added Successfully !!"
 
         #
         # queryset = Preference.objects.get(id=user)
