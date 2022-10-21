@@ -95,6 +95,7 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     "Status" : "FAILED",
                     "Message" : "Session Timeout!!"
                 }
+        print("data",data)
         return Response(
             {
             "Data":data
