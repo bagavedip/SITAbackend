@@ -179,7 +179,7 @@ class SecurityPulseService:
                     "designation": "Cyber Security Engineer",
                     "createdDate": final_date
                 },
-                "perspectiveFormData": {
+                "securityPulseFormData": {
                     "securityPulseTitle": queryset.security_pulse_title,
                     "mainTitle": queryset.main_title,
                     "sections": [],
