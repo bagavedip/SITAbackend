@@ -7,14 +7,7 @@ from users.managers import CustomUserManager
 
 
 class User(AbstractUser):
-    """
-     Model for User data mapping
-    """
-    class Roles(models.TextChoices):
-        SitaAdmin = "SitaAdmin", _("SitaAdmin")
-        EtekAnalyst = "EtekAnalyst", _("EtekAnalyst")
-        ClientAdmin = "ClientAdmin", _("ClientAdmin")
-        ClientUser = "ClientUser", _("ClientUser")
+    
     username = None
     id = models.BigAutoField(_("id"), primary_key=True)
     email = models.EmailField(_("email"), help_text="User email", unique=True, max_length=255)
