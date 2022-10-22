@@ -31,7 +31,7 @@ class DashboardService:
         for data in analysis:
             new_feed = {
                 "title": data.perspective_title,
-                "id": data.id,
+                "id": str(data.id),
                 "IsExternal": False,
                 "published_date": data.updated_at,
                 "description": data.bar_graph_title
@@ -42,7 +42,7 @@ class DashboardService:
         for data in security_pulse:
             new_feed = {
                 "title": data.security_pulse_title,
-                "id": data.id,
+                "id": str(data.id),
                 "IsExternal": False,
                 "published_date": data.updated_at,
                 "description": data.main_title
