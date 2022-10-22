@@ -65,8 +65,8 @@ class SecurityPulseService:
 
     @staticmethod
     def security_pulse_grid(response_obj: SecurityPulseGridSerializer):
-        # filter_q = Q(**response_obj.filters)
         query_data = SecurityPulse.objects.all().values(*response_obj.select_cols)
+        query_data = reversed(query_data)
         return query_data
 
     @staticmethod
