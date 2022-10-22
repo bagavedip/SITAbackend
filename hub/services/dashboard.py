@@ -26,17 +26,6 @@ class DashboardService:
                 "published_date": data.timestamp
             }
             feeds.append(new_feed)
-        # analysis = Perspective.objects.all().order_by('-updated_at')
-        # analysis_list = []
-        # for data in analysis:
-        #     new_feed = {
-        #         "title": data.perspective_title,
-        #         "id": str(data.id),
-        #         "IsExternal": False,
-        #         "published_date": data.updated_at,
-        #         "description": data.bar_graph_title
-        #     }
-        #     analysis_list.append(new_feed)
         security_pulse = SecurityPulse.objects.all().order_by('-updated_at')
         security_pulse_list = []
         for data in security_pulse:
