@@ -284,7 +284,7 @@ class PerspectiveService:
         query_data = None
         filter_q = Q(**response_obj.filters)
         if not response_obj.dropdownFilters:
-            query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
+            query_data = Perspective.objects.all().values(*response_obj.select_cols)
         else:
             for drop in response_obj.dropdownFilters:
                 if drop.get("id") == "Prospective Type":
