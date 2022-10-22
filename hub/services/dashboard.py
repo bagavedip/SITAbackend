@@ -22,7 +22,7 @@ class DashboardService:
                 "title": data.title,
                 "description": data.descriptions,
                 "IsExternal": True,
-                "links": urls,
+                "links": urls[0],
                 "published_date": data.timestamp
             }
             feeds.append(new_feed)
