@@ -23,7 +23,7 @@ class DashboardService:
                 "description": data.descriptions,
                 "IsExternal": True,
                 "links": urls,
-                "published_date": data.timestamp.date()
+                "published_date": data.timestamp
             }
             feeds.append(new_feed)
         analysis = Perspective.objects.all().order_by('-updated_at')
@@ -34,7 +34,7 @@ class DashboardService:
                 "type": "analysis",
                 "id": data.id,
                 "IsExternal": False,
-                "published_date": data.updated_at.date()
+                "published_date": data.updated_at
             }
             analysis_list.append(new_feed)
         security_pulse = SecurityPulse.objects.all().order_by('-updated_at')
@@ -45,7 +45,7 @@ class DashboardService:
                 "type": "analysis",
                 "id": data.id,
                 "IsExternal": False,
-                "published_date": data.updated_at.date()
+                "published_date": data.updated_at
             }
             security_pulse_list.append(new_feed)
         query_data = analysis_list + security_pulse_list + feeds
