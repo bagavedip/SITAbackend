@@ -1,11 +1,9 @@
 import logging
 
-from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.response import Response
 from hub.models.preference import Preference
-from django.db.models import Q
-import json
+
 from hub.services.preference import PreferenceService
 logger = logging.getLogger(__name__)
 
@@ -18,7 +16,7 @@ class PreferenceViewSet(viewsets.GenericViewSet):
             user_id = request.user.pk
             validated_data = request.data
 
-            asset = PreferenceService.preference_input(user_id, validated_data)
+            PreferenceService.preference_input(user_id, validated_data)
             logger.debug("Database transaction finished")
 
             # response formatting
