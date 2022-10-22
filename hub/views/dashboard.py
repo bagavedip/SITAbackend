@@ -20,6 +20,5 @@ class DashboardViewSet(viewsets.GenericViewSet):
          dashboard
         """
         logger.debug(f"Received request body {request.data}")
-        response_obj = DashboardGridGridSerializer(request)
-        data = DashboardService.dashboard_grid_data(response_obj)
-        return Response(response_obj.get_response(data), status=status.HTTP_200_OK)
+        data = DashboardService.dashboard_grid_data()
+        return Response(data, status=status.HTTP_200_OK)
