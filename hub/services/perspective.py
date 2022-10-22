@@ -289,13 +289,13 @@ class PerspectiveService:
             for drop in response_obj.dropdownFilters:
                 if drop.get("id") == "Perspective_type":
                     values = (drop.get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=y).values(*response_obj.select_cols)
+                    query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=values).values(*response_obj.select_cols)
                 if drop.get("id") == "Action taken":
                     values = (drop.get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=y).values(*response_obj.select_cols)
+                    query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=values).values(*response_obj.select_cols)
                 if drop.get("id") == "Status":
                     values = (drop.get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=y).values(*response_obj.select_cols)
+                    query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=values).values(*response_obj.select_cols)
                 query_data = query_data and query_data
         return query_data
 
