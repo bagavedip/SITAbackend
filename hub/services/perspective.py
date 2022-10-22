@@ -82,11 +82,11 @@ class PerspectiveService:
         # final response which gives actual dropdown_data
         response = [
             {
-                "id": "PerspectiveType",
+                "id": "Prospective Type",
                 "dropdownoption": perspective_dropdown
             },
             {
-                "id": "ActionTaken",
+                "id": "Action Taken",
                 "dropdownoption": action_dropdown
             },
             {
