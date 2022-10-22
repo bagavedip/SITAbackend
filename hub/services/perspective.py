@@ -82,11 +82,11 @@ class PerspectiveService:
         # final response which gives actual dropdown_data
         response = [
             {
-                "id": "PerspectiveType",
+                "id": "Perspective Type",
                 "dropdownoption": perspective_dropdown
             },
             {
-                "id": "ActionTaken",
+                "id": "Action Taken",
                 "dropdownoption": action_dropdown
             },
             {
@@ -287,10 +287,10 @@ class PerspectiveService:
             query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
         else:
             for drop in response_obj.dropdownFilters:
-                if drop.get("id") == "Perspective_type":
+                if drop.get("id") == "Prospective Type":
                     y = (drop.get("value"))
                     query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=y).values(*response_obj.select_cols)
-                if drop.get("id") == "Action taken":
+                if drop.get("id") == "Action Taken":
                     y = (drop.get("value"))
                     query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=y).values(*response_obj.select_cols)
                 if drop.get("id") == "Status":
