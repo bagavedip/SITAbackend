@@ -38,10 +38,11 @@ class PreferenceViewSet(viewsets.GenericViewSet):
         try:
             logger.debug(f"Parsed request body {request.data}")
 
-            queryset = Preference.objects.filter(user=request.user.pk).values()
+            queryset = Preference.objects.filter(user=request.user.pk).values("user_id","session")
+            query = queryset[0]
             print(request.user.pk)
 
-            return Response(queryset)
+            return Response(query)
         except Exception as e:
             response_data = {
                 "message": f"{e}",

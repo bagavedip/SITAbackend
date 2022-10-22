@@ -32,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['devsita.etek.com', 'localhost', 'devsita.netrum-tech.com','127.0.0.1']
+ALLOWED_HOSTS = ['devsita.etek.com', 'localhost', 'devsita.netrum-tech.com', '127.0.0.1', '0.0.0.0:8008', '*']
 
 
 # Application definition
@@ -111,7 +111,7 @@ WSGI_APPLICATION = 'SITAbackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django_tenants.postgresql_backend',
-        "NAME":  'etek',       #config("DB_NAME"),
+        "NAME":  'sita',       #config("DB_NAME"),
         "USER": config("DB_USER"),
         "PASSWORD": 'postgres',  #config("DB_PASSWORD"),
         "HOST": config("DB_HOST"),
