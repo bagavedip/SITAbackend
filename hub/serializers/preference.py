@@ -7,9 +7,6 @@ class PreferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Preference
         fields = (
-            'id',
-            'graph',
-            'graph_name',
-            'user_id',
-            'value'
+            'user',
+            'session',
         )

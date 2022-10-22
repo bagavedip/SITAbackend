@@ -13,6 +13,7 @@ from .views.geolocation import GeoLocationViewSet
 from .views.category import CategoryViewSet
 from .views.cy_feeds import CyFeeds
 from .views.security_pulse import SecurityPulseViewSet
+from .views.preference import PreferenceViewSet
 
 simple_router = routers.SimpleRouter()
 
@@ -109,6 +110,9 @@ add_security_pulse_record = SecurityPulseViewSet.as_view({"post": "add_security_
 fetch_incident_tags = PerspectiveViewSet.as_view({"post": "fetch_incident_tags"})
 fetch_asset_tags = PerspectiveViewSet.as_view({"post": "fetch_asset_tags"})
 fetch_enity_tags = PerspectiveViewSet.as_view({"post": "fetch_enity_tags"})
+
+preference_input = PreferenceViewSet.as_view({"post": "preference_input"})
+preference_fetch = PreferenceViewSet.as_view({"post": "preference_fetch"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -210,5 +214,8 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/fetch_asset_tags/", fetch_asset_tags, name="fetch_asset_tags"),
     path(r"api/v1/fetch_enity_tags/", fetch_enity_tags, name="fetch_enity_tags"),
     path(r"api/v1/fetch_incident_tags/", fetch_incident_tags, name="fetch_incident_tags"),
+
+    path(r"api/v1/preference_input/", preference_input, name="preference_input"),
+    path(r"api/v1/preference_fetch/", preference_fetch, name="preference_fetch"),
 
 ]
