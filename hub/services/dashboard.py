@@ -31,10 +31,10 @@ class DashboardService:
         for data in analysis:
             new_feed = {
                 "title": data.perspective_title,
-                "type": "analysis",
                 "id": data.id,
                 "IsExternal": False,
-                "published_date": data.updated_at
+                "published_date": data.updated_at,
+                "description": data.bar_graph_title
             }
             analysis_list.append(new_feed)
         security_pulse = SecurityPulse.objects.all().order_by('-updated_at')
@@ -42,10 +42,10 @@ class DashboardService:
         for data in security_pulse:
             new_feed = {
                 "title": data.security_pulse_title,
-                "type": "analysis",
                 "id": data.id,
                 "IsExternal": False,
-                "published_date": data.updated_at
+                "published_date": data.updated_at,
+                "description": data.main_title
             }
             security_pulse_list.append(new_feed)
         query_data = analysis_list + security_pulse_list + feeds
