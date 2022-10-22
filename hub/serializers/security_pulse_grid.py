@@ -1,5 +1,6 @@
 from hub.constants import security_pulse_constants
 
+from hub.models import SecurityPulse
 
 class SecurityPulseGridSerializer:
     """
@@ -9,12 +10,6 @@ class SecurityPulseGridSerializer:
     def __init__(self, request) -> None:
 
         request_data = request.data
-
-        self.start_date = request_data.get('fromDate')
-        self.end_date = request_data.get('toDate')
-        self.filters = {}
-        self.filters['incident_start_date_time__gte'] = self.start_date
-        self.filters['incident_end_date_time__lte'] = self.end_date
 
         self.columns_headers = []
         self.select_cols = []
@@ -31,23 +26,27 @@ class SecurityPulseGridSerializer:
                 "isSorting": True,
                 "type": "TEXT"
             }
+            col.update({"hideOnUI": True}) if index == 0 else col.update({"hideOnUI": False})
             col_headers.append(col)
 
         grid_data = []
         for row in data:
             row_data = {}
+            None if row.get("selected_assets") is None else row.update({"selected_assets": ", ".join(row.get("selected_assets"))})
+            None if row.get("created_at") is None else row.update({"created_at": row.get("created_at").strftime("%m-%d-%Y")})
+            row.update({"is_published": "Publish"}) if row.get("is_published") else row.update({"is_published": "Draft"})
+            a = row.get("created_by")
+            number = row.get("id")
+            queryset = SecurityPulse.objects.get(id=number)
+            created = queryset.created_by.first_name + " " + queryset.created_by.last_name
             for index in range(len(row)):
                 row_data["column" + (str(index + 1))] = str(row.get(self.select_cols[index]))
+                None if row.get("created_by") is None else row.update({"created_by": created})
             grid_data.append(row_data)
 
         response_json = {
-            "gridSelectedFilter": {
-                "startDate": self.start_date,
-                "endDate": self.end_date,
-                "selectedDropdownFiters": []
-            },
             "gridAddOn": {
-                "showFirstColumnAsCheckbox": True,
+                "showFirstColumnAsCheckbox": False,
                 "showLastColumnAsAction": True
             },
             "gridHeader": col_headers,

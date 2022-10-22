@@ -21,21 +21,27 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
         """
          Function for assign user for
         """
-        logger.debug(f"Received request body {request.data}")
-        response_data = PerspectiveService.perspective_dropdown_data()
-        return Response(response_data)
+        try:
+            logger.debug(f"Received request body {request.data}")
+            response_data = PerspectiveService.perspective_dropdown_data()
+            return Response(response_data)
+        except Exception as e:
+            return Response({"message": f"{e}", "status": "error"})
 
     def perspective_grid_data(self, request):
         """
          Function for perspective_grid_data view.
         """
-        logger.debug(f"Received request body {request.data}")
+        try:
+            logger.debug(f"Received request body {request.data}")
 
-        response_obj = PerspectiveGridSerializer(request)
+            response_obj = PerspectiveGridSerializer(request)
 
-        data = PerspectiveService.perspective_grid(response_obj)
+            data = PerspectiveService.perspective_grid(response_obj)
 
-        return Response(response_obj.get_response(data))
+            return Response(response_obj.get_response(data))
+        except Exception as e:
+            return Response({"message": f"{e}", "status": "error"})
 
     def add_perspective_record(self, request):
         try:
@@ -92,7 +98,7 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             return Response(perspective)
         except Exception as e:
             response_data = f"{e}"
-            return Response(response_data)
+            return Response({"message": response_data, "status": "error"})
 
     def edit_perspective_record_fetch(self, request):
         try:
@@ -101,7 +107,10 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             return Response(perspective)
         except Exception as e:
             response_data = f"{e}"
-            return Response(response_data)
+            return Response({
+                "message": response_data,
+                "status": "error"
+            })
 
     def perspective_record_delete(self, request, *args, **kwargs):
         """[action to destory society]
@@ -128,37 +137,58 @@ class PerspectiveViewSet(viewsets.GenericViewSet):
             return Response(response_data)
 
     def fetch_incident_tags(self, request):
-        serializer = request.data.get("inputFilter")
-        queryset = Hub.objects.all()
-        incidents = []
-        for query in queryset:
-            incident = query.ticket_id
-            if serializer in incident:
-                incidents.append(incident)
-        tags = set(incidents)
-        incidents = list(tags)
-        return Response(incidents)
+        try:
+            serializer = request.data.get("inputFilter")
+            queryset = Hub.objects.all()
+            incidents = []
+            for query in queryset:
+                incident = query.ticket_id
+                if serializer in incident:
+                    incidents.append(incident)
+            tags = set(incidents)
+            incidents = list(tags)
+            return Response(incidents)
+        except Exception as e:
+            response_data = {
+                "message": f"{e}",
+                "status": "error"
+            }
+            return Response(response_data)
 
     def fetch_asset_tags(self, request):
-        serializer = request.data.get("inputFilter")
-        queryset = Hub.objects.all()
-        assets = []
-        for query in queryset:
-            incident = query.asset_name
-            if serializer in incident:
-                assets.append(incident)
-        tags = set(assets)
-        assets = list(tags)
-        return Response(assets)
+        try:
+            serializer = request.data.get("inputFilter")
+            queryset = Hub.objects.all()
+            assets = []
+            for query in queryset:
+                incident = query.asset_name
+                if serializer.lower() in incident.lower():
+                    assets.append(incident)
+            tags = set(assets)
+            assets = list(tags)
+            return Response(assets)
+        except Exception as e:
+            response_data = {
+                "message": f"{e}",
+                "status": "error"
+            }
+            return Response(response_data)
 
     def fetch_enity_tags(self, request):
-        serializer = request.data.get("inputFilter")
-        queryset = Hub.objects.all()
-        entities = []
-        for entity in queryset:
-            incident = entity.entity_name
-            if serializer in incident:
-                entities.append(incident)
-        tags = set(entities)
-        entities = list(tags)
-        return Response(entities)
+        try:
+            serializer = request.data.get("inputFilter")
+            queryset = Hub.objects.all()
+            entities = []
+            for entity in queryset:
+                incident = entity.entity_name
+                if serializer.lower() in incident.lower():
+                    entities.append(incident)
+            tags = set(entities)
+            entities = list(tags)
+            return Response(entities)
+        except Exception as e:
+            response_data = {
+                "message": f"{e}",
+                "status": "error"
+            }
+            return Response(response_data)

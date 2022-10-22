@@ -21,8 +21,6 @@ class InsightsSerializer:
         if filter_data.get("forLocation"):
             self.location_id = filter_data.get("forLoacation")
         filterOptions = filter_data.get('filterOptions').get('headerFilters')
-        # if filter_data.get("forLocation"):
-        #     self.location_name = filter_data.get("forLoacation")
         add_criticality = False
         for filter in filterOptions:
             if filter == 'Criticality':
