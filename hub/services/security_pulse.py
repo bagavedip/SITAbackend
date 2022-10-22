@@ -65,8 +65,7 @@ class SecurityPulseService:
 
     @staticmethod
     def security_pulse_grid(response_obj: SecurityPulseGridSerializer):
-        query_data = SecurityPulse.objects.all().values(*response_obj.select_cols)
-        query_data = reversed(query_data)
+        query_data = SecurityPulse.objects.all().values(*response_obj.select_cols).order_by('-updated_at')[:3][::-1]
         return query_data
 
     @staticmethod
