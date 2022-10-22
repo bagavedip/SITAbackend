@@ -207,7 +207,6 @@ class PerspectiveService:
                 "selectedIds": perspective_id,
                 "selectedAssets": selected_assets,
                 "selectedEntities": selected_entities,
-                "selectedIncidents": selected_id,
                 "perspectiveInput": queryset.perspective,
                 "recomendationsInput": queryset.recommendation,
                 "imageData1": donut_left_graph,
