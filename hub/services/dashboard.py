@@ -26,17 +26,17 @@ class DashboardService:
                 "published_date": data.timestamp
             }
             feeds.append(new_feed)
-        analysis = Perspective.objects.all().order_by('-updated_at')
-        analysis_list = []
-        for data in analysis:
-            new_feed = {
-                "title": data.perspective_title,
-                "id": str(data.id),
-                "IsExternal": False,
-                "published_date": data.updated_at,
-                "description": data.bar_graph_title
-            }
-            analysis_list.append(new_feed)
+        # analysis = Perspective.objects.all().order_by('-updated_at')
+        # analysis_list = []
+        # for data in analysis:
+        #     new_feed = {
+        #         "title": data.perspective_title,
+        #         "id": str(data.id),
+        #         "IsExternal": False,
+        #         "published_date": data.updated_at,
+        #         "description": data.bar_graph_title
+        #     }
+        #     analysis_list.append(new_feed)
         security_pulse = SecurityPulse.objects.all().order_by('-updated_at')
         security_pulse_list = []
         for data in security_pulse:
@@ -48,6 +48,6 @@ class DashboardService:
                 "description": data.main_title
             }
             security_pulse_list.append(new_feed)
-        query_data = analysis_list + security_pulse_list + feeds
+        query_data = security_pulse_list + feeds
         query_data = sorted(query_data, key=itemgetter('published_date'), reverse=True)
         return query_data
