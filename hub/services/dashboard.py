@@ -16,13 +16,15 @@ class DashboardService:
             url = data.informationSource_references_references
             url = url.strip("[").strip("]").replace("'","")
             urls = url.split(",")
-
+            date = data.vulnerabilities
+            for data in list(date):
+                time = data.get("publishedDateTime").get("value")
             new_feed = {
                 "title": data.title,
                 "description": data.descriptions,
                 "IsExternal": True,
                 "links": urls,
-                "published_date": data.timestamp.date()
+                "published_date": time.date()
             }
             feeds.append(new_feed)
         analysis = Perspective.objects.all().order_by('-updated_at')
