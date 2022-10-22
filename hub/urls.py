@@ -2,6 +2,7 @@ from django.urls import path
 from rest_framework import routers
 
 from .views.assign_task import AssignTaskViewset
+from .views.dashboard import DashboardViewSet
 from .views.hub import InsightHub
 from .views.perspective import PerspectiveViewSet
 from .views.process import ProcessViewSet
@@ -109,6 +110,7 @@ add_security_pulse_record = SecurityPulseViewSet.as_view({"post": "add_security_
 fetch_incident_tags = PerspectiveViewSet.as_view({"post": "fetch_incident_tags"})
 fetch_asset_tags = PerspectiveViewSet.as_view({"post": "fetch_asset_tags"})
 fetch_enity_tags = PerspectiveViewSet.as_view({"post": "fetch_enity_tags"})
+dashboard_grid_data = DashboardViewSet.as_view({"post": "dashboard_grid_data"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -210,5 +212,6 @@ urlpatterns = urlpatterns + [
     path(r"api/v1/fetch_asset_tags/", fetch_asset_tags, name="fetch_asset_tags"),
     path(r"api/v1/fetch_enity_tags/", fetch_enity_tags, name="fetch_enity_tags"),
     path(r"api/v1/fetch_incident_tags/", fetch_incident_tags, name="fetch_incident_tags"),
+    path(r"api/v1/dashboard_grid_data/", dashboard_grid_data, name="dashboard_grid_data"),
 
 ]
