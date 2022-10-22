@@ -12,7 +12,7 @@ class DashboardViewSet(viewsets.GenericViewSet):
 
     permission_classes = [IsAuthenticated]
 
-    def security_pulse_grid_data(self, request):
+    def dashboard_grid_data(self, request):
         """
          function to check last three record according last_updated date on
          dashboard
