@@ -10,7 +10,8 @@ from hub.models.hub import Hub
 from hub.serializers.perspective_grid_view import PerspectiveGridSerializer
 from hub.services.perspective import PerspectiveService
 from django.db.models import Q
-
+from django.core import serializers
+import json
 from hub.services.preference import PreferenceService
 from hub.serializers.preference import PreferenceSerializer
 logger = logging.getLogger(__name__)
@@ -45,23 +46,47 @@ class PreferenceViewSet(viewsets.GenericViewSet):
             logger.debug(f"Parsed request body {request.data}")
             user_id = request.user
             validated_data = request.data
-            ################
-            # Get list of product ids of a particular order
-            preference = Preference.objects.filter(Q(user_id=request.user.pk), Q(graph= request.data.get("graph")))
-            user = Preference.objects.filter(user_id=request.user.pk)
-            print(request.user.pk)
-            print(preference)
+            ################ Q(graph= request.data.get("graph"))
 
-            # Get products from list of product ids
-            # products = Product.objects.filter(id__in=product_ids)
-###################################################3
-            response_data = {
-                "message": "Preference fetched SuccessFully !",
-                "graph": preference.get("graph"),
-                "graph_name": preference.get("graph_name"),
-                "value" : preference.get("value"),
-                "status": "success"
-            }
+            queryset = list(Preference.objects.filter(user_id=request.user.pk).all())
+            print(request.user.pk)
+
+            response_data=[]
+            # queryset = serializers.serialize("json", Preference.objects.all())
+            # print(queryset)
+            # for filter in queryset:
+            #     for value in filter:
+            #         resopnse"graph": preference.get("graph"),
+            #         "graph_name": preference.get("graph_name"),
+            #         "value": preference.get("value"),
+            # res = json.loads(queryset)
+            response_data = [key for key,value in queryset.items()]
+            # response_data = {
+                # [
+            #     # "message": "Preference fetched SuccessFully !",
+            #     "oei":{
+            #         "graph": preference.get("graph"),
+            #         "graph_name": preference.get("graph_name"),
+            #         "value": preference.get("value"),
+            #     },
+            #     "insights": {
+            #         "graph": preference.get("graph"),
+            #         "graph_name": preference.get("graph_name"),
+            #         "value": preference.get("value"),
+            #     },
+            #     "perspective": {
+            #         "graph": preference.get("graph"),
+            #         "graph_name": preference.get("graph_name"),
+            #         "value": preference.get("value"),
+            #     },
+            #     "location": {
+            #         "graph": preference.get("graph"),
+            #         "graph_name": preference.get("graph_name"),
+            #         "value": preference.get("value"),
+            #     },
+            #     "status": "success"
+            #
+            # }
             return Response(response_data)
         except Exception as e:
             response_data = {
