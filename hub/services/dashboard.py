@@ -23,7 +23,7 @@ class DashboardService:
                 "description": data.descriptions,
                 "IsExternal": True,
                 "links": urls,
-                "published_date": data.timestamp.date()
+                "published_date": data.timestamp
             }
             feeds.append(new_feed)
         analysis = Perspective.objects.all().order_by('-updated_at')
