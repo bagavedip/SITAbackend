@@ -2,6 +2,7 @@ from django.urls import path
 from rest_framework import routers
 
 from .views.assign_task import AssignTaskViewset
+from .views.dashboard import DashboardViewSet
 from .views.hub import InsightHub
 from .views.perspective import PerspectiveViewSet
 from .views.process import ProcessViewSet
@@ -106,6 +107,7 @@ add_security_pulse_record = SecurityPulseViewSet.as_view({"post": "add_security_
 edit_security_pulse_record_submit = SecurityPulseViewSet.as_view({"post": "edit_security_pulse_record_submit"})
 edit_security_pulse_record_fetch = SecurityPulseViewSet.as_view({"post": "edit_security_pulse_record_fetch"})
 security_pulse_details_data = SecurityPulseViewSet.as_view({"post": "security_pulse_details_data"})
+dashboard_grid_data = DashboardViewSet.as_view({"post": "dashboard_grid_data"})
 
 feed_data = CyFeeds.as_view({"post": "all_feeds"})
 
@@ -203,4 +205,5 @@ urlpatterns = urlpatterns + [
          name="edit_security_pulse_record_submit"),
     path(r"api/v1/edit_security_pulse_record_fetch/", edit_security_pulse_record_fetch,
          name="edit_security_pulse_record_fetch"),
+    path(r"api/v1/dashboard_grid_data/", dashboard_grid_data, name="dashboard_grid_data"),
 ]
