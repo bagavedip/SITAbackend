@@ -65,8 +65,8 @@ class SecurityPulseService:
 
     @staticmethod
     def security_pulse_grid(response_obj: SecurityPulseGridSerializer):
-        # filter_q = Q(**response_obj.filters)
         query_data = SecurityPulse.objects.all().values(*response_obj.select_cols)
+        query_data = reversed(query_data)
         return query_data
 
     @staticmethod
@@ -155,7 +155,7 @@ class SecurityPulseService:
             "sections": section,
             "recommendations": queryset.recommendations,
             "links": queryset.links,
-            "selectedIds": selected_id,
+            "selectedIncidents": selected_id,
             "selectedAssets": selected_assets,
             "selectedEntities": selected_entities,
             "securityPulseId": security_id,
@@ -186,7 +186,7 @@ class SecurityPulseService:
                     "recommendations": queryset.recommendations,
                     "criticality": queryset.criticality_type,
                     "links": queryset.links,
-                    "selectedIds": queryset.selected_incident,
+                    "selectedIncidents": queryset.selected_incident,
                     "selectedAssets": queryset.selected_assets,
                     "selectedEntities": queryset.selected_entities,
                 },
@@ -233,7 +233,7 @@ class SecurityPulseService:
                     "recommendations": queryset.recommendations,
                     "criticality": queryset.criticality_type,
                     "links": queryset.links,
-                    "selectedIds": queryset.selected_incident,
+                    "selectedIncidents": queryset.selected_incident,
                     "selectedAssets": queryset.selected_assets,
                     "selectedEntities": queryset.selected_entities,
                 },

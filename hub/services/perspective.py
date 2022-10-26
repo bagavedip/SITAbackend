@@ -82,11 +82,11 @@ class PerspectiveService:
         # final response which gives actual dropdown_data
         response = [
             {
-                "id": "PerspectiveType",
+                "id": "Prospective Type",
                 "dropdownoption": perspective_dropdown
             },
             {
-                "id": "ActionTaken",
+                "id": "Action Taken",
                 "dropdownoption": action_dropdown
             },
             {
@@ -284,18 +284,18 @@ class PerspectiveService:
         query_data = None
         filter_q = Q(**response_obj.filters)
         if not response_obj.dropdownFilters:
-            query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
+            query_data = Perspective.objects.all().values(*response_obj.select_cols)
         else:
             for drop in response_obj.dropdownFilters:
-                if drop.get("id") == "Perspective_type":
-                    y = (drop.get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=y).values(*response_obj.select_cols)
-                if drop.get("id") == "Action taken":
-                    y = (drop.get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=y).values(*response_obj.select_cols)
+                if drop.get("id") == "Prospective Type":
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=values).values(*response_obj.select_cols)
+                if drop.get("id") == "Action Taken":
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=values).values(*response_obj.select_cols)
                 if drop.get("id") == "Status":
-                    y = (drop.get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=y).values(*response_obj.select_cols)
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=values).values(*response_obj.select_cols)
                 query_data = query_data and query_data
         return query_data
 
