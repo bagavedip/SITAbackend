@@ -3,8 +3,6 @@ from rest_framework import viewsets,status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from hub.serializers.dashboard_grid import DashboardGridGridSerializer
-from hub.serializers.security_pulse_grid import SecurityPulseGridSerializer
 from hub.services.dashboard import DashboardService
 
 logger = logging.getLogger(__name__)
