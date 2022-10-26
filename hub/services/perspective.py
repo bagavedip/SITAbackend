@@ -39,7 +39,7 @@ class PerspectiveService:
         # fetch perspective_type list in models
         perspective_type = Perspective.objects.values_list('perspective_type').distinct()
         perspective_dropdown = [{
-            "label": "Prospective Type",
+            "label": "Perspective Type",
             "value": "Select"
         }]
 
