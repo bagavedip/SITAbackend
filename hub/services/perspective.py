@@ -39,7 +39,7 @@ class PerspectiveService:
         # fetch perspective_type list in models
         perspective_type = Perspective.objects.values_list('perspective_type').distinct()
         perspective_dropdown = [{
-            "label": "Prospective Type",
+            "label": "Perspective Type",
             "value": "Select"
         }]
 
@@ -82,7 +82,7 @@ class PerspectiveService:
         # final response which gives actual dropdown_data
         response = [
             {
-                "id": "Prospective Type",
+                "id": "Perspective Type",
                 "dropdownoption": perspective_dropdown
             },
             {
@@ -95,6 +95,7 @@ class PerspectiveService:
             }
         ]
         return response
+
 
     @staticmethod
     def create_from_validated_data(user, validated_data):
