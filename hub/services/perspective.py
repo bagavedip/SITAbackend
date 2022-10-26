@@ -188,7 +188,7 @@ class PerspectiveService:
         """
         queryset = Perspective.objects.get(id=perspective_id)
         perspective_title = queryset.perspective_title
-        selected_id = queryset.incident_id
+        selected_id = perspective_id
         selected_assets = queryset.selected_assets
         selected_entities = queryset.selected_entities
         created_at = queryset.created_at
