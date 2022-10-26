@@ -204,7 +204,7 @@ class PerspectiveService:
         response_data = {
             "perspectiveFormData": {
                 "perspectiveTitle": perspective_title,
-                "selectedIds": selected_id,
+                "selectedIds": str(selected_id),
                 "selectedAssets": selected_assets,
                 "selectedEntities": selected_entities,
                 "perspectiveInput": queryset.perspective,
