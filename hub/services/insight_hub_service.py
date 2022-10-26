@@ -96,7 +96,7 @@ class HubService:
                            "cardIcon": card_icon}
             card = [tread_level, time_to_close, suspicious]
             incident_details = {"title": "INCIDENT DETAILS",
-                                "description": "soar_id: " + query.soar_id + "itsm_case:-" + query.itsm_id,
+                                "description": "ITSM Case: " + query.itsm_id + "\nSOAR ID:" + query.soar_id,
                                }
             resolution_status = {
                 "title": "RESOLUTION STATUS",
