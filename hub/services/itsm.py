@@ -104,7 +104,7 @@ class ITSMService:
                            "cardIcon": card_icon}
             card = [tread_level, time_to_close, expected_closure]
             incident_details = {"title": "TICKET DETAILS",
-                                "description": query.Description}
+                                "description": "soar_id: " + query.SOAR_ID + "itsm_case:-" + query.Itsm_id,}
             resolution_status = {
                 "title": "RESOLUTION STATUS",
                 "resolutionDetails": {
