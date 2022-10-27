@@ -285,44 +285,56 @@ class PerspectiveService:
         query_data = None
         filter_q = Q(**response_obj.filters)
         if not response_obj.dropdownFilters:
-            query_data = Perspective.objects.filter(filter_q).values(*response_obj.select_cols)
+            query_data = Perspective.objects.all().values(*response_obj.select_cols)
         else:
-            if len(response_obj.dropdownFilters) is 1:
-                if response_obj.dropdownFilters[0].get("id") == "Perspective Type":
-                    y = (response_obj.dropdownFilters[0].get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=y).values(*response_obj.select_cols)
-                if response_obj.dropdownFilters[0].get("id") == "Action Taken":
-                    y = (response_obj.dropdownFilters[0].get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=y).values(*response_obj.select_cols)
-                if response_obj.dropdownFilters[0].get("id") == "Status":
-                    y = (response_obj.dropdownFilters[0].get("value"))
-                    query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=y).values(*response_obj.select_cols)
-                if len(response_obj.dropdownFilters) is 2:
-                    if response_obj.dropdownFilters[0].get("id") == "Perspective Type" and response_obj.dropdownFilters[1].get("id") == "Action Type":
-                        perspective_value = (response_obj.dropdownFilters[0].get("value"))
-                        action_value = (response_obj.dropdownFilters[1].get("value"))
-                        query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=perspective_value,
-                                                                                 action_type__iexact=action_value).values(
-                            *response_obj.select_cols)
-                    if response_obj.dropdownFilters[0].get("id") == "Action Taken" and response_obj.dropdownFilters[0].get("id") == "Status":
-                        y = (response_obj.dropdownFilters[0].get("value"))
-                        query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=y,
-                                                                                 status_type__iexact=y).values(
-                            *response_obj.select_cols)
-                    if response_obj.dropdownFilters[0].get("id") == "Status" and response_obj.dropdownFilters[0].get("id") == "Status":
-                        y = (response_obj.dropdownFilters[0].get("value"))
-                        query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=y,
-                                                                                 perspective_type__iexact=y).values(
-                            *response_obj.select_cols)
-                if len(response_obj.dropdownFilters) is 3:
-                    if response_obj.dropdownFilters[2].get("id") == "Status" and response_obj.dropdownFilters[1].get("id") == "Action Taken" and response_obj.dropdownFilters[0].get("id") == "Perspective Type":
-                        perspective_value = (response_obj.dropdownFilters[0].get("value"))
-                        action_value = (response_obj.dropdownFilters[1].get("value"))
-                        status_value = (response_obj.dropdownFilters[2].get("value"))
-                        query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=status_value,
-                                                                                 action_type__iexact=action_value,
-                                                                                 perspective_type__iexact=perspective_value).values(
-                            *response_obj.select_cols)
+            for drop in response_obj.dropdownFilters:
+                if drop.get("id") == "Perspective Type":
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=values).values(*response_obj.select_cols)
+                if drop.get("id") == "Action Taken":
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=values).values(*response_obj.select_cols)
+                if drop.get("id") == "Status":
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=values).values(*response_obj.select_cols)
+                query_data = query_data and query_data
+        # else:
+        #     if len(response_obj.dropdownFilters) is 1:
+        #         if response_obj.dropdownFilters[0].get("id") == "Perspective Type":
+        #             y = (response_obj.dropdownFilters[0].get("value"))
+        #             query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=y).values(*response_obj.select_cols)
+        #         if response_obj.dropdownFilters[0].get("id") == "Action Taken":
+        #             y = (response_obj.dropdownFilters[0].get("value"))
+        #             query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=y).values(*response_obj.select_cols)
+        #         if response_obj.dropdownFilters[0].get("id") == "Status":
+        #             y = (response_obj.dropdownFilters[0].get("value"))
+        #             query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=y).values(*response_obj.select_cols)
+        #         if len(response_obj.dropdownFilters) is 2:
+        #             if response_obj.dropdownFilters[0].get("id") == "Perspective Type" and response_obj.dropdownFilters[1].get("id") == "Action Type":
+        #                 perspective_value = (response_obj.dropdownFilters[0].get("value"))
+        #                 action_value = (response_obj.dropdownFilters[1].get("value"))
+        #                 query_data = Perspective.objects.filter(filter_q).filter(perspective_type__iexact=perspective_value,
+        #                                                                          action_type__iexact=action_value).values(
+        #                     *response_obj.select_cols)
+        #             if response_obj.dropdownFilters[0].get("id") == "Action Taken" and response_obj.dropdownFilters[0].get("id") == "Status":
+        #                 y = (response_obj.dropdownFilters[0].get("value"))
+        #                 query_data = Perspective.objects.filter(filter_q).filter(action_type__iexact=y,
+        #                                                                          status_type__iexact=y).values(
+        #                     *response_obj.select_cols)
+        #             if response_obj.dropdownFilters[0].get("id") == "Status" and response_obj.dropdownFilters[0].get("id") == "Status":
+        #                 y = (response_obj.dropdownFilters[0].get("value"))
+        #                 query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=y,
+        #                                                                          perspective_type__iexact=y).values(
+        #                     *response_obj.select_cols)
+        #         if len(response_obj.dropdownFilters) is 3:
+        #             if response_obj.dropdownFilters[2].get("id") == "Status" and response_obj.dropdownFilters[1].get("id") == "Action Taken" and response_obj.dropdownFilters[0].get("id") == "Perspective Type":
+        #                 perspective_value = (response_obj.dropdownFilters[0].get("value"))
+        #                 action_value = (response_obj.dropdownFilters[1].get("value"))
+        #                 status_value = (response_obj.dropdownFilters[2].get("value"))
+        #                 query_data = Perspective.objects.filter(filter_q).filter(status_type__iexact=status_value,
+        #                                                                          action_type__iexact=action_value,
+        #                                                                          perspective_type__iexact=perspective_value).values(
+        #                     *response_obj.select_cols)
                 # query_data = query_data and query_data
         return query_data
 
