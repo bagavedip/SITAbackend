@@ -19,7 +19,7 @@ class User(AbstractUser):
                                     help_text=_("Role Name"))
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['is_admin', "role_id"]  # Email & Password are required by default.
+    REQUIRED_FIELDS = ['is_admin']  # Email & Password are required by default.
 
     objects = CustomUserManager()
 
