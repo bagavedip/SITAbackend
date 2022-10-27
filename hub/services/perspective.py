@@ -204,6 +204,7 @@ class PerspectiveService:
         comparative_right_graph = None if bool(queryset.comparative_right_graph) is False else queryset.comparative_right_graph.read()
         response_data = {
             "perspectiveFormData": {
+                "perspective_id": perspective_id,
                 "perspectiveTitle": perspective_title,
                 "selectedIds": selected_id,
                 "selectedAssets": selected_assets,
