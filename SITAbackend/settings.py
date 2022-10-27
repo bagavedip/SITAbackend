@@ -32,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['devsita.etek.com', 'localhost', 'devsita.netrum-tech.com']
+ALLOWED_HOSTS = ['devsita.etek.com', 'localhost', 'devsita.netrum-tech.com','192.168.29.61']
 
 
 # Application definition
@@ -113,7 +113,7 @@ DATABASES = {
         'ENGINE': 'django_tenants.postgresql_backend',
         "NAME": config("DB_NAME"),
         "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
+        "PASSWORD": 'postgres', #config("DB_PASSWORD"),
         "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT", default=5432, cast=int),
         "CONN_MAX_AGE": config("DB_CONN_MAX_AGE", default=60, cast=int),
@@ -193,14 +193,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+#
+# # azure storage
+# DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+# STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
 
 # Auto-created primary key
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Email sending setup
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "saimsonu194@gmail.com"
-EMAIL_HOST_PASSWORD = "ilgtxsxmmzndsxqc"
+EMAIL_HOST_USER = "skumar8work@outlook.com"
+EMAIL_HOST_PASSWORD = "3785@@mypc_two"

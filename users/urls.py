@@ -8,6 +8,10 @@ from users.views.update_password import PasswordUpdate
 from users.views.sent_mail import UserSentMail
 from users.views.forget_password import PasswordReset
 
+from django.conf.urls.static import static
+from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 simple_router = routers.SimpleRouter()
 login = UserViewSet.as_view({"post": "login"})
 add_user = UserViewSet.as_view({"post": "add_user"})

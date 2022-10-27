@@ -1,5 +1,7 @@
 import logging
 from django.core.mail import EmailMultiAlternatives, send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.conf import settings
 import datetime
 from cryptography.fernet import Fernet
@@ -22,12 +24,13 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
         strnowtime = nowtime.strftime('%m/%d/%y %H:%M')
         encMessage = fernet.encrypt(strnowtime.encode())
         if query:
-            query.key=key
-            query.update()
+            User.objects.all().filter(email__iexact=reciever).update(key=key)
+            key = User.objects.filter(email__iexact=reciever).values('key')
+            print(key)
             for q in query:
                 id = q.id
             subject = "Forget Password Link"
-            message = (f"Hi,Please click this link http://20.127.195.117:3000/forget_password/{id}@{encMessage} to reset your password. Thanks, Shashi")
+            message = (f"Hi,Please click this <a href=\"http://20.127.195.117:3000/forget_password/{id}@{encMessage}\">link</a> to reset your password. <br>Thanks, <r>Netrum")
             email_from = settings.EMAIL_HOST_USER
             email_reciever = [reciever]
             # messages = (f"Hi,Please click this link http://20.127.195.117:3000/forget_password/{query.id}@{encMessage} to reset your password. Thanks, Shashi")
@@ -40,6 +43,21 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             # server.login(email_from, "bcDv%dfter5243")
             # server.sendmail(email_from, email_reciever, message)
             # server.quit()
+            # html_content = render_to_string("email_template.html", {'title': 'Reset Your Password','content': 'Hi,Please click this link to reset your password.', 'link': message, "regards":"Thanks", "sender":"SITA"})
+            # text_content = strip_tags(html_content)
+            #
+            # email = EmailMultiAlternatives(
+            #     #subject
+            #     "Reset your password",
+            #     #content
+            #     text_content,
+            #     #fromemail
+            #     email_from,
+            #     #recipientlist
+            #     email_reciever
+            # )
+            # email.alternatives(html_content,"text/html")
+            # email.send()
             send_mail(subject,
                 message,
                 email_from,
