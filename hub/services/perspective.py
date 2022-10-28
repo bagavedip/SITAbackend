@@ -284,53 +284,21 @@ class PerspectiveService:
     @staticmethod
     def perspective_grid(response_obj: PerspectiveGridSerializer):
         query_data = None
+        filter_q = Q(**response_obj.filters)
         if not response_obj.dropdownFilters:
             query_data = Perspective.objects.all().values(*response_obj.select_cols)
         else:
-            if len(response_obj.dropdownFilters) is 1:
-                if response_obj.dropdownFilters[0].get("id") == "Perspective Type":
-                    y = (response_obj.dropdownFilters[0].get("value"))
-                    query_data = Perspective.objects.filter(perspective_type__iexact=y).values(*response_obj.select_cols)
-                if response_obj.dropdownFilters[0].get("id") == "Action Taken":
-                    y = (response_obj.dropdownFilters[0].get("value"))
-                    query_data = Perspective.objects.filter(action_type__iexact=y).values(*response_obj.select_cols)
-                if response_obj.dropdownFilters[0].get("id") == "Status":
-                    y = (response_obj.dropdownFilters[0].get("value"))
-                    query_data = Perspective.objects.filter(status_type__iexact=y).values(*response_obj.select_cols)
-            if len(response_obj.dropdownFilters) is 2:
-                final_list = [{}, {}, {}]
-                for filters in response_obj.dropdownFilters:
-                    if filters.get('id') == "Perspective Type":
-                        final_list[0] = filters
-                    elif filters.get('id') == "Action Taken":
-                        final_list[1] = filters
-                    elif filters.get('id') == "Status":
-                        final_list[2] = filters
-                if final_list[0].get("id") == "Perspective Type" and final_list[1].get("id") == "Action Taken":
-                    perspective_value = (final_list[0].get("value"))
-                    action_value = (final_list[1].get("value"))
-                    query_data = Perspective.objects.filter(perspective_type__iexact=perspective_value,
-                                                            action_type__iexact=action_value).values(
-                        *response_obj.select_cols)
-                if final_list[1].get("id") == "Action Taken" and final_list[2].get("id") == "Status":
-                    y = (final_list[1].get("value"))
-                    status = (final_list[2].get("value"))
-                    query_data = Perspective.objects.filter(action_type__iexact=y,
-                                                            status_type__iexact=status).values(
-                        *response_obj.select_cols)
-                if final_list[0].get("id") == "Perspective Type" and final_list[2].get("id") == "Status":
-                    y = (final_list[0].get("value"))
-                    status = (final_list[2].get("value"))
-                    query_data = Perspective.objects.filter(perspective_type__iexact=y, status_type__iexact=status).values(
-                        *response_obj.select_cols)
-            if len(response_obj.dropdownFilters) is 3:
-                found_filters = {}
-                for filter_type in response_obj.dropdownFilters:
-                    found_filters.update({filter_type.get('id'): filter_type.get('value')})
-                query_data = Perspective.objects.filter(status_type__iexact=found_filters.get('Status'),
-                                                        action_type__iexact=found_filters.get('Action Taken'),
-                                                        perspective_type__iexact=found_filters.get('Perspective Type')).values(
-                    *response_obj.select_cols)
+            for drop in response_obj.dropdownFilters:
+                if drop.get("id") == "Perspective Type":
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(perspective_type__iexact=values).values(*response_obj.select_cols)
+                if drop.get("id") == "Action Taken":
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(action_type__iexact=values).values(*response_obj.select_cols)
+                if drop.get("id") == "Status":
+                    values = (drop.get("value"))
+                    query_data = Perspective.objects.filter(status_type__iexact=values).values(*response_obj.select_cols)
+                query_data = query_data and query_data
         return query_data
 
     @staticmethod
