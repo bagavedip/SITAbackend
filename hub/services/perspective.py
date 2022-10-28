@@ -1,4 +1,5 @@
 import logging
+from operator import itemgetter
 
 from django.db.models import Q
 from django.utils import timezone
@@ -331,8 +332,8 @@ class PerspectiveService:
                                                         action_type__iexact=found_filters.get('Action Taken'),
                                                         perspective_type__iexact=found_filters.get('Perspective Type')).values(
                     *response_obj.select_cols)
+        query_data = sorted(query_data, key=itemgetter('created_at'), reverse=True)
         return query_data
-
 
     @staticmethod
     def delete(perspective):
