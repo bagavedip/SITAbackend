@@ -8,7 +8,7 @@ PERSPECTIVE_TABLE_HEADER = {
     'INCIDENT ID': 'id',
     'Publish / Draft': 'is_published',
     'PERSPECTIVE DATE': 'created_at',
-    'PERSECTIVE TYPE': 'perspective_type',
+    'PERSPECTIVE TYPE': 'perspective_type',
     'PERSPECTIVE  TITLE': 'perspective_title',
     'STATUS': 'status_type',
     'ACTION': 'action_type'
