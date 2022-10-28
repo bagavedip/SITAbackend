@@ -176,17 +176,17 @@ class InsightHub(viewsets.GenericViewSet):
         asset_types = Hub.objects.values_list('asset_type').distinct()
         asset_dropdown = [{
                         "value": "Select",
-                        "label": "Asset Type | Select"
+                        "label": "Asset Type"
                     }]
         geo = Hub.objects.all().values_list('location_name').distinct()
         geo_dropdown = [{
                         "value": "Select",
-                        "label": "Geo | Select"
+                        "label": "Geo"
                     }]
         entities = Hub.objects.values_list('entity_name').distinct()
         entity_dropdown = [{
                         "value": "Select",
-                        "label": "Entity | Select"
+                        "label": "Entity"
                     }]
         for asset_type in asset_types:
             new_asset = {
