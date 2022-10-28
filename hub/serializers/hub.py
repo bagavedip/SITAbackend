@@ -26,6 +26,11 @@ class InsightsSerializer:
             else:
                 self.request_filters.append(filter)
         self.request_filters.append(filter_data.get('filterOptions').get('headerOption'))
+        temp_request_filters = []
+        for option in Map.get_master():
+            if option in self.request_filters:
+                temp_request_filters.append(option)
+        self.request_filters = temp_request_filters
         header_option = filter_data.get('filterOptions').get('headerOption')
         filters = Map.get_filter(header_option).split(",")
         if len(filters) > 1:
