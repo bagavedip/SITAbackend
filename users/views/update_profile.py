@@ -1,4 +1,6 @@
 import logging
+
+from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db import transaction, IntegrityError
 from django.contrib.auth.hashers import make_password
@@ -24,7 +26,11 @@ class UserUpdate(mixins.CreateModelMixin, viewsets.GenericViewSet):
         request_data = {
             "email":request_user["email"],
             "first_name":request_user["firstName"],
-            "last_name":request_user["lastName"]
+            "last_name":request_user["lastName"],
+            "phone_code": request_user["phone_code"],
+            "phone_number": request_user["phone_number"],
+            "profile_photo": request_user["profile_photo"],
+            "profile_photo_name": request_user["profile_photo_name"]
         }
         serializer = UserUpdateSerializer(data = request_data)
         serializer.is_valid(raise_exception=True)
@@ -35,6 +41,13 @@ class UserUpdate(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 updated_user.first_name = validated_data["first_name"]
             if request_user.get("lastName"):
                 updated_user.last_name = validated_data["last_name"]
+            if request_user.get("phone_number"):
+                updated_user.phone_number = validated_data["phone_number"]
+            if request_user.get("phone_code"):
+                updated_user.phone_code = validated_data["phone_code"]
+            updated_user.profile_photo = None if request_user.get("profile_photo") is None else ContentFile(
+                request_user.get("profile_photo"), name=request_user.get("profile_photo_name"))
+
             updated_user.save()
             return Response(
                 {
