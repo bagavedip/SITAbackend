@@ -301,19 +301,19 @@ class PerspectiveService:
             if len(response_obj.dropdownFilters) == 2:
                 final_list = [{}, {}, {}]
                 for filters in response_obj.dropdownFilters:
-                    if filters.get('id') == "Perspective_type":
+                    if filters.get('id') == "Perspective Type":
                         final_list[0] = filters
-                    elif filters.get('id') == "Action taken":
+                    elif filters.get('id') == "Action Taken":
                         final_list[1] = filters
                     elif filters.get('id') == "Status":
                         final_list[2] = filters
-                if final_list[0].get("id") == "Perspective Type" and final_list[1].get("id") == "Action taken":
+                if final_list[0].get("id") == "Perspective Type" and final_list[1].get("id") == "Action Taken":
                     perspective_value = (final_list[0].get("value"))
                     action_value = (final_list[1].get("value"))
                     query_data = Perspective.objects.filter(perspective_type__iexact=perspective_value,
                                                             action_type__iexact=action_value).values(
                         *response_obj.select_cols)
-                if final_list[1].get("id") == "Action taken" and final_list[2].get("id") == "Status":
+                if final_list[1].get("id") == "Action Taken" and final_list[2].get("id") == "Status":
                     y = (final_list[1].get("value"))
                     status = (final_list[2].get("value"))
                     query_data = Perspective.objects.filter(action_type__iexact=y,
