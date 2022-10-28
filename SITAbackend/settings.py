@@ -152,7 +152,7 @@ REST_FRAMEWORK = {
 
 # JWT Tokens Configuraions
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=600),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -203,8 +203,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Email sending setup
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_HOST = 'smtp.office365.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "skumar8work@outlook.com"
-EMAIL_HOST_PASSWORD = "3785@@mypc_two"
+EMAIL_HOST_USER = "no-reply@netrum-tech.com"
+EMAIL_HOST_PASSWORD = "password"

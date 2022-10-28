@@ -29,8 +29,9 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             print(key)
             for q in query:
                 id = q.id
+                first_name = q.first_name
             subject = "Forget Password Link"
-            message = (f"Hi,Please click this <a href=\"http://20.127.195.117:3000/forget_password/{id}@{encMessage}\">link</a> to reset your password. <br>Thanks, <r>Netrum")
+            message = (f"http://20.127.195.117:3000/forget_password/{id}@{encMessage}")
             email_from = settings.EMAIL_HOST_USER
             email_reciever = [reciever]
             # messages = (f"Hi,Please click this link http://20.127.195.117:3000/forget_password/{query.id}@{encMessage} to reset your password. Thanks, Shashi")
@@ -43,8 +44,8 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             # server.login(email_from, "bcDv%dfter5243")
             # server.sendmail(email_from, email_reciever, message)
             # server.quit()
-            # html_content = render_to_string("email_template.html", {'title': 'Reset Your Password','content': 'Hi,Please click this link to reset your password.', 'link': message, "regards":"Thanks", "sender":"SITA"})
-            # text_content = strip_tags(html_content)
+            html_message = render_to_string("email_template.html", {'link': message, "name":first_name})
+            text_content = strip_tags(html_message)
             #
             # email = EmailMultiAlternatives(
             #     #subject
@@ -59,12 +60,13 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             # email.alternatives(html_content,"text/html")
             # email.send()
             send_mail(subject,
-                message,
+                text_content,
                 email_from,
-                email_reciever)
+                email_reciever,
+                html_message=html_message)
             data={
                 "Status": "SUCCESS",
-                "Messages" : message,
+                "link" : message,
                 "Message" : "Mail Successfully sent"
             }
         else:
