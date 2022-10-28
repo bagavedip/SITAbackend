@@ -310,9 +310,10 @@ class PerspectiveService:
                                                             status_type__iexact=status).values(
                         *response_obj.select_cols)
                 if response_obj.dropdownFilters[0].get("id") == "Perspective Type" and response_obj.dropdownFilters[1].get("id") == "Status":
-                    perspective_value = (response_obj.dropdownFilters[0].get("value"))
-                    y = (response_obj.dropdownFilters[1].get("value"))
-                    query_data = Perspective.objects.filter(perspective_type__iexact=perspective_value, status_type__iexact=y
+                    found_filters = {}
+                    for filter_type in response_obj.dropdownFilters:
+                        found_filters.update({filter_type.get('id'): filter_type.get('value')})
+                    query_data = Perspective.objects.filter(perspective_type__iexact=found_filters.get('Perspective Type'), status_type__iexact=found_filters.get('Select')
                                                             ).values(
                         *response_obj.select_cols)
             if len(response_obj.dropdownFilters) is 3:
