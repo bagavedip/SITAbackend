@@ -288,7 +288,7 @@ class PerspectiveService:
         if not response_obj.dropdownFilters:
             query_data = Perspective.objects.all().values(*response_obj.select_cols)
         else:
-            if len(response_obj.dropdownFilters) is 1:
+            if len(response_obj.dropdownFilters) == 1:
                 if response_obj.dropdownFilters[0].get("id") == "Perspective Type":
                     y = (response_obj.dropdownFilters[0].get("value"))
                     query_data = Perspective.objects.filter(perspective_type__iexact=y).values(*response_obj.select_cols)
@@ -298,7 +298,7 @@ class PerspectiveService:
                 if response_obj.dropdownFilters[0].get("id") == "Status":
                     y = (response_obj.dropdownFilters[0].get("value"))
                     query_data = Perspective.objects.filter(status_type__iexact=y).values(*response_obj.select_cols)
-            if len(response_obj.dropdownFilters) is 2:
+            if len(response_obj.dropdownFilters) == 2:
                 final_list = [{}, {}, {}]
                 for filters in response_obj.dropdownFilters:
                     if filters.get('id') == "Perspective Type":
@@ -324,7 +324,7 @@ class PerspectiveService:
                     status = (final_list[2].get("value"))
                     query_data = Perspective.objects.filter(perspective_type__iexact=y, status_type__iexact=status).values(
                         *response_obj.select_cols)
-            if len(response_obj.dropdownFilters) is 3:
+            if len(response_obj.dropdownFilters) == 3:
                 found_filters = {}
                 for filter_type in response_obj.dropdownFilters:
                     found_filters.update({filter_type.get('id'): filter_type.get('value')})
