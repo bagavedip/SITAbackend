@@ -10,6 +10,6 @@ PERSPECTIVE_TABLE_HEADER = {
     'DATE': 'created_at',
     'PERSPECTIVE TYPE': 'perspective_type',
     'PERSPECTIVE  TITLE': 'perspective_title',
-    'STATUS_TYPE': 'status_type',
-    'ACTION_TYPE': 'action_type'
+    'STATUS TYPE': 'status_type',
+    'ACTION TYPE': 'action_type'
 }
