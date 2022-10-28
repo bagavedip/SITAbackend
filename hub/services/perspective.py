@@ -307,7 +307,7 @@ class PerspectiveService:
                         final_list[1] = filters
                     elif filters.get('id') == "Status":
                         final_list[2] = filters
-                if final_list[0].get("id") == "Perspective Type" and final_list[1].get("id") == "Action taken":
+                if final_list[0].get("id") == "Perspective_type" and final_list[1].get("id") == "Action taken":
                     perspective_value = (final_list[0].get("value"))
                     action_value = (final_list[1].get("value"))
                     query_data = Perspective.objects.filter(perspective_type__iexact=perspective_value,
