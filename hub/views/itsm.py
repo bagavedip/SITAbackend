@@ -179,7 +179,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "Service | Select"
+                        "label": "Service"
                     },
                     {
                         "label": "SOC",
@@ -194,7 +194,7 @@ class ITSMViewSet(viewsets.ModelViewSet):
                 "dropdownoption": [
                     {
                         "value": "Select",
-                        "label": "First response Time | Select"
+                        "label": "First response Time"
                     },
                     {
                         "label": "All",
