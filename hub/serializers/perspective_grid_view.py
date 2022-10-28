@@ -16,9 +16,6 @@ class PerspectiveGridSerializer:
         self.filters = {}
         self.filters['incident_start_date_time__gte'] = self.start_date
         self.filters['incident_end_date_time__lte'] = self.end_date
-        for drop in self.dropdownFilters:
-            key = drop.get("id")
-            values = drop.get("value")
         self.columns_headers = []
         self.select_cols = []
         for key in perspective_constants.PERSPECTIVE_TABLE_HEADER.keys():
