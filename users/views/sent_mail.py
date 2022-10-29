@@ -1,4 +1,6 @@
 import logging
+import smtplib
+
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -46,19 +48,13 @@ class UserSentMail(mixins.CreateModelMixin, viewsets.GenericViewSet):
             # server.quit()
             html_message = render_to_string("email_template.html", {'link': message, "name":first_name})
             text_content = strip_tags(html_message)
-            #
-            # email = EmailMultiAlternatives(
-            #     #subject
-            #     "Reset your password",
-            #     #content
-            #     text_content,
-            #     #fromemail
-            #     email_from,
-            #     #recipientlist
-            #     email_reciever
-            # )
-            # email.alternatives(html_content,"text/html")
-            # email.send()
+
+            # server = smtplib.SMTP('smtp.office365.com', 587)
+            # server.ehlo()
+            # server.starttls()
+            # server.login(user, pwd)
+            # server.sendmail(FROM, TO, message)
+            # server.close()
             send_mail(subject,
                 text_content,
                 email_from,

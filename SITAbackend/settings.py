@@ -203,8 +203,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Email sending setup
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'
+EMAIL_HOST = 'smtp.office365.com' # 'smtp.outlook.office365.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "no-reply@netrum-tech.com"
-EMAIL_HOST_PASSWORD = "password"
+EMAIL_HOST_USER = "sandeep.pal@samta.ai"
+EMAIL_HOST_PASSWORD = "Sandy@samtaai1"
+DEFAULT_FROM_EMAIL = "sandeep.pal@samta.ai"
+SERVER_EMAIL = "sandeep.pal@samta.ai"
+
+# EMAIL_Encryption_METHOD = "STARTTLS"
