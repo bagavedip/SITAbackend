@@ -14,6 +14,8 @@ class UserSerializer(serializers.Serializer):
     is_admin = serializers.BooleanField(required=True)
     role_id = serializers.IntegerField(source='role_id.id',required = False)
     role = serializers.CharField(source='role_id.name',required = False)
+    phone_code = serializers.CharField(max_length=10, required=False)
+    phone_number = serializers.CharField(max_length=20, required=False)
     
     class Meta:
         fields = "__all__"
