@@ -1,0 +1,8 @@
+Asset_Name,IP_Address,Asset_Type,Entity,Geolocation,Function,Process,start_date,end_date,Asset_Color,Entity_Color,Function_Color,Geolocation_Color,Process_Color
+firewall_Distribuidas,Not Assigned,Server,GR CHIA SAS,BOGOTA,Undefined,Undefined,,,#91b5d5,#595959,#cfe5cf,#e4c377,#d44b2a
+GRC_FT_FW_IFX,172.201.2.1,Log Source,GR CHIA SAS,BOGOTA,Undefined,Undefined,,,#91b5d5,#595959,#cfe5cf,#e4c377,#d44b2a
+GRC_FT_FW_MERCANET,172.201.1.1,Log Source,GR CHIA SAS,BOGOTA,Undefined,Undefined,,,#91b5d5,#595959,#cfe5cf,#e4c377,#d44b2a
+FW_Distribuidas,20.20.20.1,Firewall,GR CHIA SAS,BOGOTA,Undefined,Undefined,,,#91b5d5,#595959,#cfe5cf,#e4c377,#d44b2a
+GRC_FT_FW_Distribuida,20.20.20.1,Log Source,GR CHIA SAS,BOGOTA,Undefined,Undefined,,,#91b5d5,#595959,#cfe5cf,#e4c377,#d44b2a
+firewall_IFX,172.201.2.1,Firewall,GR CHIA SAS,BOGOTA,Undefined,Undefined,,,#91b5d5,#595959,#cfe5cf,#e4c377,#d44b2a
+firewall_MERCANET,172.201.1.1,Firewall,GR CHIA SAS,BOGOTA,Undefined,Undefined,,,#91b5d5,#595959,#cfe5cf,#e4c377,#d44b2a
